@@ -1,0 +1,42 @@
+[
+  {
+    "type": "section-header",
+    "label": "Тема"
+  },
+  "vars",
+  "custom-page",
+  {
+    "type": "section-header",
+    "label": "Компоненты"
+  },
+  {
+    "type": "dir",
+    "label": "Компоненты документации",
+    "name": "components"
+  },
+  {
+    "type": "dir",
+    "label": "Runtime-компоненты",
+    "name": "runtime-components"
+  },
+  {
+    "type": "file",
+    "label": "Встроенные иконки",
+    "name": "icons/index"
+  },
+  {
+    "type": "dir",
+    "label": "Встроенные компоненты",
+    "name": "layout-components",
+    "tag": "eject-only"
+  },
+  {
+    "type": "section-header",
+    "label": "Хуки"
+  },
+  {
+    "type": "dir",
+    "label": "Встроенные хуки",
+    "name": "hooks"
+  }
+]

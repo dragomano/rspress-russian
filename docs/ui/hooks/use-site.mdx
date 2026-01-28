@@ -1,0 +1,22 @@
+---
+description: Хук useSite для доступа к нормализованной конфигурации сайта из rspress.config.ts.
+---
+
+# useSite
+
+`useSite` возвращает сериализованную конфигурацию сайта из `rspress.config.ts`.
+
+- **Тип:** `() => { site: SiteData }`
+
+Вот пример получения конфигурации [title](/api/config/config-basic#title) из `rspress.config.ts`:
+
+```tsx preview
+import { useSite } from '@rspress/core/runtime';
+
+export default function SiteTitle() {
+  const { site } = useSite();
+  return <span>{site.title}</span>;
+}
+```
+
+> Может использоваться вместе с [`usePage`](./use-page) для получения как глобальной конфигурации сайта, так и метаданных текущей страницы.

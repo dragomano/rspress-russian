@@ -1,0 +1,17 @@
+[
+  {
+    "type": "dir-section-header",
+    "name": "system",
+    "label": "Система плагинов"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "official-plugins",
+    "label": "Официальные плагины"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "community-plugins",
+    "label": "Плагины сообщества"
+  }
+]

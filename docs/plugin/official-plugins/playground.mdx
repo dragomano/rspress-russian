@@ -1,0 +1,269 @@
+# @rspress/plugin-playground <SourceCode href="https://github.com/web-infra-dev/rspress/tree/main/packages/plugin-playground" />
+
+import { SourceCode, PackageManagerTabs } from '@rspress/core/theme';
+
+Предоставляет интерактивную песочницу с возможностью редактирования в реальном времени для предварительного просмотра компонентов в блоках кода MDX-файлов.
+
+:::tip Совет
+Этот плагин можно использовать вместе с [@rspress/plugin-preview](./preview). В отличие от plugin-preview, plugin-playground компилирует код в браузере, поэтому имеет больше ограничений (например, не поддерживает импорт модулей из локальных файлов). Рекомендуется использовать plugin-playground как дополнение к plugin-preview для сценариев, требующих редактирования кода в реальном времени.
+:::
+
+## Установка
+
+<PackageManagerTabs command="add @rspress/plugin-playground -D" />
+
+## Использование
+
+### 1. Регистрация плагина
+
+Сначала добавьте следующую конфигурацию в конфигурационный файл:
+
+```ts title="rspress.config.ts" twoslash
+import { defineConfig } from '@rspress/core';
+import { pluginPlayground } from '@rspress/plugin-playground';
+
+export default defineConfig({
+  plugins: [pluginPlayground()],
+});
+```
+
+### 2. Использование в mdx-файлах
+
+Используйте синтаксис ` ```tsx playground ` в mdx-файлах:
+
+````mdx title="example.mdx"
+```tsx playground
+import { useState } from 'react';
+
+function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <p>Текущее значение: {count}</p>
+      <button onClick={() => setCount(count + 1)}>+</button>
+      <button onClick={() => setCount(count - 1)}>-</button>
+    </div>
+  );
+}
+
+export default App;
+```
+````
+
+Результат рендеринга выглядит следующим образом:
+
+```tsx playground
+import { useState } from 'react';
+
+function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <p>Текущее значение: {count}</p>
+      <button onClick={() => setCount(count + 1)}>+</button>
+      <button onClick={() => setCount(count - 1)}>-</button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+:::tip Совет
+
+1. В настоящее время работает только в файлах `.mdx`.
+2. Необходимо экспортировать компонент как `default`, и Rspress автоматически отрендерит этот компонент.
+3. При использовании tsx проверка типов в настоящее время не выполняется.
+
+:::
+
+### 3. Написание кода компонента в других файлах (опционально)
+
+Помимо написания кода компонента в блоке кода mdx-файла, вы также можете использовать его вместе с [Блоком кода файла](../../guide/use-mdx/code-blocks.mdx#file-code-block) для написания примера кода в других файлах.
+
+````mdx title="example.mdx"
+```tsx file="./_playgroundDemo.jsx" playground
+
+```
+````
+
+```tsx title="_playgroundDemo.jsx" file="./_playgroundDemo.jsx"
+
+```
+
+Результат рендеринга выглядит следующим образом:
+
+```tsx file="./_playgroundDemo.jsx" playground
+
+```
+
+## Настройка направления макета \{#direction}
+
+Вы можете использовать параметр `direction` для указания направления макета редактора и области предварительного просмотра. Поддерживаются `horizontal` или `vertical`.
+
+### `direction="horizontal"`
+
+Горизонтальный макет является режимом по умолчанию, при котором редактор и область предварительного просмотра располагаются бок о бок.
+
+Синтаксис:
+
+````mdx title="example.mdx"
+```tsx playground direction=horizontal
+
+```
+````
+
+### `direction="vertical"`
+
+Вертикальный режим макета, при котором редактор и область предварительного просмотра располагаются друг над другом сверху вниз.
+
+Синтаксис:
+
+````mdx title="example.mdx"
+```tsx playground direction=vertical
+
+```
+````
+
+Результат рендеринга выглядит следующим образом:
+
+```tsx playground direction=vertical
+import { useState } from 'react';
+
+function App() {
+  const [text, setText] = useState('Hello');
+
+  return (
+    <div>
+      <input value={text} onChange={(e) => setText(e.target.value)} />
+      <p>Вы ввели: {text}</p>
+    </div>
+  );
+}
+
+export default App;
+```
+
+### Определение макета всей страницы
+
+Вы можете указать `playgroundDirection` в метаданных для определения макета редактора и области предварительного просмотра для всей страницы.
+
+```md title="example.mdx"
+---
+title: Заголовок
+playgroundDirection: vertical
+---
+```
+
+Приоритет: Определение непосредственно в блоке кода > Определение в метаданных страницы > Конфигурация плагина.
+
+## Опции
+
+Этот плагин принимает объект конфигурации со следующим определением типа:
+
+```ts
+interface PlaygroundOptions {
+  defaultRenderMode?: 'pure' | 'playground';
+  defaultDirection?: 'horizontal' | 'vertical';
+  editorPosition?: 'left' | 'right';
+  babelUrl?: string;
+  monacoLoader?: Parameters<typeof loader.config>[0];
+  monacoOptions?: MonacoEditorProps['options'];
+  include?: Array<string | [string, string]>;
+  render?: string;
+}
+```
+
+### defaultRenderMode
+
+- **Тип:** `'pure' | 'playground'`
+- **По умолчанию:** `'pure'`
+
+Настраивает поведение рендеринга по умолчанию для блоков кода, которые явно не объявляют `pure` или `playground`.
+
+- ` ```tsx pure`: Отображается как обычный блок кода
+- ` ```tsx `: Отображается в соответствии с конфигурацией `defaultRenderMode`
+- ` ```tsx playground`: Отображается как редактируемый компонент песочницы
+
+:::warning Предупреждение
+Не рекомендуется изменять значение по умолчанию, поскольку это может повлиять на совместное использование с `@rspress/plugin-preview`.
+:::
+
+### defaultDirection
+
+- **Тип:** `'horizontal' | 'vertical'`
+- **По умолчанию:** `'horizontal'`
+
+Настраивает направление макета [по умолчанию](#direction) редактора и области предварительного просмотра.
+
+### editorPosition
+
+- **Тип:** `'left' | 'right'`
+- **По умолчанию:** `'left'`
+
+Настраивает положение редактора в горизонтальном макете (слева/справа).
+
+### babelUrl
+
+- **Тип:** `string`
+- **По умолчанию:** `'https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.20/babel.min.js'`
+
+Песочница использует `@babel/standalone` для компиляции демонстрационного кода. Вы можете изменить его на URL, предоставленный другими CDN, такими как unpkg, jsdelivr и т. д.
+
+### monacoLoader
+
+Настраивает поведение загрузчика monaco. По умолчанию загружается с [cdnjs.com](https://cdnjs.com/libraries/monaco-editor).
+
+Вы можете изменить его на URL, предоставленный другими CDN, такими как unpkg, jsdelivr и т.д.
+
+Полная документация доступна на [suren-atoyan/monaco-loader](https://github.com/suren-atoyan/monaco-loader#config).
+
+### monacoOptions
+
+- **Тип:** [IStandaloneEditorConstructionOptions](https://microsoft.github.io/monaco-editor/typedoc/interfaces/editor.IStandaloneEditorConstructionOptions.html)
+
+Настраивает опции Monaco Editor.
+
+:::warning Примечание
+`monacoLoader` и `monacoOptions` будут сериализованы в JSON, поэтому некоторые типы данных, такие как функции и объекты с циклическими ссылками, не поддерживаются.
+:::
+
+### include
+
+- **Тип:** `Array<string | [string, string]>`
+
+По умолчанию этот плагин автоматически сканирует все операторы import в демо; пакеты, не используемые в демо, нельзя использовать в песочнице. Если вы хотите добавить другие пакеты в песочницу, вы можете использовать параметр `include`:
+
+```ts
+pluginPlayground({
+  include: [
+    // Добавление пакета dayjs
+    'dayjs',
+    // Добавление пакета с именем "my-package", фактически указывающего на "/path/to/package/index.js"
+    ['my-package', '/path/to/package/index.js'],
+  ],
+});
+```
+
+### render
+
+- **Тип:** `string`
+
+Вы можете настроить файл рендеринга для отображения песочницы. Обратите внимание, что имя файла должно быть `Playground.(jsx?|tsx?)`.
+
+```ts
+pluginPlayground({
+  render: '/path/to/render/Playground.tsx',
+});
+```
+
+В пользовательской песочнице вы можете напрямую импортировать оригинальный редактор и рендерер, а также импортировать предварительно упакованные зависимости через `_rspress_playground_imports`:
+
+```ts
+import getImport from '_rspress_playground_imports';
+import { Runner, Editor } from '@rspress/plugin-playground/web';
+```
+
+Для настройки вы можете обратиться к встроенному компоненту [Playground.tsx](https://github.com/web-infra-dev/rspress/tree/main/packages/plugin-playground/static/global-components/Playground.tsx).

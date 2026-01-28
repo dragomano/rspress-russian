@@ -1,0 +1,58 @@
+Вот рекомендуемая структура файлов, которая включает [фрагменты MDX и компоненты React](/guide/use-mdx/components#fragments), [пользовательские темы](/guide/basic/custom-theme), [файловую маршрутизацию](/guide/basic/conventional-route) и [интернационализацию](/guide/basic/i18n):
+
+```text
+├── docs
+│   ├── components  # React-компоненты документации
+│   │   └── Example.tsx
+│   ├── ru
+│   │   ├── fragments   # русскоязычные фрагменты
+│   │   │   └── example.mdx
+│   │   └── index.mdx
+│   └── en
+│       ├── fragments   # англоязычные фрагменты
+│       │   └── example.mdx
+│       └── index.mdx
+└── theme
+    ├── components # React-компоненты темы
+    │   └── DocFooter.tsx
+    └── index.tsx
+```
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  route: {
+    exclude: ['*/components/**/*', '*/fragments/**/*'], // Файлы в этих директориях не будут зарегистрированы как маршруты
+  },
+  lang: 'en',
+  locales: [
+    {
+      lang: 'ru',
+      label: 'Русский',
+    },
+    {
+      lang: 'en',
+      label: 'English',
+    },
+  ],
+});
+```
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "lib": ["DOM", "ESNext"],
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+    "paths": {
+      "i18n": ["./i18n.json"],
+      "@theme": ["./theme/index.tsx"]
+    }
+  },
+  "include": ["docs", "theme", "rspress.config.ts"],
+  "mdx": {
+    "checkMdx": true
+  }
+}
+```

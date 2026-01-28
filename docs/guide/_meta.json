@@ -1,0 +1,28 @@
+[
+  {
+    "type": "dir-section-header",
+    "name": "start",
+    "label": "Подготовка"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "basic",
+    "label": "Возможности"
+  },
+  {
+    "type": "dir-section-header",
+    "label": "Markdown и MDX",
+    "name": "use-mdx",
+    "tag": "новинка"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "advanced",
+    "label": "Дополнительно"
+  },
+  {
+    "type": "dir-section-header",
+    "name": "migration",
+    "label": "Миграция"
+  }
+]

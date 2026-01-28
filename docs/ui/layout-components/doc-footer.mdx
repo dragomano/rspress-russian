@@ -1,0 +1,41 @@
+---
+description: Компонент DocFooter для нижней части страницы документа, содержащий ссылку на редактирование, время последнего обновления и навигацию по предыдущей/следующей странице.
+overviewHeaders: []
+---
+
+# DocFooter
+
+`DocFooter` отображает область футера в нижней части страниц документа, включая ссылку на редактирование, время последнего обновления и навигацию по предыдущей/следующей странице.
+
+## Использование
+
+Этот компонент автоматически отображается в нижней части страниц документа и обычно не требует ручного использования. Для кастомизации можно его извлечь:
+
+```tsx title="theme/components/DocFooter/index.tsx"
+import { EditLink, LastUpdated, PrevNextPage } from '@rspress/core/theme';
+
+export function DocFooter() {
+  return (
+    <footer className="my-doc-footer">
+      <EditLink />
+      <LastUpdated />
+      <PrevNextPage />
+      {/* Добавляем свой контент */}
+    </footer>
+  );
+}
+```
+
+```mdx preview
+import { DocFooter } from '@rspress/core/theme';
+
+<DocFooter />
+```
+
+## Включённые компоненты
+
+`DocFooter` состоит из следующих компонентов:
+
+- [EditLink](/ui/layout-components/edit-link) — Отображает ссылку «Отредактировать страницу»
+- [LastUpdated](/ui/layout-components/last-updated) — Отображает время последнего обновления страницы
+- [PrevNextPage](/ui/layout-components/prev-next-page) — Отображает навигацию по предыдущей/следующей странице

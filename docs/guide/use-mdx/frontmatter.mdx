@@ -1,0 +1,37 @@
+---
+description: Определяйте метаданные страницы с помощью метаданных YAML, включая title, description, pageType, sidebar, outline и многое другое.
+---
+
+# Метаданные
+
+Вы можете добавить метаданные в начало вашего Markdown-файла. Это блок [YAML](https://yaml.org/), обёрнутый тремя дефисами `---` сверху и снизу, и он используется для определения метаданных.
+
+Например, с помощью [title](/api/config/config-frontmatter#title) можно указать заголовок страницы. По умолчанию заголовок h1 страницы будет использоваться в качестве заголовка HTML-документа. Если вы хотите использовать другой заголовок, укажите его с помощью метаданных:
+
+```mdx
+---
+title: Моя главная страница
+---
+
+**Содержание главной страницы**
+```
+
+Например, вы можете использовать [head](/api/config/config-frontmatter#head), чтобы указать пользовательские мета-теги для [Open Graph](https://ogp.me/).
+
+```yaml
+---
+head:
+  - - meta
+    - property: og:url
+      content: https://example.com/foo/
+  - - meta
+    - property: og:image
+      content: https://example.com/bar.jpg
+# - - [htmlTag]
+#   - [attributeName]: [attributeValue]
+#     [attributeName]: [attributeValue]
+---
+
+:::tip Совет
+См. [конфигурацию метаданных](/api/config/config-frontmatter) для просмотра доступных настроек метаданных и [useFrontmatter](/ui/hooks/use-frontmatter) для получения информации о том, как обращаться к метаданным в коде.
+:::

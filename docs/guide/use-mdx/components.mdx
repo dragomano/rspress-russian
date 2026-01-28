@@ -1,0 +1,105 @@
+---
+description: Используйте MDX для импорта и рендеринга React-компонентов в Markdown с поддержкой фрагментов документов и пользовательских слотов компонентов.
+---
+
+# MDX и React-компоненты
+
+Rspress поддерживает [MDX](https://mdxjs.com/), формат создания контента, который безупречно сочетает Markdown с JSX. MDX позволяет использовать React-компоненты непосредственно в вашей документации, объединяя лаконичный синтаксис Markdown с мощью экосистемы React, что делает его идеальным для создания интерактивной, основанной на компонентах технической документации.
+
+## Что такое MDX
+
+MDX — это сочетание синтаксиса Markdown и JSX, которое позволяет писать и использовать React-компоненты непосредственно в Markdown-документах.
+
+Мы рекомендуем использовать расширение `.mdx` для всех файлов документации, что позволяет писать контент так же, как в обычном Markdown, а также импортировать и использовать [встроенные компоненты](/ui/components/index.mdx), предоставляемые Rspress.
+
+```mdx title="docs/index.mdx"
+# Привет, мир!
+
+import { PackageManagerTabs } from '@rspress/core/theme';
+
+<PackageManagerTabs command="create rspress@latest" />
+```
+
+## Фрагменты MDX \{#fragments}
+
+В MDX каждый файл `.mdx` компилируется в React-компонент, что означает, что его можно импортировать как обычный компонент и свободно рендерить внутри него React-компоненты. Например:
+
+import { Tabs, Tab } from '@rspress/core/theme';
+import { Border } from '@components/Border';
+
+<Tabs>
+<Tab label="docs/index.mdx">
+
+```mdx
+import MdxFragment from './_mdx-fragment.mdx';
+import TsxComponent from './_tsx-component';
+
+Тестирование использования MDX-фрагментов и React-компонентов.
+
+<MdxFragment />
+
+<TsxComponent />
+```
+
+</Tab>
+
+<Tab label="docs/_mdx-fragment.mdx">
+
+```mdx file="./_mdx-fragment.mdx"
+
+```
+
+</Tab>
+
+<Tab label="docs/_tsx-component.tsx">
+
+```tsx file="./_tsx-component.tsx"
+
+```
+
+</Tab>
+
+</Tabs>
+
+Отобразится так:
+
+import MdxFragment from './_mdx-fragment.mdx';
+import TsxComponent from './_tsx-component';
+
+<Border className='rp-toc-exclude'>
+Тестирование использования MDX-фрагментов и React-компонентов.
+
+<MdxFragment />
+
+<TsxComponent />
+</Border>
+
+Вы можете использовать [встроенные компоненты](/ui/components/index.mdx), предоставляемые Rspress, или подключить сторонние библиотеки React-компонентов, чтобы обогатить документацию в файлах `.mdx`.
+
+## Соглашение о маршрутах \{#routing-convention}
+
+import RouteConvention from '@fragments/route-convention.mdx';
+
+<RouteConvention />
+
+## Альтернативный способ: написание страниц на TSX
+
+```tsx file="./_escape-hatch.tsx" title="_escape-hatch.tsx"
+
+```
+
+import EscapeHatch from './_escape-hatch';
+
+Отобразится так:
+
+<Border className="rp-toc-exclude">
+  <EscapeHatch />
+</Border>
+
+:::warning Предупреждение
+
+Синтаксис tsx и html затрудняет извлечение статической информации, например, индексов для локального поиска.
+
+Поэтому рекомендуется писать основной контент документации в файлах `.mdx`, а файлы `.tsx` использовать только для интерактивного и динамического содержимого.
+
+:::

@@ -1,0 +1,47 @@
+---
+description: Компонент HomeHero для рендеринга секции Hero на главной странице, включая заголовок, описание и кнопки действий.
+overviewHeaders: []
+---
+
+# HomeHero
+
+Этот компонент является частью [главной страницы](/guide/basic/home-page). `HomeHero` отображает Hero-секцию на главной странице.
+
+## Использование
+
+Изменить или переопределить через [кастомную тему](/guide/basic/custom-theme).
+
+```tsx
+import { HomeHero as BasicHomeHero } from '@rspress/core/theme-original';
+
+export default function HomeHero() {
+  return <BasicHomeHero />;
+}
+```
+
+### Пользовательские слоты
+
+Используйте пропсы `beforeHeroActions` и `afterHeroActions`, чтобы вставить пользовательский контент перед и после кнопок действий:
+
+```tsx title="index.mdx"
+import { HomeHero } from '@rspress/core/theme';
+
+<HomeHero
+  beforeHeroActions={<div>Контент перед кнопками</div>}
+  afterHeroActions={<div>Контент после кнопок</div>}
+/>;
+```
+
+## Пропсы
+
+### beforeHeroActions
+
+- **Тип:** `React.ReactNode`
+
+Пользовательский контент для вставки перед кнопками Hero.
+
+### afterHeroActions
+
+- **Тип:** `React.ReactNode`
+
+Пользовательский контент для вставки после кнопок Hero.

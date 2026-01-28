@@ -1,0 +1,54 @@
+import { Tabs, Tab } from '@rspress/core/theme';
+import { Border } from '@components/Border';
+
+В директории [docs](/api/config/config-basic#root) фрагменты MDX или React-компоненты необходимо исключать из маршрутизации с помощью параметра [route.exclude](/api/config/config-basic#routeexclude). Для удобства файлы, начинающиеся с символа `_`, по умолчанию исключаются через [route.excludeConvention](/api/config/config-basic#routeexcludeconvention).
+
+Также вы можете размещать компоненты в соседних директориях вне директории docs, например:
+
+```text
+docs
+├── _button.mdx
+└── index.mdx
+components
+└── button.tsx
+```
+
+<Tabs>
+<Tab label="docs/index.mdx">
+
+```mdx
+import ButtonFragment from './_button.mdx';
+import Button from '../../components/button';
+
+<ButtonFragment />
+<Button />
+```
+
+</Tab>
+<Tab label="docs/_button.mdx">
+
+```mdx file="./_button.mdx"
+
+```
+
+</Tab>
+<Tab label="docsite/components/button.tsx">
+
+```tsx
+const Button = () => <button>Кнопка из tsx</button>;
+export default Button;
+```
+
+</Tab>
+</Tabs>
+
+Отобразится так:
+
+<Border className='rp-toc-exclude'>
+
+import Button from './_button.mdx';
+
+<Button />
+<button>Кнопка из tsx</button>
+
+</Border>

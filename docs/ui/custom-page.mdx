@@ -1,0 +1,144 @@
+---
+description: Способы настройки макета страницы, глобальных компонентов, стилей и тегов head.
+---
+
+import { PackageManagerTabs } from '@rspress/core/theme';
+
+# Настройка страницы
+
+Rspress предоставляет несколько способов кастомизировать содержимое ваших страниц, включая:
+
+- Добавление пользовательских глобальных компонентов.
+- Добавление пользовательских глобальных стилей.
+- Настройку структуры макета страницы.
+
+## Пользовательские глобальные компоненты
+
+В некоторых сценариях вам может понадобиться добавить на страницу пользовательские глобальные компоненты. Rspress предоставляет параметр конфигурации `globalUIComponents` для реализации этой функции.
+
+### Как использовать
+
+Добавьте следующую конфигурацию в `rspress.config.ts`:
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+import path from 'path';
+
+export default defineConfig({
+  globalUIComponents: [path.join(__dirname, 'components', 'MyComponent.tsx')],
+});
+```
+
+Каждый элемент `globalUIComponents` может быть строкой, представляющей путь к файлу компонента; либо массивом, где первый элемент — путь к файлу компонента, а второй — объект `props` для компонента, например:
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  globalUIComponents: [
+    [
+      path.join(__dirname, 'components', 'MyComponent.tsx'),
+      {
+        foo: 'bar',
+      },
+    ],
+  ],
+});
+```
+
+import GlobalUIComponents from '@fragments/global-ui-components.mdx';
+
+<GlobalUIComponents />
+
+### Tailwind CSS
+
+Чтобы использовать Tailwind CSS в Rspress, выполните следующие шаги:
+
+1. Установите Tailwind CSS:
+
+<PackageManagerTabs command="install tailwindcss -D" />
+
+2. Создайте файл `postcss.config.js`, содержащий плагин `tailwindcss`:
+
+```js title="postcss.config.js"
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+  },
+};
+```
+
+3. Создайте файл `tailwind.config.js` и убедитесь, что все файлы контента включены через параметр `content`:
+
+```js title="tailwind.config.js"
+module.exports = {
+  content: ['./src/**/*.tsx', './docs/**/*.mdx'],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+```
+
+4. Включите директивы Tailwind в ваш файл со стилями CSS, см. [globalStyles](/api/config/config-basic#globalstyles):
+
+```css title=styles/index.css
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+```
+
+> Актуальные инструкции по настройке можно найти в официальной [документации Tailwind CSS](https://tailwindcss.com/docs/installation/using-postcss).
+
+## Пользовательская структура страниц
+
+### Использование pageType
+
+Rspress предоставляет конфигурацию `pageType`, чтобы вы могли настраивать структуру макета страницы.
+
+Маршрутизация в Rspress, основанная на соглашениях, поддерживает два типа маршрутов: первый — маршрутизация документов, то есть страницы, написанные в файлах md(x), и второй — маршрутизация компонентов, то есть страницы, написанные в файлах `.jsx/.tsx`.
+
+Для первого типа вы можете добавить поле `pageType` в блок метаданных файла, чтобы указать структуру макета страницы, например:
+
+```mdx title="foo.mdx"
+---
+pageType: custom
+---
+```
+
+Для второго типа маршрутов вы можете добавить следующий экспорт, чтобы указать `pageType`:
+
+```tsx title="foo.tsx"
+export const frontmatter = {
+  // Объявялем тип макета
+  pageType: 'custom',
+};
+```
+
+`pageType` можно настроить со следующими значениями:
+
+import PageType from '@fragments/page-type.mdx';
+
+<PageType />
+
+### Использование детальной настройки
+
+Помимо настройки макета страницы через `pageType`, Rspress также предоставляет более точные переключатели. Вы можете настроить другие поля в метаданных. Эти поля и их значения следующие:
+
+- `navbar`: Показывать ли верхнюю навигационную панель. Чтобы скрыть панель, установите `false`.
+- `sidebar`: Показывать ли боковую панель. Чтобы скрыть её, установите `false`.
+- `outline`: Показывать ли колонку оглавления. Чтобы скрыть её, установите `false`.
+- `footer`: Показывать ли футер. Чтобы скрыть его, установите `false`.
+- `globalComponents`: Определяет, отображать ли глобальные компоненты. Если вы хотите скрыть глобальные компоненты, установите значение `false`.
+
+Пример:
+
+```mdx title="foo.mdx"
+---
+navbar: false
+sidebar: false
+outline: false
+footer: false
+globalUIComponents: false
+---
+```

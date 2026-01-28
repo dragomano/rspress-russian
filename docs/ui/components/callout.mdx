@@ -1,0 +1,78 @@
+---
+overviewHeaders: []
+tag: eject-only
+---
+
+# Callout
+
+Компонент Callout используется для отображения выделенных информационных блоков, таких как советы, предупреждения и заметки.
+
+:::tip
+Мы рекомендуем использовать [синтаксис контейнера](/guide/use-mdx/container), который работает как в Markdown, так и в MDX-файлах.
+:::
+
+## Синтаксис контейнера
+
+В большинстве случаев используйте синтаксис контейнера для создания callouts:
+
+import ContainerSyntax from '@fragments/container-syntax.mdx';
+
+<ContainerSyntax />
+
+Для получения дополнительной информации о синтаксисе контейнера см. [Контейнер](/guide/use-mdx/container).
+
+## Использование компонента
+
+Вы также можете использовать компонент Callout непосредственно в MDX-файлах:
+
+```mdx title="index.mdx"
+import { Callout } from '@rspress/core/theme-original';
+
+<Callout type="tip">Это подсказка callout</Callout>
+
+<Callout type="warning" title="Предупреждение">
+  Это предупреждение с пользовательским заголовком
+</Callout>
+```
+
+import { Callout } from '@rspress/core/theme-original';
+
+<Callout type="tip">Это подсказка callout</Callout>
+
+<Callout type="warning" title="Предупреждение">
+  Это предупреждение с пользовательским заголовком
+</Callout>
+
+## Настройка
+
+Вы можете извлечь компонент Callout для настройки его стилей и поведения:
+
+```bash
+npx rspress eject Callout
+```
+
+Это скопирует компонент в `theme/components/Callout`. После настройки повторно экспортируйте его в вашем `theme/index.tsx`:
+
+```tsx title="theme/index.tsx"
+export { Callout } from './components/Callout';
+export * from '@rspress/core/theme-original';
+```
+
+## Пропсы
+
+```ts
+interface CalloutProps {
+  /**
+   * Тип callout, который определяет его цвет и иконку.
+   */
+  type: 'tip' | 'note' | 'warning' | 'caution' | 'danger' | 'info' | 'details';
+  /**
+   * Пользовательский заголовок для callout. Если не указан, будет использован заглавный тип.
+   */
+  title?: string;
+  /**
+   * Содержимое для отображения внутри callout.
+   */
+  children: React.ReactNode;
+}
+```

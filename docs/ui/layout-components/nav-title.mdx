@@ -1,0 +1,103 @@
+---
+overviewHeaders: []
+---
+
+# NavTitle
+
+Этот компонент является частью навбара. `NavTitle` отображает логотип сайта и заголовок в левом верхнем углу навбара.
+
+## Использование
+
+Используйте через [кастомную тему](/guide/basic/custom-theme). Компонент внутренне считывает конфигурацию из `rspress.config.ts` через [`useSite`](/ui/hooks/use-site):
+
+```ts title="rspress.config.ts"
+import { defineConfig } from 'rspress/config';
+
+export default defineConfig({
+  title: 'Мой сайт',
+  logo: '/logo.png',
+  // Или поддержка светлого/тёмного режима:
+  logo: {
+    light: '/logo-light.png',
+    dark: '/logo-dark.png',
+  },
+  logoText: 'Мой сайт',
+});
+```
+
+### Пользовательский NavTitle
+
+Вы можете настроить NavTitle через проп `navTitle` компонента Layout:
+
+```tsx title="theme/index.tsx"
+import { Layout as BasicLayout } from '@rspress/core/theme-original';
+
+const Layout = () => <BasicLayout navTitle={<MyCustomNavTitle />} />;
+
+export { Layout };
+export * from '@rspress/core/theme-original';
+```
+
+Или используйте пропы `beforeNavTitle` и `afterNavTitle` для вставки пользовательского содержимого:
+
+```tsx title="theme/index.tsx"
+import { Layout as BasicLayout } from '@rspress/core/theme-original';
+
+const Layout = () => (
+  <BasicLayout
+    beforeNavTitle={<div>Перед</div>}
+    afterNavTitle={<div>После</div>}
+  />
+);
+
+export { Layout };
+export * from '@rspress/core/theme-original';
+```
+
+Для получения дополнительной информации о пользовательских темах см. документацию [Кастомная тема](/guide/basic/custom-theme).
+
+## Конфигурация
+
+### logo
+
+- **Тип:** `string | { light: string; dark: string }`
+
+Логотип сайта. Может быть единичным путем к изображению или отдельными изображениями для светлого/темного режима.
+
+### logoText
+
+- **Тип:** `string`
+
+Текст, отображаемый рядом с логотипом.
+
+### title
+
+- **Тип:** `string`
+
+Заголовок сайта. Отображается, когда `logo` и `logoText` не настроены.
+
+## Поддержка i18n
+
+Для многоязычных сайтов вы можете настроить `title` для каждого языка:
+
+```ts title="rspress.config.ts"
+import { defineConfig } from 'rspress/config';
+
+export default defineConfig({
+  title: 'Мой сайт',
+  themeConfig: {
+    locales: [
+      {
+        lang: 'en',
+        title: 'Мой сайт',
+      },
+      {
+        lang: 'ru',
+        title: 'Мой сайт',
+      },
+    ],
+  },
+});
+```
+
+Компонент NavTitle автоматически отобразит соответствующий заголовок в зависимости от текущего языка.

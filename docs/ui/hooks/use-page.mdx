@@ -1,0 +1,33 @@
+---
+description: Хук usePage для доступа к метаданным текущей страницы Markdown/MDX.
+---
+
+# usePage
+
+`usePage` предоставляет метаданные, извлеченные из текущей страницы Markdown или MDX, и является основным хуком Rspress.
+
+- **Тип:** `() => { page: PageDataLegacy['page'] }`
+
+Объект `page` содержит распарсенный блок метаданных и данные времени выполнения, такие как `title`, `toc`, `lang`, `version`, `routePath`, `pagePath`, `description`, `pageType`, `lastUpdatedTime` и т. д., что позволяет легко создавать контекстный UI на основе текущего документа.
+
+Вот пример получения заголовка и описания текущей страницы:
+
+```tsx preview
+import { usePage } from '@rspress/core/runtime';
+
+export default function () {
+  const { page } = usePage();
+  return (
+    <div>
+      <p>
+        Заголовок текущей страницы: <em>{page.title}</em>
+      </p>
+      <p>
+        Описание текущей страницы: <em>{page.description}</em>
+      </p>
+    </div>
+  );
+}
+```
+
+> Когда вам нужно получить как метаданные страницы, так и глобальную конфигурацию сайта, используйте вместе с [`useSite`](./use-site).

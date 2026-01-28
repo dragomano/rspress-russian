@@ -1,0 +1,181 @@
+---
+description: Включите страницу обзора через конфигурацию overview в метаданных, автоматически извлекая информацию из боковой панели для генерации содержимого обзора.
+---
+
+# Страница обзора
+
+Страница обзора отображает обзор всех статей в директории, автоматически извлекая информацию из боковой панели для создания сгруппированного контента.
+
+## Использование
+
+Чтобы включить такую страницу, добавьте `overview: true` в файл `index.md` нужной директории:
+
+```md title="api/index.md"
+---
+overview: true
+title: Обзор API
+---
+
+Это обзорная страница API.
+```
+
+Страница обзора автоматически считывает конфигурацию боковой панели текущей директории ([конфигурация боковой панели](/guide/basic/auto-nav-sidebar)) и извлекает заголовки статей для генерации сгруппированных карточек.
+
+## Пример
+
+При следующей структуре директорий и конфигурации `_meta.json`:
+
+```text
+docs
+└── api
+    ├── _meta.json
+    ├── index.md        <-- overview: true
+    ├── config
+    │   ├── _meta.json
+    │   ├── basic.mdx
+    │   └── theme.mdx
+    └── runtime
+        ├── _meta.json
+        ├── hooks.mdx
+        └── context.mdx
+```
+
+```mdx title="api/index.md"
+---
+overview: true
+title: Обзор API
+---
+
+Это обзорная страница API.
+```
+
+```json title="api/_meta.json"
+[
+  { "type": "file", "name": "index", "label": "API Overview" },
+  { "type": "dir", "name": "config", "label": "Config" },
+  { "type": "dir", "name": "runtime", "label": "Runtime" }
+]
+```
+
+Сгенерированная страница обзора выглядит следующим образом:
+
+import { Overview } from '@rspress/core/theme';
+import { Border } from '../../../components/Border';
+
+<Border className="rp-toc-exclude" style={{ padding: '40px' }}>
+  <Overview
+    content={<p>Это обзорная страница API.</p>}
+    groups={[
+      {
+        name: 'Config',
+        items: [
+          {
+            text: 'basic',
+            link: '#',
+            headers: [
+              { id: 'title', text: 'title', depth: 2 },
+              { id: 'description', text: 'description', depth: 2 },
+            ],
+          },
+          {
+            text: 'theme',
+            link: '#',
+            headers: [
+              { id: 'dark-mode', text: 'darkMode', depth: 2 },
+              { id: 'footer', text: 'footer', depth: 2 },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'Runtime',
+        items: [
+          {
+            text: 'hooks',
+            link: '#',
+            headers: [
+              { id: 'use-page', text: 'usePage', depth: 2 },
+              { id: 'use-site', text: 'useSite', depth: 2 },
+            ],
+          },
+          {
+            text: 'context',
+            link: '#',
+            headers: [
+              { id: 'data-context', text: 'DataContext', depth: 2 },
+              { id: 'theme-context', text: 'ThemeContext', depth: 2 },
+            ],
+          },
+        ],
+      },
+    ]}
+  />
+</Border>
+
+## Конфигурация
+
+### overviewHeaders
+
+Управляет уровнями заголовков, которые отображаются на странице обзора. По умолчанию — `[2]` (только заголовки h2).
+
+Можно настроить в файле `_meta.json`:
+
+```json title="_meta.json"
+[
+  {
+    "type": "file",
+    "name": "component",
+    "overviewHeaders": [2, 3]
+  }
+]
+```
+
+Или в блоке метаданных самой статьи:
+
+```md title="component.mdx"
+---
+overviewHeaders: [2, 3]
+---
+```
+
+### Вложенные страницы обзора
+
+Подкаталоги также могут иметь собственные страницы обзора — для этого достаточно настроить `overview: true` в файле `index.md` соответствующей поддиректории:
+
+```text
+docs
+└── api
+    ├── index.md         <-- overview: true
+    └── theme
+        ├── index.md     <-- overview: true (вложенная страница обзора)
+        ├── component.mdx
+        └── utils.mdx
+```
+
+## Настройка
+
+Если вам нужно полностью настроить содержимое страницы обзора, вы можете вручную собрать её с помощью компонента [OverviewGroup](/ui/layout-components/overview-group):
+
+```mdx title="index.mdx"
+---
+overview: true
+---
+
+import { OverviewGroup } from '@rspress/core/theme';
+
+<OverviewGroup
+  group={{
+    name: 'Пользовательская группа',
+    items: [
+      {
+        text: 'Заголовок страницы',
+        link: '/path/to/page',
+        headers: [
+          { id: 'section-1', text: 'Секция 1', depth: 2 },
+          { id: 'section-2', text: 'Секция 2', depth: 2 },
+        ],
+      },
+    ],
+  }}
+/>
+```

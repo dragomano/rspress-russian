@@ -1,0 +1,17 @@
+[
+  {
+    "type": "file",
+    "name": "index",
+    "label": "Обзор API"
+  },
+  {
+    "type": "dir",
+    "name": "config",
+    "label": "Конфигурация"
+  },
+  {
+    "type": "file",
+    "name": "commands",
+    "label": "Команды"
+  }
+]

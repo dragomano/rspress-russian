@@ -1,0 +1,178 @@
+---
+description: Настраивайте тему через CSS-переменные, BEM-классы, обёртывание компонентов со слотами или извлечение встроенных компонентов для полного контроля.
+---
+
+# Кастомная тема
+
+1. Для CSS Rspress предоставляет [CSS-переменные](#css-variables) и [BEM-классы](#bem-classname) для кастомизации.
+
+2. Для JS / React Rspress реализует runtime-интерфейс на основе ESM re-exports, который поддерживает модификацию или замену встроенных компонентов для реализации собственной домашней страницы, боковой панели, компонентов поиска и т. д.
+
+    На этой основе существуют два режима:
+   - [**wrap**](#wrap): **Оборачивать** и улучшать встроенные компоненты Rspress через пропсы и слоты.
+   - [**eject**](#eject): Полностью **переопределить** весь компонент. Вы можете использовать команду [`rspress eject`](../../api/commands.mdx#rspress-eject), чтобы скопировать исходный код локально и изменить его напрямую.
+
+Далее они будут представлены по порядку в зависимости от степени кастомизации темы.
+
+## CSS-переменные \{#css-variables}
+
+Rspress предоставляет некоторые часто используемые CSS-переменные. По сравнению с переписыванием встроенных React-компонентов Rspress, переопределение CSS-переменных для кастомизации проще и легче в поддержке. Вы можете просмотреть эти CSS-переменные на странице [UI - CSS-переменные](../../ui/vars.mdx) и переопределить их через:
+
+import { Tabs, Tab } from '@rspress/core/theme';
+
+<Tabs>
+<Tab label="theme/index.tsx">
+
+```tsx
+import './index.css';
+export * from '@rspress/core/theme-original';
+```
+
+</Tab>
+<Tab label="theme/index.css">
+```css
+/* Скопируйте сюда код с CSS-переменными для переопределения стилей */
+```
+</Tab>
+</Tabs>
+
+## BEM-классы \{#bem-classname}
+
+Все встроенные компоненты Rspress используют соглашение об именовании BEM. Вы можете использовать эти имена классов для переопределения стилей таким же образом, как и [CSS-переменные](#css-variables).
+
+```css
+.rp-[component-name]__[element-name]--[modifier-name] {
+  /* стили */
+}
+```
+
+Например:
+
+```css
+.rp-nav {
+}
+.rp-link {
+}
+.rp-tabs {
+}
+.rp-codeblock {
+}
+.rp-codeblock__title {
+}
+.rp-codeblock__description {
+}
+.rp-nav-menu__item,
+.rp-nav-menu__item--active {
+}
+```
+
+## Переопределение встроенных компонентов с использованием повторного экспорта ESM \{#reexport}
+
+По умолчанию необходимо создать директорию `theme` в корне проекта, а затем создать в ней файл `index.ts` или `index.tsx`. Этот файл используется для экспорта компонентов темы.
+
+```text
+├── docs
+├── theme
+│   └── index.tsx
+└── rspress.config.ts
+```
+
+Вы можете написать файл `theme/index.tsx`, используя встроенные компоненты из `@rspress/core/theme-original`:
+
+```tsx title="theme/index.tsx"
+import { Layout as BasicLayout } from '@rspress/core/theme-original';
+
+const Layout = () => <BasicLayout beforeNavTitle={<div>some content</div>} />;
+
+export { Layout }; //[!code highlight]
+export * from '@rspress/core/theme-original'; //[!code highlight]
+```
+
+При **переопределении встроенных компонентов через повторный экспорт ESM** все внутренние ссылки Rspress на встроенные компоненты будут преимущественно использовать вашу переэкспортированную версию.
+
+:::note О @rspress/core/theme-original
+
+`@rspress/core/theme-original` используется для избежания циклических ссылок, применяйте его только при настройке тем.
+
+```text
+├── docs
+│   └── index.mdx <-- используйте "@rspress/core/theme"
+├── theme
+│   └── index.tsx <-- используйте "@rspress/core/theme-original"
+└── rspress.config.ts
+```
+
+1. В директории `docs` используйте `@rspress/core/theme`, который указывает на ваш `theme/index.tsx`.
+
+2. В директории `theme` используйте `@rspress/core/theme-original`, который всегда указывает на встроенные компоненты темы Rspress.
+
+:::
+
+## Wrap: Передача пропсов и слотов \{#wrap}
+
+Wrap означает добавление пропсов к переэкспортируемым компонентам. Вот пример вставки некоторого содержимого перед заголовком панели навигации:
+
+<Tabs>
+<Tab label="theme/index.tsx">
+
+```tsx
+import { Layout as BasicLayout } from '@rspress/core/theme-original';
+import { useI18n } from '@rspress/core';
+
+const Layout = () => {
+  const t = useI18n();
+  return <BasicLayout beforeNavTitle={<div>{t('some content')}</div>} />;
+};
+
+export { Layout };
+export * from '@rspress/core/theme-original';
+```
+
+</Tab>
+
+<Tab label="i18n.json">
+
+```json
+{
+  "some content": {
+    "en": "some content",
+    "ru": "некий контент"
+  }
+}
+```
+
+</Tab>
+
+</Tabs>
+
+:::tip Совет
+
+Компонент [`Layout`](/ui/layout-components/layout) разработан с использованием ряда слот-пропсов, специально предназначенных для обёртки. Вы можете использовать эти пропсы для расширения макета темы по умолчанию:
+
+:::
+
+### Eject: Полное переопределение компонента \{#eject}
+
+Eject означает прямое переопределение одного встроенного компонента Rspress, используя полностью вашу собственную версию. Для этого Rspress предоставляет команду [`rspress eject [component]`](../../api/commands.mdx#rspress-eject), чтобы скопировать исходный код встроенных компонентов локально и изменить их напрямую. Шаги следующие:
+
+1. Выполните CLI-команду, Rspress извлечет исходный код указанного компонента в локальную директорию `theme/components`, не извлекая зависимости.
+
+2. Обновите re-export в `theme/index.tsx`:
+
+```tsx title="theme/index.tsx"
+// Предположим, что вы выполнили eject компонента DocFooter
+export { DocFooter } from './components/DocFooter';
+export * from '@rspress/core/theme-original';
+```
+
+3. Измените файл `theme/components/DocFooter.tsx` по мере необходимости, чтобы удовлетворить вашим требованиям.
+
+Чтобы облегчить пользователям процесс eject, компоненты Rspress разделены с высокой детализацией. Вы можете увидеть, какие компоненты подходят для eject в [Layout Components](/ui/layout-components/).
+
+:::warning Действительно ли нужен eject?
+
+Eject увеличит затраты на сопровождение, потому что при будущих обновлениях Rspress эти выброшенные компоненты не будут автоматически получать обновления, и вам придётся вручную сравнивать и сливать изменения.
+
+Пожалуйста, сначала проверьте, может ли режим wrap удовлетворить ваши потребности. Рассматривайте eject только в том случае, когда wrap не справляется с задачей.
+
+:::

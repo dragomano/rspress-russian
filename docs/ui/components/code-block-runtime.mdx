@@ -1,0 +1,97 @@
+---
+description: Компонент CodeBlockRuntime для динамического рендеринга исполняемых блоков кода во время выполнения.
+overviewHeaders: []
+tag: non-ejectable
+---
+
+# CodeBlockRuntime
+
+`CodeBlockRuntime` отображает исполняемые [блоки кода](/guide/use-mdx/code-blocks) во время выполнения.
+
+## Использование
+
+```tsx title="index.mdx"
+import { CodeBlockRuntime } from '@rspress/core/theme';
+
+export default function Page() {
+  return (
+    <CodeBlockRuntime
+      lang="js"
+      title="index.js"
+      code={`console.log('Привет, мир!')`}
+      shikiOptions={{}}
+    />
+  );
+}
+```
+
+import { CodeBlockRuntime } from '@rspress/core/theme';
+
+<CodeBlockRuntime
+  lang="js"
+  title="index.js"
+  code={`console.log('Hello World!')`}
+  shikiOptions={{}}
+/>
+
+Передайте `lang`, `title` и `code` для рендеринга блока; `shikiOptions` настраивает подсветку синтаксиса и также поддерживает трансформеры.
+
+:::warning Предупреждение
+
+Рекомендуется использовать `CodeBlockRuntime` только при необходимости, поскольку это увеличивает размер бандла во время выполнения, особенно при включении нескольких языков, и не позволяет воспользоваться преимуществами подсветки во время компиляции.
+
+:::
+
+## Использование опций shiki
+
+Вот пример использования трансформера для подсветки строк:
+
+```mdx title="foo.mdx"
+import { CodeBlockRuntime } from '@rspress/core/theme';
+import { transformerNotationHighlight } from '@shikijs/transformers';
+
+<CodeBlockRuntime
+  lang="ts"
+  title="highlight.ts"
+  code={`console.log('Highlighted'); // [\!code highlight]
+// [\!code highlight:1]
+console.log('Highlighted');
+console.log('Not highlighted');`}
+  shikiOptions={{
+    transformers: [transformerNotationHighlight()],
+  }}
+/>
+```
+
+import { transformerNotationHighlight } from '@shikijs/transformers';
+
+<CodeBlockRuntime
+  lang="ts"
+  title="highlight.ts"
+  code={`console.log('Highlighted'); // [!code highlight]
+// [!code highlight:1]
+console.log('Highlighted');
+console.log('Not highlighted');`}
+  shikiOptions={{
+    transformers: [transformerNotationHighlight()],
+  }}
+/>
+
+## Импорт содержимого файлов
+
+Вы можете использовать query-параметр `?raw` для импорта содержимого файла как строки и передачи его в проп `code`. Подробности см. в главе [Rsbuild - Статические ресурсы](https://rsbuild.rs/guide/basic/static-assets).
+
+```mdx title="foo.mdx"
+import { CodeBlockRuntime } from '@rspress/core/theme';
+import codeContent from './example.ts?raw';
+
+<CodeBlockRuntime lang="ts" title="example.ts" code={codeContent} />
+```
+
+Этот подход подходит для сценариев, когда необходимо динамически отображать содержимое внешних файлов, например, для показа примеров кодовых файлов.
+
+:::warning Предупреждение
+
+Если вам нужно просто ссылаться на внешние файлы как на блоки кода, рекомендуется использовать статический синтаксис [блока кода файла](/guide/use-mdx/code-blocks#file-code-block), который обрабатывается на этапе компиляции, обеспечивая лучшую производительность и меньший размер бандла.
+
+:::

@@ -1,0 +1,20 @@
+---
+description: Хук useVersion для получения текущей версии документации в мультиверсионных доках.
+---
+
+# useVersion
+
+`useVersion` предоставляет текущую версию документации, когда включена поддержка нескольких версий.
+
+- **Тип:** `() => string`
+
+Используйте его для отображения текущей версии в UI или для выполнения логики ветвления для разных версий.
+
+```tsx
+import { useVersion } from '@rspress/core/runtime';
+
+export default function VersionTag() {
+  const version = useVersion();
+  return <div>Текущая версия: {version}</div>;
+}
+```
