@@ -10,6 +10,7 @@ import {
 } from '@shikijs/transformers';
 
 export default defineConfig({
+  base: '/rspress-russian/',
   root: path.join(__dirname, 'docs'),
   title: 'Rspress по-русски',
   description: 'Документация Rspress на русском языке',
