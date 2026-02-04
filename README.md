@@ -1,6 +1,6 @@
 # Rspress по-русски
 
-[![Сайт](https://img.shields.io/badge/Сайт-rspress-russian-blue?style=flat-square)](https://dragomano.github.io/rspress-russian)
+![Website](https://img.shields.io/website?url=https%3A%2F%2Fdragomano.github.io%2Frspress-russian)
 
 **https://dragomano.github.io/rspress-russian** — Перевод официальной документации Rspress
 
