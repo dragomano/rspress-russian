@@ -180,14 +180,20 @@ export default App;
 
 - **Эмуляция сенсорных событий для мобильных устройств**: Эмулируйте мобильные сенсорные события на ПК, импортировав [@vant/touch-emulator](https://www.npmjs.com/package/@vant/touch-emulator).
 
-- **Обработка темного режима**: Внедрите `MutationObserver` для отслеживания изменений класса `html.dark`, затем синхронизируйте с `body.dark` или выполните другую обработку тёмного режима.
+- **Обработка тёмного режима**: Внедрите `MutationObserver` для отслеживания изменений класса `html.dark`, затем синхронизируйте с `body.dark` или выполните другую обработку тёмного режима.
+
+- **Использование Tailwind CSS**: Поскольку среда предпросмотра в iframe — это отдельный экземпляр Rsbuild, если ваши предпросматриваемые компоненты зависят от Tailwind CSS, вам необходимо внедрить `@import "tailwindcss";` через опцию `preEntry`.
 
 ```ts title="rspress.config.ts"
 pluginPreview({
   iframeOptions: {
     builderConfig: {
       source: {
-        preEntry: ['@vant/touch-emulator', './src/dark-mode-observer.js'],
+        preEntry: [
+          '@vant/touch-emulator',
+          './src/dark-mode-observer.js',
+          './tailwind.css',
+        ],
       },
     },
   },
