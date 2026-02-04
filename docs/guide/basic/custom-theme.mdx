@@ -18,24 +18,30 @@ description: Настраивайте тему через CSS-переменны
 
 Rspress предоставляет некоторые часто используемые CSS-переменные. По сравнению с переписыванием встроенных React-компонентов Rspress, переопределение CSS-переменных для кастомизации проще и легче в поддержке. Вы можете просмотреть эти CSS-переменные на странице [UI - CSS-переменные](../../ui/vars.mdx) и переопределить их через:
 
-import { Tabs, Tab } from '@rspress/core/theme';
+```text
+├── docs
+│   └── index.mdx
+├── theme
+│   ├── index.tsx
+│   └── index.css  <-- Скопируйте код CSS-переменных сюда для переопределения стилей
+└── rspress.config.ts
+```
 
-<Tabs>
-<Tab label="theme/index.tsx">
-
-```tsx
+```tsx title="theme/index.tsx"
 import './index.css';
 export * from '@rspress/core/theme-original';
 ```
 
-</Tab>
-<Tab label="theme/index.css">
-```css
-/* Скопируйте сюда код с CSS-переменными для переопределения стилей */
-```
-</Tab>
-</Tabs>
+Другой подход — использовать конфигурацию [globalStyles](/api/config/config-basic#globalstyles) в файле `rspress.config.ts`:
 
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+import path from 'path';
+
+export default defineConfig({
+  globalStyles: path.join(__dirname, 'styles/index.css'), // Указывает на ваш CSS-файл
+});
+```
 ## BEM-классы \{#bem-classname}
 
 Все встроенные компоненты Rspress используют соглашение об именовании BEM. Вы можете использовать эти имена классов для переопределения стилей таким же образом, как и [CSS-переменные](#css-variables).
@@ -111,6 +117,8 @@ export * from '@rspress/core/theme-original'; //[!code highlight]
 ## Wrap: Передача пропсов и слотов \{#wrap}
 
 Wrap означает добавление пропсов к переэкспортируемым компонентам. Вот пример вставки некоторого содержимого перед заголовком панели навигации:
+
+import { Tabs, Tab } from '@rspress/core/theme';
 
 <Tabs>
 <Tab label="theme/index.tsx">
