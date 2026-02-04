@@ -1,0 +1,98 @@
+# shadcn/ui
+
+[shadcn/ui](https://ui.shadcn.com/) — это коллекция переиспользуемых компонентов, построенных на Radix UI / Base UI и Tailwind CSS. В этом руководстве описано, как использовать компоненты shadcn/ui в вашем сайте документации на Rspress.
+
+Перед продолжением убедитесь, что вы уже настроили [Tailwind CSS](/ui/tailwindcss) в своём проекте.
+
+import { PackageManagerTabs, Steps } from '@rspress/core/theme';
+
+<Steps>
+
+### Настройка алиасов путей
+
+Добавьте `paths` в `compilerOptions` вашего `tsconfig.json`, чтобы компоненты shadcn/ui корректно разрешались:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["doc", "src", "rspress.config.ts"]
+}
+```
+
+### Создание components.json и утилитарной функции
+
+Поскольку `shadcn init` не может автоматически определить фреймворк Rspress, вам необходимо следовать подходу [ручной установки](https://ui.shadcn.com/docs/installation/manual) для создания конфигурационных файлов.
+
+Создайте файл `components.json` в корне вашего проекта для настройки CLI shadcn/ui:
+
+```json title="components.json"
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "tailwind": {
+    "config": "",
+    "css": "tailwind.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "rsc": false,
+  "tsx": true,
+  "aliases": {
+    "utils": "@/lib/utils",
+    "components": "@/components",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  }
+}
+```
+
+:::tip Совет
+
+- `tailwind.config` опущен, поскольку Tailwind CSS v4 больше не требует конфигурационного файла.
+- `rsc` установлен в `false`, потому что Rspress не использует серверные компоненты React.
+
+:::
+
+Затем установите зависимости и создайте утилитарную функцию:
+
+<PackageManagerTabs command="install clsx tailwind-merge class-variance-authority" />
+
+```ts title="src/lib/utils.ts"
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+### Добавление компонентов
+
+Используйте CLI `shadcn` для добавления необходимых компонентов. Например, чтобы добавить кнопку (Button):
+
+<PackageManagerTabs command="shadcn@latest add button" dlx />
+
+### Использование в MDX
+
+Импортируйте и используйте компоненты в ваших MDX-файлах:
+
+```mdx title="doc/index.mdx"
+import { Button } from '@/components/ui/button';
+
+# Моя страница
+
+<Button>Нажми меня</Button>
+<Button variant="outline">Кнопка с обводкой</Button>
+```
+
+</Steps>
+
+:::tip Совет
+Поскольку shadcn/ui не является традиционным npm-пакетом, а представляет собой коллекцию компонентов для копирования и вставки, вы полностью контролируете код компонентов и можете настраивать их по своему усмотрению.
+:::

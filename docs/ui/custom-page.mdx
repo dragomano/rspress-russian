@@ -2,8 +2,6 @@
 description: Способы настройки макета страницы, глобальных компонентов, стилей и тегов head.
 ---
 
-import { PackageManagerTabs } from '@rspress/core/theme';
-
 # Настройка страницы
 
 Rspress предоставляет несколько способов кастомизировать содержимое ваших страниц, включая:
@@ -49,46 +47,6 @@ export default defineConfig({
 import GlobalUIComponents from '@fragments/global-ui-components.mdx';
 
 <GlobalUIComponents />
-
-### Tailwind CSS
-
-Чтобы использовать Tailwind CSS в Rspress, выполните следующие шаги:
-
-1. Установите Tailwind CSS:
-
-<PackageManagerTabs command="install tailwindcss -D" />
-
-2. Создайте файл `postcss.config.js`, содержащий плагин `tailwindcss`:
-
-```js title="postcss.config.js"
-module.exports = {
-  plugins: {
-    tailwindcss: {},
-  },
-};
-```
-
-3. Создайте файл `tailwind.config.js` и убедитесь, что все файлы контента включены через параметр `content`:
-
-```js title="tailwind.config.js"
-module.exports = {
-  content: ['./src/**/*.tsx', './docs/**/*.mdx'],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-};
-```
-
-4. Включите директивы Tailwind в ваш файл со стилями CSS, см. [globalStyles](/api/config/config-basic#globalstyles):
-
-```css title=styles/index.css
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-```
-
-> Актуальные инструкции по настройке можно найти в официальной [документации Tailwind CSS](https://tailwindcss.com/docs/installation/using-postcss).
 
 ## Пользовательская структура страниц
 

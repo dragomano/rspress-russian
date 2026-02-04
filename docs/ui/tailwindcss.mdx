@@ -1,0 +1,83 @@
+# Tailwind CSS
+
+[Tailwind CSS](https://tailwindcss.com/) — это утилитарный CSS-фреймворк для быстрого создания пользовательских интерфейсов. Его можно использовать с MDX-файлами в Rspress, чтобы более эффективно стилизовать вашу документацию, например:
+
+```mdx title="docs/foo.mdx"
+# Foo
+
+<div className="text-3xl font-bold underline">Привет, мир!</div>
+```
+
+Rspress построен на базе [Rsbuild](https://rsbuild.rs/), и конфигурация Tailwind CSS полностью соответствует Rsbuild. Подробности смотрите здесь:
+
+- [Rsbuild — Tailwind CSS v4](https://rsbuild.rs/guide/styling/tailwindcss)
+- [Rsbuild — Tailwind CSS v3](https://rsbuild.rs/guide/styling/tailwindcss-v3)
+
+Ниже приведено руководство по интеграции Tailwind CSS v4 с Rspress.
+
+:::tip Совет
+
+Все встроенные компоненты Rspress используют соглашение об именовании BEM и не используют Tailwind CSS внутри себя, что исключает конфликты с классами Tailwind CSS. Вы можете свободно использовать Tailwind v4 или v3, не беспокоясь о столкновениях стилей.
+
+:::
+
+import { PackageManagerTabs, Steps } from '@rspress/core/theme';
+
+<Steps>
+
+### Установка зависимостей
+
+<PackageManagerTabs command="add tailwindcss @tailwindcss/postcss -D" />
+
+### Создание конфигурации PostCSS
+
+Создайте файл `postcss.config.mjs` в корне вашего проекта:
+
+```js title="postcss.config.mjs"
+export default {
+  plugins: {
+    '@tailwindcss/postcss': {},
+  },
+};
+```
+
+### Создание файла Tailwind CSS
+
+Создайте файл `tailwind.css` в корне вашего проекта:
+
+```css title="tailwind.css"
+@import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
+```
+
+:::tip Тёмный режим
+
+Rspress переключает тёмный режим, проверяя наличие класса `.dark` у элемента `html`, поэтому вам нужно настроить `@custom-variant`. Подробнее см. в [документации Tailwind — Dark Mode](https://tailwindcss.com/docs/dark-mode).
+
+:::
+
+### Настройка Rspress
+
+В файле `rspress.config.ts` используйте опцию `globalStyles` для импорта файла Tailwind CSS:
+
+```ts title="rspress.config.ts"
+import * as path from 'node:path';
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  root: path.join(__dirname, 'doc'),
+  globalStyles: path.join(__dirname, 'tailwind.css'),
+});
+```
+
+### Использование
+
+Теперь вы можете использовать utility-классы Tailwind в своих MDX-файлах:
+
+```mdx title="doc/foo.mdx"
+# Foo
+
+<div className="text-3xl font-bold underline">Привет, мир!</div>
+```
+
+</Steps>
