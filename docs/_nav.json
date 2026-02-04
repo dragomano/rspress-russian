@@ -21,6 +21,11 @@
     "activeMatch": "/api/"
   },
   {
+    "text": "Блог",
+    "link": "/blog/",
+    "activeMatch": "/blog/"
+  },
+  {
     "text": "Версия",
     "items": [
       {

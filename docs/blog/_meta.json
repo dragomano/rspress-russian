@@ -1,0 +1,12 @@
+[
+  {
+    "type": "section-header",
+    "label": "Обзор"
+  },
+  "index",
+  {
+    "type": "section-header",
+    "label": "Блоги"
+  },
+  "rspress-v2"
+]
