@@ -36,7 +36,7 @@ rspress dev
 
 В режиме разработки используется **чистый рендеринг на стороне клиента (CSR)** без предварительного рендеринга. Это позволяет максимально ускорить итерации и обеспечить полноценную работу Hot Module Replacement (HMR — горячая перезагрузка модулей).
 
-:::tip СОВЕТ
+:::tip Совет
 Если ваш код отлично работает в режиме разработки, но выдаёт ошибки при сборке, чаще всего причина в том, что SSG выполняет рендеринг в среде Node.js и не имеет доступа к браузерным API (таким как `window` или `document`). Подробные решения смотрите в разделе [«Распространённые проблемы и их решения»](#common-issues-and-solutions) ниже.
 :::
 
@@ -140,48 +140,48 @@ doc_build/
 
 1. **Используйте `useEffect` для отложенного выполнения**: Помещайте вызовы браузерных API внутрь `useEffect`, чтобы они выполнялись только на стороне клиента
 
-   ```tsx
-   import { useEffect, useState } from 'react';
+    ```tsx
+    import { useEffect, useState } from 'react';
 
-   function MyComponent() {
-     const [width, setWidth] = useState(0);
+    function MyComponent() {
+      const [width, setWidth] = useState(0);
 
-     useEffect(() => {
-       // Запускается только на клиенте
-       setWidth(window.innerWidth);
-     }, []);
+      useEffect(() => {
+        // Запускается только на клиенте
+        setWidth(window.innerWidth);
+      }, []);
 
-     return <div>Ширина окна: {width}</div>;
-   }
-   ```
+      return <div>Ширина окна: {width}</div>;
+    }
+    ```
 
 2. **Проверка окружения**: Проверяйте среду перед обращением к браузерным API
 
-   ```tsx
-   if (typeof window !== 'undefined') {
-     // Среда браузера
-     console.log(window.location.href);
-   }
-   ```
+    ```tsx
+    if (typeof window !== 'undefined') {
+      // Среда браузера
+      console.log(window.location.href);
+    }
+    ```
 
 3. **Динамический импорт**: Для сторонних библиотек, которые зависят от браузерных API, используйте динамический импорт
 
-   ```tsx
-   import { useEffect, useState } from 'react';
+    ```tsx
+    import { useEffect, useState } from 'react';
 
-   function MyComponent() {
-     const [Editor, setEditor] = useState(null);
+    function MyComponent() {
+      const [Editor, setEditor] = useState(null);
 
-     useEffect(() => {
-       import('some-browser-only-library').then((mod) => {
-         setEditor(() => mod.default);
-       });
-     }, []);
+      useEffect(() => {
+        import('some-browser-only-library').then((mod) => {
+          setEditor(() => mod.default);
+        });
+      }, []);
 
-     if (!Editor) return <div>Загрузка...</div>;
-     return <Editor />;
-   }
-   ```
+      if (!Editor) return <div>Загрузка...</div>;
+      return <Editor />;
+    }
+    ```
 
 ### Несоответствие при гидратации
 
