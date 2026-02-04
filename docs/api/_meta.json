@@ -1,8 +1,16 @@
 [
   {
+    "type": "section-header",
+    "label": "Обзор"
+  },
+  {
     "type": "file",
     "name": "index",
     "label": "Обзор API"
+  },
+  {
+    "type": "section-header",
+    "label": "Конфигурация"
   },
   {
     "type": "dir",
