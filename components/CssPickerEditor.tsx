@@ -25,7 +25,7 @@ function useDebounce<T extends (...args: any[]) => void>(
 
 // Predefined colors
 const PREDEFINED_COLORS = [
-  { label: 'Orange', color: '#FFA500' },
+  { label: 'Blue', color: '#0095FF' },
   { label: 'Purple', color: '#8B5CF6' },
   { label: 'Pink', color: '#EC4899' },
   { label: 'Red', color: '#EF4444' },
