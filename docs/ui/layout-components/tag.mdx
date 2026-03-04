@@ -1,6 +1,6 @@
 ---
 description: Компонент Tag для отображения меток в боковой панели или навигационной панели, поддерживает встроенные теги, SVG и изображения.
-tag: новинка
+tag: new
 overviewHeaders: []
 ---
 
@@ -16,7 +16,7 @@ import { Badge, Tag } from '@rspress/core/theme';
 
 ```mdx title="foo.mdx"
 ---
-tag: новинка
+tag: new
 ---
 
 # Foo
@@ -24,18 +24,18 @@ tag: новинка
 какой-нибудь текст
 ```
 
-<Tag tag="новинка" />
+<Tag tag="new" />
 
 Поддерживается и вывод нескольких тегов, через запятую:
 
 ```mdx
 ---
-tag: новинка, экспериментально
+tag: new, experimental
 ---
 ```
 
 <div style={{ display: 'flex', gap: '8px' }}>
-  <Tag tag="новинка, экспериментально" />
+  <Tag tag="new, experimental" />
 </div>
 
 Также можно указывать теги через файл `_meta.json`:
@@ -45,7 +45,7 @@ tag: новинка, экспериментально
   {
     "name": "foo",
     "type": "file",
-    "tag": "новинка, экспериментально"
+    "tag": "new, experimental"
   }
 ]
 ```
@@ -66,25 +66,22 @@ tag: новинка, экспериментально
 
 Чтобы сделать передачу значений в блок метаданных удобной, компонент Tag поддерживает следующие типы тегов:
 
-### Общие теги <Tag tag="new" />
+### Встроенные теги <Tag tag="new" />
 
 Компонент имеет несколько встроенных тегов, которые отображаются с помощью `<Badge />`. Полный список:
 
 | Тег            | Соответствующий UI Badge       |
 | -------------- | ------------------------------ |
-| `tip`          | <Tag tag="совет" />            |
-| `info`         | <Tag tag="информация" />       |
-| `warning`      | <Tag tag="предупреждение" />   |
-| `danger`       | <Tag tag="опасность" />        |
-| `new`          | <Tag tag="новинка" />          |
-| `experimental` | <Tag tag="экспериментально" /> |
-| `deprecated`   | <Tag tag="устарело" />         |
+| `new`          | <Tag tag="new" />          |
+| `experimental` | <Tag tag="experimental" /> |
+| `deprecated`   | <Tag tag="deprecated" />         |
+| `updated`      | <Tag tag="updated" />        |
 
 :::tip Расширение списка тегов
 
-Компонент Tag является `ejectable`. Когда вы хотите расширить стандартные теги, вы можете использовать оборачивание или извлечение для модификации компонента Tag. Значение тега передаётся как пропсы в компонент Tag.
+Компонент Tag является `ejectable`. Когда вы хотите расширить стандартные теги, вы можете использовать оборачивание или извлечение для модификации компонента Tag. Значение тега передаётся с помощью пропсов в компонент Tag.
 
-Ниже приведён пример того, как этот сайт использует оборачивание для добавления пользовательского тега `eject-only`:
+Ниже приведён пример того, как этот сайт использует оборачивание для добавления переводов тегов:
 
 ```tsx title="theme/components/Tag/index.tsx"
 import {
@@ -92,17 +89,34 @@ import {
   Tag as BasicTag,
 } from '@rspress/core/theme-original';
 
-export const Tag = ({ tag }: { tag: string }) => {
-  if (tag === 'eject-only') {
-    return <BasicBadge text="eject-only" type="warning" />;
+export const Tag = ({ tag }: { tag?: string }) => {
+  if (!tag) {
+    return null;
   }
+
+  if (tag === 'new') {
+    return <BasicBadge text="Новинка" type="tip" />;
+  }
+
+  if (tag === 'experimental') {
+    return <BasicBadge text="Экспериментально" type="warning" />;
+  }
+
+  if (tag === 'deprecated') {
+    return <BasicBadge text="Устарело" type="danger" />;
+  }
+
+  if (tag === 'updated') {
+    return <BasicBadge text="Обновлено" type="info" />;
+  }
+
   return <BasicTag tag={tag} />;
 };
 ```
 
 ```mdx title="index.mdx"
 ---
-tag: новинка, eject-only
+tag: new, theme-only
 ---
 ```
 
@@ -156,7 +170,7 @@ import { Tag } from '@rspress/core/theme';
 interface TagProps {
   /**
    * Содержимое тега. Поддерживает:
-   * - Общие теги: 'tip', 'info', 'warning', 'danger', 'new', 'experimental', 'deprecated'
+   * - Встроенные теги: 'new', 'experimental', 'deprecated', 'updated'
    * - Несколько тегов вместе: 'new, experimental'
    * - SVG-строку: '<svg>...</svg>'
    * - URL изображения: 'https://...' или 'data:...'
