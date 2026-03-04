@@ -1,6 +1,7 @@
 import * as path from 'node:path';
 import { defineConfig } from '@rspress/core';
 import { pluginSass } from '@rsbuild/plugin-sass';
+import pluginFileTree from 'rspress-plugin-file-tree';
 import {
   transformerNotationDiff,
   transformerNotationErrorLevel,
@@ -46,6 +47,7 @@ export default defineConfig({
       ],
     },
   },
+  plugins: [pluginFileTree()],
   builderConfig: {
     plugins: [pluginSass()],
     resolve: {
