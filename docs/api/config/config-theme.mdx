@@ -134,18 +134,14 @@ interface SidebarGroup {
   tag?: string;
 }
 
-// Можно указать объект или просто строку
-// При указании строки она автоматически преобразуется в объект: строка будет использована как link, а текст будет взят из заголовка соответствующего документа
-type SidebarItem =
-  | {
-      // Текст пункта боковой панели
-      text: string;
-      // Ссылка пункта боковой панели
-      link: string;
-      // SVG-строка или URL изображения (необязательно)
-      tag?: string;
-    }
-  | string;
+type SidebarItem = {
+  // Текст пункта боковой панели
+  text: string;
+  // Ссылка пункта боковой панели
+  link: string;
+  // SVG-строка или URL изображения (необязательно)
+  tag?: string;
+};
 ```
 
 Например:
@@ -160,7 +156,6 @@ export default defineConfig({
         {
           text: 'Первые шаги',
           items: [
-            // Заполняем объект
             {
               text: 'Введение',
               link: '/guide/getting-started/introduction',
@@ -174,9 +169,14 @@ export default defineConfig({
         {
           text: 'Дополнительно',
           items: [
-            // Заполняем ссылки строками
-            '/guide/advanced/customization',
-            '/guide/advanced/markdown',
+            {
+              text: 'Настройка',
+              link: '/guide/advanced/customization',
+            },
+            {
+              text: 'Markdown',
+              link: '/guide/advanced/markdown',
+            },
           ],
         },
       ],
@@ -402,7 +402,7 @@ interface EditLink {
 
 - **По умолчанию**: `undefined`
 
-Отображает ссылку «Редактировать страницу» на сервисе управления Git (например, GitHub, GitLab).
+Отображает ссылку «Редактировать страницу» на сервисе управления Git (например, GitHub, GitLab). Ссылка отображается как в подвале документа, так и в панели оглавления.
 
 Например:
 
@@ -554,12 +554,13 @@ type LlmsUI =
         | { title: string; icon?: React.ReactNode; onClick?: () => void }
         | { title: string; href: string; icon?: React.ReactNode }
       >;
+      placement?: 'title' | 'outline';
     };
 ```
 
 - **По умолчанию**: `false` (автоматически устанавливается в `true`, когда настроено `llms: true`)
 
-Конфигурация для UI-компонентов LLMS. При включении этой опции под всеми заголовками H1 автоматически добавляются компоненты `LlmsCopyButton` и `LlmsViewOptions`.
+Конфигурация для UI-компонентов LLMS. При включении компоненты `LlmsCopyButton` и `LlmsViewOptions` будут автоматически добавлены под всеми заголовками H1 (по умолчанию) или в виде строк в панели оглавления.
 
 Это полезно при использовании функции [llms](/guide/basic/ssg-md) для генерации файлов llms.txt — пользователи смогут легко скопировать или открыть markdown-содержимое в инструментах ИИ.
 
@@ -577,6 +578,7 @@ export default defineConfig({
     // Или с пользовательскими настройками:
     // llmsUI: {
     //   viewOptions: ['markdownLink', 'chatgpt', 'claude'],
+    //   placement: 'outline',
     // },
   },
 });
@@ -594,3 +596,26 @@ export default defineConfig({
 - `'claude'`: Открыть в Claude
 
 Вы также можете добавить собственные варианты, указав `title`, `href` или `onClick`, а также опционально `icon`.
+
+### placement
+
+- **Тип**: `'title' | 'outline'`
+- **По умолчанию**: `'title'`
+
+Определяет, где отображаются UI-компоненты LLMS.
+
+- `'title'`: Показывать в виде кнопок под заголовком H1 (поведение по умолчанию)
+- `'outline'`: Показывать в виде отдельных строк в панели оглавления
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  llms: true,
+  themeConfig: {
+    llmsUI: {
+      placement: 'outline',
+    },
+  },
+});
+```
