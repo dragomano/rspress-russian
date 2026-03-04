@@ -7,6 +7,7 @@ import { NavIcon } from '@rstack-dev/doc-ui/nav-icon';
 import { CssModificationProvider } from '../components/CssModificationContext';
 import { CssModificationIndicator } from '../components/CssModificationIndicator';
 import { CssStyleSync } from '../components/CssStyleSync';
+import { Callout, Tag } from './components';
 import './index.css';
 
 function HomeLayout() {
@@ -35,4 +36,4 @@ const Layout = () => {
 };
 
 export * from '@rspress/core/theme-original';
-export { HomeLayout, Layout };
+export { HomeLayout, Layout, Callout, Tag };
