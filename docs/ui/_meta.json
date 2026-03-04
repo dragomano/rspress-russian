@@ -34,7 +34,7 @@
     "type": "dir",
     "label": "Встроенные компоненты",
     "name": "layout-components",
-    "tag": "eject-only"
+    "tag": "theme-only"
   },
   {
     "type": "section-header",
