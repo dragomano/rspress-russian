@@ -1,5 +1,5 @@
 ---
-tag: новинка
+tag: new
 ---
 
 # @rspress/plugin-llms <SourceCode href="https://github.com/web-infra-dev/rspress/tree/main/packages/plugin-llms" />
@@ -46,7 +46,7 @@ export default defineConfig({
 
 #### Использование themeConfig (рекомендуемый способ)
 
-Самый простой способ — включить `llmsUI` в `themeConfig`. Это автоматически добавит компоненты `LlmsCopyButton` и `LlmsViewOptions` под всеми заголовками H1 без необходимости писать код пользовательской темы:
+Самый простой способ — включить `llmsUI` в `themeConfig`. Это автоматически добавит компоненты `LlmsCopyButton` и `LlmsViewOptions` под всеми заголовками H1 (или в панели оглавления) без необходимости писать код пользовательской темы:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -59,6 +59,7 @@ export default defineConfig({
     // Или с пользовательскими настройками:
     // llmsUI: {
     //   viewOptions: ['markdownLink', 'chatgpt', 'claude'],
+    //   placement: 'outline', // Отображать в панели оглавления вместо размещения под заголовком H1
     // },
   },
 });
