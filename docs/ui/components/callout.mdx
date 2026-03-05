@@ -1,6 +1,6 @@
 ---
 overviewHeaders: []
-tag: eject-only
+tag: theme-only
 ---
 
 # Callout
@@ -28,16 +28,16 @@ import ContainerSyntax from '@fragments/container-syntax.mdx';
 ```mdx title="index.mdx"
 import { Callout } from '@rspress/core/theme-original';
 
-<Callout type="tip">Это подсказка callout</Callout>
+<Callout type="tip">Это подсказка со стандартным заголовком</Callout>
 
 <Callout type="warning" title="Предупреждение">
   Это предупреждение с пользовательским заголовком
 </Callout>
 ```
 
-import { Callout } from '@rspress/core/theme-original';
+import { Callout } from '@theme/components/Callout';
 
-<Callout type="tip">Это подсказка callout</Callout>
+<Callout type="tip">Это подсказка со стандартным заголовком</Callout>
 
 <Callout type="warning" title="Предупреждение">
   Это предупреждение с пользовательским заголовком
