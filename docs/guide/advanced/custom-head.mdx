@@ -7,10 +7,24 @@
 | Тег                                                        | Описание                                                                              |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | `<meta name="generator" content="Rspress v${version}">`     | Указывает генератор сайта и его версию                                               |
-| `<meta name="description" content="${description}">`        | Описание страницы, берётся из метаданных или глобальной конфигурации (если задано)   |
+| `<meta name="description" content="${description}">`        | Описание страницы, см. [Как определяется описание](#как-определяется-описание) ниже  |
 | `<meta property="og:type" content="website">`               | Тип Open Graph, фиксированное значение `website`                                     |
 | `<meta property="og:title" content="${title}">`             | Заголовок Open Graph, используется заголовок текущей страницы (если доступен)        |
-| `<meta property="og:description" content="${description}">` | Описание Open Graph, берётся из метаданных или глобальной конфигурации (если задано) |
+| `<meta property="og:description" content="${description}">` | Описание Open Graph, то же, что и выше                                               |
+
+## Как определяется описание
+
+По умолчанию Rspress извлекает первый содержательный абзац под заголовком `h1` в качестве описания страницы (см. [`markdown.extractDescription`](/api/config/config-build#markdownextractdescription)). Если результат извлечения вас не устраивает, вы можете указать поле `description` в [frontmatter](/api/config/config-frontmatter#description), чтобы переопределить его:
+
+```md title="example.mdx"
+---
+description: Пользовательское описание для этой страницы.
+---
+```
+
+:::tip
+Вы можете использовать навык агента [rspress-description-generator](https://github.com/rstackjs/agent-skills#rspress-description-generator) для автоматической генерации описаний для всех страниц. Подробнее см. [Навыки агентов](/guide/start/ai#agent-skills).
+:::
 
 Если вы хотите добавить теги head, можно воспользоваться следующими способами:
 
@@ -22,18 +36,25 @@
 
 Вы можете изменять поля [title](/api/config/config-frontmatter#title) и [description](/api/config/config-frontmatter#description) в блоке метаданных, чтобы задать заголовок и описание для отдельных страниц.
 
+```md title="example.mdx"
+---
+title: Пользовательский заголовок страницы
+description: Пользовательское описание страницы для мета-тега description и Open Graph.
+---
+```
+
 Также можно использовать [метаданные - head](/api/config/config-frontmatter#head), чтобы настроить пользовательские мета-теги страницы для оптимизации SEO.
 
-Например, если вы хотите добавить `<meta name="og:description" content="Это описание">` в тег `<head>`, можно указать метаданные следующим образом:
+Например, если вы хотите добавить `<meta property="og:description" content="Это описание">` в тег `<head>`, можно указать метаданные следующим образом:
 
 ```md title="example.mdx"
 ---
 head:
   - - meta
-    - name: og:title
+    - property: og:title
       content: Это заголовок
   - - meta
-    - name: og:description
+    - property: og:description
       content: Это описание
 ---
 ```
@@ -41,6 +62,30 @@ head:
 ## Компонент Head
 
 Если вам нужна более сложная настройка тегов head, вы можете использовать компонент [Head](/ui/runtime-components/head), предоставляемый Rspress, чтобы динамически задавать теги head на страницах или в компонентах макета.
+
+## Хук useHead
+
+Если вы уже находитесь внутри React-компонента и предпочитаете декларацию в виде объекта, используйте [`useHead`](/ui/hooks/use-head):
+
+```tsx
+import { useHead } from '@rspress/core/runtime';
+
+export function PageMeta() {
+  useHead({
+    title: 'Пользовательский заголовок страницы',
+    meta: [
+      {
+        name: 'description',
+        content: 'Пользовательское описание страницы для SEO и социальных сетей.',
+      },
+    ],
+  });
+
+  return null;
+}
+```
+
+По сравнению с `Head`, `useHead` обычно более удобен, когда итоговые теги зависят от пропсов, состояния или вспомогательных функций.
 
 ## Конфигурация html.tags в Rsbuild
 
@@ -72,6 +117,6 @@ export default defineConfig({
 - **Конфигурация head в Rspress**: Может получать доступ к информации о маршрутах, поддерживает динамическую установку тегов head в зависимости от разных страниц
 - **Rsbuild html.tags**: Статическая конфигурация времени сборки, подходит для глобального единого внедрения тегов (например, код аналитики)
 
-Если вам нужно динамически изменять содержимое head в зависимости от маршрутов страниц, используйте [глобальную конфигурацию head](#global-head-configuration) или [компонент Head](#head-component).
+Если вам нужно динамически изменять содержимое head в зависимости от маршрутов страницы, используйте [глобальную конфигурацию head](#global-head-configuration), [компонент Head](#head-component) или [хук useHead](#usehead-hook).
 
 :::
