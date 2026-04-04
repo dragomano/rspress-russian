@@ -4,7 +4,7 @@ import styles from './BlogAvatar.module.css';
 const AUTHORS = {
   sooniter: {
     name: 'Sooniter',
-    title: 'Мейнтейнер Rspress V2',
+    title: 'Мейнтейнер Rspress',
     github: 'https://github.com/sooniter',
     avatar: 'https://github.com/sooniter.png',
     x: 'https://x.com/Soon_Iter',
