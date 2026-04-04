@@ -111,6 +111,28 @@ export default defineConfig({
 });
 ```
 
+## i18nSourcePath
+
+- **Тип**: `string`
+- **По умолчанию**: `path.join(cwd, 'i18n.json')`
+
+Указывает путь к файлу источника данных i18n. По умолчанию Rspress читает файл `i18n.json` из текущей рабочей директории. Например:
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+import path from 'path';
+
+export default defineConfig({
+  i18nSourcePath: path.join(__dirname, 'config/i18n.json'),
+});
+```
+
+:::tip
+
+Это имеет тот же эффект, что и размещение файла `i18n.json` в корне проекта. Если также настроен `i18nSource`, то данные из `i18nSource` будут объединены с данными из `i18nSourcePath` и имеют приоритет.
+
+:::
+
 ## i18nSource
 
 - **Тип**: `Record<string, Record<string, string>> | ((value: Record<string, Record<string, string>>) => Record<string, Record<string, string>> | Promise<Record<string, Record<string, string>>>)`
@@ -164,6 +186,23 @@ export default defineConfig({
   },
 });
 ```
+
+Вот встроенные строки i18n в Rspress:
+
+<details>
+
+```ts
+const DEFAULT_I18N_TEXT = {
+  // Основные строки интерфейса
+  searchPlaceholder: 'Поиск',
+  theme: 'Тема',
+  darkMode: 'Тёмная тема',
+  lightMode: 'Светлая тема',
+  // И другие строки...
+};
+```
+
+</details>
 
 ## logo \{#logo-1}
 
@@ -240,6 +279,26 @@ export default defineConfig({
   outDir: 'doc_build',
 });
 ```
+
+## themeDir
+
+- **Тип**: `string`
+- **По умолчанию**: `theme`
+
+Указывает директорию пользовательской темы. По умолчанию Rspress использует директорию `theme` в текущей рабочей директории в качестве директории пользовательской темы. Вы можете использовать `themeDir` для её настройки. Например:
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+import path from 'path';
+
+export default defineConfig({
+  themeDir: path.join(__dirname, 'my-theme'),
+});
+```
+
+Эта конфигурация поддерживает как относительные, так и абсолютные пути, при этом относительные пути отсчитываются от текущей рабочей директории.
+
+Подробнее о пользовательских темах см. [Кастомная тема](/guide/basic/custom-theme).
 
 ## locales
 
@@ -329,12 +388,35 @@ export default defineConfig({
 }
 ```
 
+## llms
+
+- **Тип**: `boolean | { remarkSplitMdxOptions?: RemarkSplitMdxOptions }`
+- **По умолчанию**: `false`
+
+Включает генерацию [SSG-MD](/guide/basic/ssg-md) для создания файлов `llms.txt`, `llms-full.txt` и Markdown-файлов для каждой страницы, что облегчает понимание вашей документации большими языковыми моделями.
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  llms: true,
+});
+```
+
+:::warning
+
+`llms` — это экспериментальная функция. Если SSG-MD не удается включить из-за несовместимости с SSR, используйте в качестве запасного варианта [@rspress/plugin-llms](/plugin/official-plugins/llms).
+
+:::
+
+Подробное использование, параметры конфигурации и принципы реализации см. в разделе [llms.txt (SSG-MD)](/guide/basic/ssg-md).
+
 ## mediumZoom
 
 - **Тип**: `boolean` | `{ selector?: string }`
 - **По умолчанию**: `true`
 
-Включить ли функцию увеличения изображений по клику. По умолчанию включена, можно отключить, установив `mediumZoom` в `false`.
+Включает функцию увеличения изображений по клику. По умолчанию включена, можно отключить, установив `mediumZoom` в `false`.
 
 > На нижнем уровне используется библиотека [medium-zoom](https://github.com/francoischalifour/medium-zoom).
 
@@ -583,7 +665,7 @@ export default defineConfig({
 - **Тип**: `boolean | { experimentalWorker?: boolean; experimentalLoose?: boolean; }`
 - **По умолчанию**: `true`
 
-Включить ли генерацию статического сайта (SSG). По умолчанию Rspress включает её, чтобы одновременно создавать клиентский рендеринг (CSR) и статические HTML-страницы (SSG).
+Включает генерацию статического сайта (SSG). По умолчанию Rspress включает её, чтобы одновременно создавать клиентский рендеринг (CSR) и статические HTML-страницы (SSG).
 
 Если ваш сайт документации нужен только в режиме клиентского рендеринга (CSR), вы можете установить `ssg: false` — в этом случае Rspress будет генерировать исключительно CSR-сборку.
 
