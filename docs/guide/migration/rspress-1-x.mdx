@@ -2,6 +2,8 @@
 description: Полное руководство по миграции с Rspress 1.x на V2, охватывающее изменение названий пакетов, путей импорта, пользовательских тем, подсветки кода Shiki и многое другое.
 ---
 
+import { PackageManagerTabs } from '@theme';
+
 # Миграция с Rspress 1.x
 
 Этот документ поможет вам перейти с Rspress 1.x на Rspress V2. Рекомендуем использовать функцию «Копировать как Markdown», чтобы передать этот документ большой языковой модели для автоматизированной помощи в миграции.
@@ -17,6 +19,7 @@ description: Полное руководство по миграции с Rspres
 - [ ] **builderPlugins**: перенести в `builderConfig.plugins`
 - [ ] **Sass/Less**: вручную установить `@rsbuild/plugin-sass` или `@rsbuild/plugin-less`
 - [ ] **Внешние блоки кода**: `<code src="..." />` → ` ```tsx file="..." `
+- [ ] **markdown.mdxRs**: удалить опцию `markdown.mdxRs` (больше не поддерживается)
 - [ ] **themeConfig.locales**: удалить `outlineTitle` и другие текстовые конфиги, использовать `i18nSource` вместо них
 
 ## [Важно] Требования к Node.js и зависимостям верхнего уровня
@@ -329,7 +332,7 @@ export default defineConfig({
 - раньше: `/guide/index`
 - теперь: `/guide/`
 
-## Удалена конфигурация builderPlugins
+## Удалена опция builderPlugins
 
 Опция `builderPlugins` удалена. Пожалуйста, мигрируйте на `builderConfig.plugins`.
 
@@ -351,6 +354,38 @@ import { defineConfig } from '@rspress/core';
 export default defineConfig({
   builderConfig: {
     plugins: [pluginFoo()],
+  },
+});
+```
+
+## Удалена опция `markdown.mdxRs`
+
+Опция `markdown.mdxRs` была удалена в V2. Rspress больше не использует MDX-парсер на основе Rust (`@rspress/mdx-rs`). Пожалуйста, удалите опцию `markdown.mdxRs` из вашей конфигурации.
+
+Сохранение этой опции в конфигурации вызовет ошибки проверки типов TypeScript, но не повлияет на поведение во время выполнения.
+
+- до:
+
+```ts title="rspress.config.ts"
+import { defineConfig } from 'rspress/config';
+
+export default defineConfig({
+  markdown: {
+    mdxRs: false,
+    remarkPlugins: [plugin1, plugin2],
+  },
+});
+```
+
+- после:
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  markdown: {
+    // опция mdxRs удалена, замена не требуется
+    remarkPlugins: [plugin1, plugin2],
   },
 });
 ```
@@ -507,6 +542,32 @@ export default defineConfig({
   },
 });
 ```
+
+## plugin-preview
+
+`@rspress/plugin-preview` V2 больше не включает `@rsbuild/plugin-less` и `@rsbuild/plugin-sass` как встроенные зависимости. Если вам нужна поддержка Less или Sass в превью, установите соответствующий плагин и настройте его через `iframeOptions.builderConfig`:
+
+<PackageManagerTabs command="add @rsbuild/plugin-less -D" />
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+import { pluginPreview } from '@rspress/plugin-preview';
+import { pluginLess } from '@rsbuild/plugin-less';
+
+export default defineConfig({
+  plugins: [
+    pluginPreview({
+      iframeOptions: {
+        builderConfig: {
+          plugins: [pluginLess()],
+        },
+      },
+    }),
+  ],
+});
+```
+
+Подробнее о миграции см. [руководство по миграции plugin-preview](/plugin/official-plugins/preview#миграция-с-v1).
 
 ## Ресурсы
 
