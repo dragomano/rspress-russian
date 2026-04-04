@@ -154,12 +154,28 @@ docs
 
 ## Настройка
 
-Если вам нужно полностью настроить содержимое страницы обзора, вы можете вручную собрать её с помощью компонента [OverviewGroup](/ui/layout-components/overview-group):
+Если вам нужно полностью настроить содержимое страницы обзора, есть два подхода:
+
+### Подход 1: настройка стилей через кастомную тему
+
+Используйте [кастомную тему](/guide/basic/custom-theme) для изменения стилей компонента [OverviewGroup](/ui/layout-components/overview-group), продолжая использовать встроенную функциональность страницы обзора:
 
 ```mdx title="index.mdx"
 ---
 overview: true
 ---
+```
+
+### Подход 2: полностью кастомное содержимое страницы
+
+Используйте компонент [OverviewGroup](/ui/layout-components/overview-group) с `pageType: doc-wide` для настройки макета страницы и определения содержимого самостоятельно:
+
+```mdx title="index.mdx"
+---
+pageType: doc-wide
+---
+
+# Моя кастомная страница обзора
 
 import { OverviewGroup } from '@rspress/core/theme';
 
