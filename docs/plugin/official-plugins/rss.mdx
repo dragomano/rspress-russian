@@ -202,7 +202,7 @@ export interface FeedChannel extends Partial<FeedOptions> {
     | RegExp
     | string
     | (RegExp | string)[]
-    | ((item: PageIndexInfo, base: string) => boolean);
+    | ((item: PageIndexInfo) => boolean);
   item?: (
     item: FeedItem,
     page: PageIndexInfo,
@@ -221,19 +221,36 @@ export interface FeedChannel extends Partial<FeedOptions> {
 
 #### `test`
 
-- **Тип**: `RegExp | string | (RegExp | string)[] | ((item: PageIndexInfo, base: string) => boolean)`
+- **Тип**: `RegExp | string | (RegExp | string)[] | ((item: PageIndexInfo) => boolean)`
 - **Обязательный параметр**
 
 Определяет, какие документы попадут в эту RSS-ленту. Возможные варианты:
 
-- `RegExp` — регулярное выражение для маршрута страницы. При наличии `base` будет проверяться как с `base`, так и без него.
-- `string` — префикс маршрута страницы. При наличии `base` проверяется с `base` и без него.
-- `(item: PageIndexInfo, base: string) => boolean` — произвольная функция, позволяющая фильтровать страницы по их данным и метаполям.
+- `RegExp`: регулярное выражение для сопоставления с маршрутом документа.
+- `string`: префиксное сопоставление с маршрутом документа.
+- `(item: PageIndexInfo) => boolean`: сопоставление страниц на основе данных страницы и метаданных. Это также рекомендуемый способ включить префикс маршрута, исключая при этом определённые страницы, такие как `/blog/`.
+
+:::tip
+`item.routePath` не включает путь `base`.
+:::
+
+Например, если вы хотите включить только страницы статей внутри `/blog/`, но исключить саму индексную страницу блога:
+
+```ts
+feed: {
+  id: 'blog',
+  test: (item) => {
+    return (
+      item.routePath.startsWith('/blog/') && item.routePath !== '/blog/'
+    );
+  },
+}
+```
 
 #### `item`
 
 - **Тип**: `(item: FeedItem, page: PageIndexInfo, siteUrl: string) => FeedItem | PromiseLike<FeedItem>`
-- **По умолчанию**: описано ниже
+- **По умолчанию**: <SourceCode href="https://github.com/web-infra-dev/rspress/tree/main/packages/plugin-rss/src/createFeed.ts" />
 
 Формирует структурированные данные каждой статьи в RSS-ленте.
 
@@ -253,8 +270,6 @@ const item: FeedChannel['item'] = (item) => ({
   content: item.content.slice(0, 1000),
 });
 ```
-
-Подробности о логике встроенного генератора: <SourceCode href="https://github.com/web-infra-dev/rspress/tree/main/packages/plugin-rss/src/feed.ts" />
 
 #### `output`
 
@@ -280,6 +295,14 @@ interface FeedOutputOptions {
   filename?: string;
   publicPath?: string;
   sorting?: (left: FeedItem, right: FeedItem) => number;
+  transform?: (
+    content: string,
+    context: {
+      type: 'atom' | 'rss' | 'json';
+      feed: Feed;
+      channel: FeedChannel;
+    },
+  ) => string | PromiseLike<string>;
 }
 ```
 
@@ -354,3 +377,33 @@ pluginRss({
 - **Тип**: `sorting?: (left: FeedItem, right: FeedItem) => number;`
 
 Функция сортировки статей. По умолчанию — от новых к старым.
+
+#### `transform`
+
+- **Тип**: `(content: string, context: { type: 'atom' | 'rss' | 'json'; feed: Feed; channel: FeedChannel }) => string | PromiseLike<string>`
+
+Преобразует финальный сгенерированный контент ленты перед записью на диск. Этот хук доступен как в опции `output` на уровне плагина, так и в опции `output` для каждой ленты, поэтому один и тот же шаблон кастомизации можно использовать для Atom, RSS и JSON Feed.
+
+Например, следующая конфигурация добавляет пользовательский `folo:id` в XML-ленты и добавляет тот же идентификатор в JSON Feed:
+
+```ts
+pluginRss({
+  siteUrl: 'https://example.com/',
+  output: {
+    transform(content, { type, channel }) {
+      if (type === 'json') {
+        return JSON.stringify({
+          ...JSON.parse(content),
+          foloId: channel.id,
+        });
+      }
+
+      const closingTag = type === 'rss' ? '</channel>' : '</feed>';
+      return content.replace(
+        closingTag,
+        `<folo:id>${channel.id}</folo:id>${closingTag}`,
+      );
+    },
+  },
+});
+```
