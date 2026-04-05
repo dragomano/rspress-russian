@@ -261,11 +261,33 @@ interface IframeOptions {
 - **Тип:** `number`
 - **По умолчанию:** `7890`
 
-Порт dev-сервера для предпросмотра в iframe. Используйте эту настройку, если порт по умолчанию уже занят.
+Настраивает порт dev-сервера для предпросмотра в iframe. Если указанный порт уже занят, плагин автоматически попробует следующий порт, до 20 попыток.
 
 #### iframeOptions.builderConfig
 
 Настраивает параметры сборки Rsbuild для iframe, например, добавление глобальных стилей или скриптов.
+
+Например, чтобы добавить поддержку Less или Sass в превью, установите и настройте соответствующий плагин Rsbuild:
+
+<PackageManagerTabs command="add @rsbuild/plugin-less -D" />
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+import { pluginPreview } from '@rspress/plugin-preview';
+import { pluginLess } from '@rsbuild/plugin-less';
+
+export default defineConfig({
+  plugins: [
+    pluginPreview({
+      iframeOptions: {
+        builderConfig: {
+          plugins: [pluginLess()],
+        },
+      },
+    }),
+  ],
+});
+```
 
 #### iframeOptions.customEntry
 
@@ -359,6 +381,27 @@ return React.createElement(json.type, null, json.children);
 - `<code src="./foo.tsx"/>` → нужно заменить на [Блок кода из файла](../../guide/use-mdx/code-blocks.mdx#file-code-block): `tsx file="./foo.tsx"`
 - Опция `defaultPreviewMode` заменяет прежние `iframeOptions.position` и `previewMode`
 - Значение по умолчанию `defaultRenderMode` изменилось с `'preview'` на `'pure'`
+- `@rsbuild/plugin-less` и `@rsbuild/plugin-sass` больше не встроены. Если вам нужна поддержка Less или Sass в превью, установите соответствующий плагин и настройте его через `iframeOptions.builderConfig`:
+
+<PackageManagerTabs command="add @rsbuild/plugin-less -D" />
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+import { pluginPreview } from '@rspress/plugin-preview';
+import { pluginLess } from '@rsbuild/plugin-less';
+
+export default defineConfig({
+  plugins: [
+    pluginPreview({
+      iframeOptions: {
+        builderConfig: {
+          plugins: [pluginLess()],
+        },
+      },
+    }),
+  ],
+});
+```
 
 :::tip Примеры миграции
 
