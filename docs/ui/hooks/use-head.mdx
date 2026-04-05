@@ -1,0 +1,43 @@
+---
+description: Хук useHead для объявления тегов head документа в React-компонентах и макетах.
+---
+
+# useHead
+
+`useHead` позволяет объявлять теги head документа из React-компонентов или пользовательских макетов.
+
+- **Тип:** `(input: UseHeadInput) => ActiveHeadEntry | void`
+
+Rspress переэкспортирует этот хук из `@rspress/core/runtime`, поэтому вы можете использовать тот же API head в пользовательских страницах, компонентах темы и коде макета.
+
+```tsx
+import { useHead } from '@rspress/core/runtime';
+
+export function ProductMeta() {
+  useHead({
+    title: 'Rspress',
+    meta: [
+      {
+        name: 'description',
+        content: 'Генератор статических сайтов на базе Rsbuild и MDX.',
+      },
+      {
+        property: 'og:title',
+        content: 'Rspress',
+      },
+    ],
+    link: [
+      {
+        rel: 'canonical',
+        href: 'https://rspress.dev/',
+      },
+    ],
+  });
+
+  return null;
+}
+```
+
+Используйте `useHead`, когда данные для head проще формировать из JavaScript-объектов или они зависят от состояния и пропсов компонента.
+
+> Если вы предпочитаете объявлять теги напрямую в MDX, используйте вместо этого компонент [`Head`](/ui/runtime-components/head).
