@@ -255,6 +255,47 @@ export default defineConfig({
 
 Если пользователь напишет ссылку `[](/guide/getting-started)` в `docs/ru/guide/index.md`, Rspress автоматически преобразует её в `[](/ru/guide/getting-started)`.
 
+### markdown.image
+
+- **Type**:
+
+```ts
+export type RemarkImageOptions = {
+  checkDeadImages?:
+    | boolean
+    | { excludes: string[] | ((url: string) => boolean) };
+};
+```
+
+- **По умолчанию**: `{ checkDeadImages: true }`
+
+Настройка параметров, связанных с изображениями.
+
+#### markdown.image.checkDeadImages
+
+- **Тип**: `boolean | { excludes: string[] | ((url: string) => boolean) }`
+- **По умолчанию**: `true`
+
+После включения этой настройки Rspress будет проверять локальные изображения в документе. Если изображение ссылается на несуществующий файл, сборка вызовет ошибку и завершится.
+
+Для относительных путей к изображениям (например, `./image.png`) файл разрешается относительно текущего документа. Для абсолютных путей к изображениям (например, `/image.png`) файл разрешается из каталога `public`.
+
+Если происходит ошибочное определение изображений, можно игнорировать ошибку с помощью настройки `excludes`:
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  markdown: {
+    image: {
+      checkDeadImages: {
+        excludes: ['/generated-diagram.png'],
+      },
+    },
+  },
+});
+```
+
 ### markdown.showLineNumbers
 
 - **Тип**: `boolean`
