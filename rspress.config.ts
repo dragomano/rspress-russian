@@ -1,6 +1,8 @@
 import * as path from 'node:path';
 import { defineConfig } from '@rspress/core';
 import { pluginSass } from '@rsbuild/plugin-sass';
+import { pluginPreview } from '@rspress/plugin-preview';
+import { pluginPlayground } from '@rspress/plugin-playground';
 import pluginFileTree from 'rspress-plugin-file-tree';
 import {
   transformerNotationDiff,
@@ -47,7 +49,11 @@ export default defineConfig({
       ],
     },
   },
-  plugins: [pluginFileTree()],
+  plugins: [
+    pluginPreview(),
+    pluginPlayground(),
+    pluginFileTree(),
+  ],
   builderConfig: {
     plugins: [pluginSass()],
     resolve: {
