@@ -54,7 +54,6 @@ import { Tabs, Tab } from '@rspress/core/theme';
 ```
 
 </Tab>
-
 </Tabs>
 
 :::tip Подсказка
@@ -232,6 +231,24 @@ export default defineConfig({
   markdown: {
     link: {
       checkDeadLinks: true,
+    },
+  },
+});
+```
+
+## Проверка битых изображений
+
+Аналогично проверке битых ссылок, Rspress также может проверять ссылки на изображения в документации. Это позволяет обнаруживать изображения, которые ссылаются на несуществующие локальные файлы, включая как относительные пути, так и абсолютные пути, ссылающиеся на каталог `public`.
+
+Настройте проверку с помощью [markdown.image.checkDeadImages](/api/config/config-build#markdownimagecheckdeadimages) для автоматической проверки неработающих изображений.
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  markdown: {
+    image: {
+      checkDeadImages: true,
     },
   },
 });
