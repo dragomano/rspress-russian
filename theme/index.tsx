@@ -9,7 +9,7 @@ import { NavIcon } from '@rstack-dev/doc-ui/nav-icon';
 import { CssModificationProvider } from '../components/CssModificationContext';
 import { CssModificationIndicator } from '../components/CssModificationIndicator';
 import { CssStyleSync } from '../components/CssStyleSync';
-import { Callout, Tag } from './components';
+import { Callout, Prompt, Tag } from './components';
 import { BlogBackButton } from './components/BlogBackButton';
 import './index.css';
 
@@ -53,4 +53,4 @@ const DocLayout = (props: DocLayoutProps) => {
 };
 
 export * from '@rspress/core/theme-original';
-export { DocLayout, HomeLayout, Layout, Callout, Tag };
+export { DocLayout, HomeLayout, Layout, Callout, Prompt, Tag };
