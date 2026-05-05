@@ -29,11 +29,15 @@
     "text": "Версия",
     "items": [
       {
-        "text": "Журнал изменений",
+        "text": "Журнал изменений (GitHub)",
         "link": "https://github.com/web-infra-dev/rspress/releases"
       },
       {
-        "text": "Документация Rspress 1.x",
+        "text": "Документация Rspress 2.x (English)",
+        "link": "https://rspress.rs/"
+      },
+      {
+        "text": "Документация Rspress 1.x (English)",
         "link": "https://v1.rspress.rs/"
       }
     ]
