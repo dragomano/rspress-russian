@@ -8,11 +8,11 @@
     "preview": "rspress preview"
   },
   "devDependencies": {
-    "@rsbuild/plugin-sass": "^1.5.1",
-    "@rspress/core": "^2.0.9",
-    "@rspress/plugin-playground": "^2.0.9",
-    "@rspress/plugin-preview": "^2.0.9",
-    "@rstack-dev/doc-ui": "^1.12.5",
+    "@rsbuild/plugin-sass": "^1.5.2",
+    "@rspress/core": "^2.0.10",
+    "@rspress/plugin-playground": "^2.0.10",
+    "@rspress/plugin-preview": "^2.0.10",
+    "@rstack-dev/doc-ui": "^1.13.3",
     "@shikijs/transformers": "^4.0.2",
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
