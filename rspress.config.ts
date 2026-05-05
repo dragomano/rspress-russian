@@ -87,13 +87,16 @@ export default defineConfig({
       {
         icon: 'github',
         mode: 'link',
-        content: 'https://github.com/dragomano/rspress-russian',
-      },
-      {
-        icon: 'github',
-        mode: 'link',
         content: 'https://github.com/web-infra-dev/rspress',
       },
     ],
+    editLink: {
+      docRepoBaseUrl:
+        'https://github.com/dragomano/rspress-russian/tree/main/docs',
+    },
+    footer: {
+      message:
+        '<p><a href="https://github.com/dragomano/rspress-russian">Поставьте лайк репозиторию перевода</a></p>',
+    },
   },
 });
