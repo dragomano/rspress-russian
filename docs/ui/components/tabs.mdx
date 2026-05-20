@@ -18,7 +18,7 @@ import { Tab, Tabs } from '@rspress/core/theme';
 </Tabs>
 ```
 
-### Блоки кода
+## Блоки кода
 
 ````mdx title="index.mdx" preview
 import { Tab, Tabs } from '@rspress/core/theme';
@@ -43,21 +43,99 @@ const bar = require('bar');
 </Tabs>
 ````
 
-### Пропсы
+## Синхронизация групп
+
+Используйте один и тот же `groupId` для синхронизации активной вкладки в нескольких компонентах `Tabs`.
+
+```mdx title="index.mdx" preview
+import { Tab, Tabs } from '@rspress/core/theme';
+
+<Tabs groupId="package-manager">
+  <Tab label="npm">npm install rspress</Tab>
+  <Tab label="pnpm">pnpm add rspress</Tab>
+</Tabs>
+
+<Tabs groupId="package-manager">
+  <Tab label="npm">npm run dev</Tab>
+  <Tab label="pnpm">pnpm dev</Tab>
+</Tabs>
+```
+
+## Пользовательские метки
+
+Используйте свойство `label` у каждого `Tab`, чтобы задать пользовательские заголовки вкладок.
+
+```mdx title="index.mdx" preview
+import {
+  IconGithub,
+  IconGitlab,
+  SvgWrapper,
+  Tab,
+  Tabs,
+} from '@rspress/core/theme';
+
+<Tabs>
+  <Tab
+    label={
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+        <SvgWrapper icon={IconGithub} width={16} height={16} />
+        GitHub
+      </span>
+    }
+  >
+    Настройки репозитория GitHub
+  </Tab>
+  <Tab
+    label={
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+        <SvgWrapper icon={IconGitlab} width={16} height={16} />
+        GitLab
+      </span>
+    }
+  >
+    Настройки проекта GitLab
+  </Tab>
+</Tabs>
+```
+
+## Раздельное задание меток и содержимого
+
+Используйте `values` для определения заголовков вкладок отдельно от содержимого панелей. Каждый элемент содержит `value`, а соответствующий `<Tab value="...">` предоставляет содержимое. Используйте `defaultValue` для выбора вкладки по умолчанию по её `value`.
+
+```mdx title="index.mdx" preview
+import { Tab, Tabs } from '@rspress/core/theme';
+
+<Tabs
+  defaultValue="apple"
+  values={[
+    { label: 'Apple', value: 'apple' },
+    { label: 'Orange', value: 'orange' },
+    { label: 'Banana', value: 'banana' },
+  ]}
+>
+  <Tab value="apple">Это яблоко 🍎</Tab>
+  <Tab value="orange">Это апельсин 🍊</Tab>
+  <Tab value="banana">Это банан 🍌</Tab>
+</Tabs>
+```
+
+## Пропсы
 
 ```ts
 interface TabsProps {
   children: React.ReactNode;
+  values?: Array<{ label: React.ReactNode; value: string }>;
+  defaultIndex?: number;
   defaultValue?: string;
   groupId?: string;
   tabPosition?: 'left' | 'center';
 }
 
 interface TabProps {
-  label: string;
+  label?: React.ReactNode;
   value?: string;
   children: React.ReactNode;
 }
 ```
 
-Используйте `defaultValue`, чтобы предварительно выбрать вкладку (соответствует `value`); `groupId` синхронизирует выбор между несколькими `Tabs`; `tabPosition` задаёт выравнивание списка вкладок.
+`label` принимает любой отрисовываемый React-узел, поэтому в него можно добавлять иконки или произвольную разметку. Используйте `defaultIndex` для выбора вкладки по индексу или `defaultValue` для выбора по `value`. Параметр `groupId` синхронизирует выбор между несколькими группами `Tabs`. Свойство `tabPosition` задаёт выравнивание списка вкладок.
