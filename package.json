@@ -9,15 +9,15 @@
   },
   "devDependencies": {
     "@rsbuild/plugin-sass": "^1.5.2",
-    "@rspress/core": "^2.0.10",
-    "@rspress/plugin-playground": "^2.0.10",
-    "@rspress/plugin-preview": "^2.0.10",
-    "@rstack-dev/doc-ui": "^1.13.3",
-    "@shikijs/transformers": "^4.0.2",
-    "@types/node": "^25.6.0",
-    "@types/react": "^19.2.14",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
+    "@rspress/core": "^2.0.12",
+    "@rspress/plugin-playground": "^2.0.12",
+    "@rspress/plugin-preview": "^2.0.12",
+    "@rstack-dev/doc-ui": "^1.14.0",
+    "@shikijs/transformers": "^4.1.0",
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.15",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
     "rspress-plugin-file-tree": "^1.0.5"
   }
 }
