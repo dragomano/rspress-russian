@@ -138,7 +138,27 @@ doc_build/
 
 **Решения:**
 
-1. **Используйте `useEffect` для отложенного выполнения**: Помещайте вызовы браузерных API внутрь `useEffect`, чтобы они выполнялись только на стороне клиента
+1. **Используйте [`BrowserOnly`](/ui/runtime-components/browser-only) для рендеринга только в браузере**: Оберните код, который не может выполняться во время SSG, в функцию.
+
+   ```tsx
+   import { BrowserOnly } from '@rspress/core/runtime';
+
+   function MyComponent(props) {
+     return (
+       <BrowserOnly fallback={<div>Загрузка...</div>}>
+         {async () => {
+           const { LibComponent } =
+             await import('some-lib-that-accesses-window');
+           return <LibComponent {...props} />;
+         }}
+       </BrowserOnly>
+     );
+   }
+   ```
+
+   `children` компонента должны быть функцией, а не JSX. Иначе такие выражения как `window.location.href` будут выполняться во время серверной генерации страниц (SSG).
+
+2. **Используйте `useEffect` для отложенного выполнения**: Помещайте вызовы браузерных API внутрь `useEffect`, чтобы они выполнялись только на стороне клиента
 
     ```tsx
     import { useEffect, useState } from 'react';
@@ -155,7 +175,7 @@ doc_build/
     }
     ```
 
-2. **Проверка окружения**: Проверяйте среду перед обращением к браузерным API
+3. **Проверка окружения**: Проверяйте среду перед обращением к браузерным API
 
     ```tsx
     if (typeof window !== 'undefined') {
@@ -164,7 +184,7 @@ doc_build/
     }
     ```
 
-3. **Динамический импорт**: Для сторонних библиотек, которые зависят от браузерных API, используйте динамический импорт
+4. **Динамический импорт в `useEffect`**: Для сторонних библиотек, которые зависят от браузерных API, используйте динамический импорт в `useEffect`
 
     ```tsx
     import { useEffect, useState } from 'react';

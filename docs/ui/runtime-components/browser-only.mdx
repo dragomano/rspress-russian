@@ -1,0 +1,57 @@
+---
+description: Компонент BrowserOnly для рендеринга контента только в браузере после гидратации.
+overviewHeaders: []
+---
+
+# BrowserOnly
+
+Rspress статически рендерит ваш React-код в HTML на этапе сборки. Это означает, что код выполняется в окружении Node.js, где браузерные глобальные объекты, такие как `window`, `document` и `localStorage`, отсутствуют.
+
+Когда компонент или сторонняя библиотека зависит от этих браузерных API, нужно избежать [статической генерации сайта (SSG)](/guide/basic/ssg). Компонент `BrowserOnly` рендерит заглушку (fallback) на этапе SSG и отображает свои дочерние элементы только после завершения гидратации в браузере.
+
+## Использование
+
+```mdx title="index.mdx"
+import { BrowserOnly } from '@rspress/core/runtime';
+
+<BrowserOnly fallback={<div>Загрузка...</div>}>
+  {async () => {
+    const { LibComponent } = await import('some-lib-that-accesses-window');
+    return <LibComponent {...props} />;
+  }}
+</BrowserOnly>
+```
+
+import { BrowserOnly } from '@rspress/core/runtime';
+
+<BrowserOnly fallback={<div>Загрузка...</div>}>
+  {() => {
+    return (
+      <>{`LibComponent может получить доступ к \`window.location.pathname\` через BrowserOnly: ${window.location.pathname}`}</>
+    );
+  }}
+</BrowserOnly>
+
+## Почему children должны быть функцией?
+
+`children` компонента `BrowserOnly` должны быть функцией, которая возвращает React-узел. Важно понимать, что children — это не JSX-элемент, а именно функция. Это осознанное архитектурное решение.
+
+Рассмотрим неправильный код:
+
+```mdx
+import { BrowserOnly } from '@rspress/core/runtime';
+
+<BrowserOnly>
+  {/* Не делайте так — `window` всё равно будет вычисляться во время SSG */}
+  <span>Текущий URL: {window.location.href}</span>
+</BrowserOnly>
+;
+```
+
+Если передать JSX напрямую как children, React вычислит выражения внутри при построении JSX-дерева — ещё до того, как появятся `window` и другие браузерные объекты. Это приводит к ошибкам. 
+
+Если же сделать children функцией, выражения не будут выполняться заранее. Они запустятся только после того, как `BrowserOnly` убедится, что код работает в браузере. Таким образом удаётся избежать обращения к браузерным API во время SSR.
+
+## Как это работает
+
+`BrowserOnly` реализован с помощью **useEffect и динамических импортов**, что позволяет избежать проблем совместимости с SSR.
