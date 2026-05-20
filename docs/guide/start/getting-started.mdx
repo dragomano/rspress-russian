@@ -1,5 +1,5 @@
 ---
-description: Быстро создайте проект Rspress через CLI или вручную и узнайте базовый рабочий процесс запуска dev-сервера, продакшен-сборки и локального предварительного просмотра.
+description: Быстро создайте проект Rspress с помощью шаблона или вручную, и изучите базовый рабочий процесс, включая запуск dev-сервера, сборку для продакшена и локальный предпросмотр.
 ---
 
 # Быстрый старт \{#quick-start}
@@ -9,14 +9,13 @@ import { Prompt } from '@rspress/core/theme';
 
 <Prompt
   title="Запустите проект Rspress одной командой"
-  description="Скопируйте этот промпт и отправьте его своему AI-агенту. Он автоматически создаст для вас новый сайт Rspress."
+  description="Скопируйте этот промпт и отправьте его своему ИИ-агенту. Он автоматически создаст для вас новый сайт Rspress."
   prompt={`Создай проект Rspress, следуя официальному руководству по быстрому старту по адресу
 https://rspress.rs/guide/start/getting-started.md.
 
 1. Создай проект с помощью \`create rspress@latest\`.
 2. Установи зависимости.
-3. Запусти сервер разработки.
-4. Убедись, что сайт отображается корректно.`}
+3. Запусти сервер разработки.`}
 />
 
 ## Подготовка окружения
@@ -35,29 +34,136 @@ Rspress требует Node.js версии 20.19+ или 22.12+.
 
 :::
 
-## 1. Инициализация проекта \{#1-initialize-the-project}
+## Онлайн-демонстрация \{#online-example}
 
-### Способ 1: через CLI \{#method-1-create-via-cli}
+Вы можете попробовать Rspress прямо в [CodeSandbox](https://codesandbox.io/p/github/web-infra-dev/rspress-codesandbox-template/main).
 
-Создать проект Rspress можно одной командой с помощью `create-rspress`:
+## Создание проекта Rspress
+
+Рекомендуемый способ начать новый проект Rspress — использовать утилиту `create-rspress`:
 
 <PackageManagerTabs command="create rspress@latest" />
 
-Введите имя папки проекта — утилита сама создаст и настроит всё необходимое.
+Утилита запросит имя проекта или путь, необходимость настройки пользовательской папки темы, а также выбор дополнительных инструментов или навыков для добавления.
 
-### Способ 2: вручную \{#method-2-manual-creation}
+После создания проекта следуйте инструкциям, которые появятся в терминале:
 
-Сначала создайте пустую папку:
+```bash
+cd rspress-project
+git init # опционально
+npm install
+npm run dev
+```
+
+После запуска dev-сервер отобразит локальный URL-адрес. Откройте его в браузере, чтобы просмотреть сгенерированный сайт документации.
+
+### Шаблоны
+
+Rspress предоставляет следующие встроенные шаблоны:
+
+| Шаблон          | Описание                                                                                 |
+| --------------- | ---------------------------------------------------------------------------------------- |
+| `basic`         | Создаёт минимальный сайт документации Rspress с использованием темы по умолчанию.        |
+| `custom-theme`  | Создаёт сайт документации с папкой `theme` для кастомизации темы.                        |
+
+### Дополнительные инструменты
+
+При создании проекта вы можете выбрать дополнительные инструменты для линтинга или форматирования:
+
+| Инструмент | Назначение                                     |
+| ---------- | ---------------------------------------------- |
+| `rslint`   | Добавляет Rslint для линтинга.                 |
+| `eslint`   | Добавляет ESLint для линтинга.                 |
+| `prettier` | Добавляет Prettier для форматирования.         |
+| `biome`    | Добавляет Biome для линтинга и форматирования. |
+
+### Дополнительные навыки
+
+Если вы планируете поддерживать сайт документации с помощью ИИ-агента, при создании проекта вы можете выбрать дополнительные **навыки**. CLI создаст директорию `.agents/skills` в вашем проекте и добавит туда выбранные навыки.
+
+Для большинства сайтов документации мы рекомендуем выбрать:
+- [rspress-best-practices](https://github.com/rstackjs/agent-skills#rspress-best-practices): предоставляет ИИ-агентам рекомендации по структуре проекта Rspress, конфигурации, MDX, темам и развёртыванию.
+- [rspress-description-generator](https://github.com/rstackjs/agent-skills#rspress-description-generator): помогает ИИ-агентам писать и поддерживать описания страниц для SEO, поиска и ИИ-читаемых результатов.
+
+Если вы выберете шаблон `custom-theme`, по умолчанию будет выбран следующий навык:
+- [rspress-custom-theme](https://github.com/rstackjs/agent-skills#rspress-custom-theme): позволяет вашему ИИ-агенту кастомизировать тему Rspress (CSS-переменные, слоты, переопределение компонентов темы).
+
+Эти навыки не влияют на работу вашего сайта Rspress. Они предоставляют только локальные подсказки для ИИ-агентов при редактировании и поддержке проекта. Если вы не используете ИИ-агента, отмените выбор или нажмите Enter, чтобы пропустить этот шаг.
+
+Подробнее о навыках агентов и других возможностях ИИ читайте в разделе [ИИ](/guide/start/ai).
+
+### Текущая директория \{#current-directory}
+
+Чтобы создать проект в текущем каталоге, введите `.` в качестве пути к проекту, когда будет предложено:
+
+```bash
+◆  Create Rspress Project
+
+◇  Project name or path
+│  .
+```
+
+Если текущий каталог не пуст, CLI спросит, следует ли продолжить и перезаписать файлы.
+
+### Неинтерактивный режим
+
+Вы можете передать параметры CLI для создания проекта без интерактивных подсказок:
+
+```bash
+npx -y create-rspress@latest my-docs --template custom-theme --tools rslint,prettier
+```
+
+Вы также можете явно добавить навыки агента:
+
+```bash
+npx -y create-rspress@latest my-docs --template custom-theme --skill rspress-best-practices,rspress-description-generator
+```
+
+Все флаги CLI, поддерживаемые `create-rspress`:
+
+```bash
+Usage: create-rspress [dir] [options]
+
+Options:
+
+  -h, --help                display help for command
+  -d, --dir <dir>           create project in specified directory
+  -t, --template <tpl>      specify the template to use
+  --tools <tool>            add additional tools, comma separated
+  --skill <skill>           add optional skills, comma separated
+  --override                override files in target directory
+  --packageName <name>      specify the package name
+  --template-version <ver>  specify the npm template version
+
+Available templates:
+  basic, custom-theme
+
+Optional tools:
+  eslint, rslint, biome, prettier
+
+Optional skills:
+  rspress-best-practices, rspress-custom-theme, rspress-description-generator
+```
+
+## Ручная настройка
+
+Если вы хотите добавить Rspress в существующий проект или самостоятельно создать минимальные файлы, начните с создания каталога:
 
 ```bash
 mkdir rspress-app && cd rspress-app
 ```
 
-Выполните `npm init -y`, чтобы инициализировать проект. Установить Rspress можно через любой популярный менеджер пакетов:
+Создайте `package.json`:
+
+```bash
+npm init -y
+```
+
+Установите Rspress:
 
 <PackageManagerTabs command="install @rspress/core -D" />
 
-Затем создайте файл `index.md` следующей командой:
+Создайте первую страницу:
 
 ```bash
 mkdir docs && echo '# Привет, мир!' > docs/index.md
@@ -75,7 +181,7 @@ mkdir docs && echo '# Привет, мир!' > docs/index.md
 }
 ```
 
-Затем создайте файл конфигурации `rspress.config.ts`:
+Создайте файл конфигурации:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -85,7 +191,7 @@ export default defineConfig({
 });
 ```
 
-Наконец, создайте `tsconfig.json`:
+Создайте `tsconfig.json`:
 
 ```json
 {
@@ -119,7 +225,7 @@ export default defineConfig({
 }
 ```
 
-## 2. Запуск dev-сервера \{#2-start-dev-server}
+## Запуск dev-сервера \{#start-dev-server}
 
 Запустите локальный сервер разработки следующей командой:
 
@@ -131,7 +237,7 @@ export default defineConfig({
 
 :::
 
-## 3. Сборка для продакшена \{#3-build-in-production}
+## Сборка для продакшена \{#build-for-production}
 
 Соберите продакшен-версию сайта следующей командой:
 
@@ -139,8 +245,16 @@ export default defineConfig({
 
 По умолчанию Rspress использует папку `doc_build` как директорию вывода.
 
-## 4. Локальный предпросмотр \{#4-preview-in-local-environment}
+## Локальный предпросмотр \{#preview-locally}
 
 Запустите локальный сервер предпросмотра следующей командой:
 
 <PackageManagerTabs command="run preview" />
+
+Превью-сервер обслуживает скомпилированные файлы рабочей версии сайта из `doc_build`.
+
+## Следующие шаги
+
+- Изучите раздел [Базовые возможности](/guide/basic/conventional-route), чтобы узнать о маршрутизации, главных страницах, статических ресурсах, развёртывании и других общих функциях сайта документации.
+- Изучите раздел [Использование MDX](/guide/use-mdx/components), чтобы узнать, как писать MDX и использовать компоненты в документации.
+- Изучите раздел [Конфигурация](/api/config/config-basic), чтобы узнать все поддерживаемые параметры конфигурации Rspress.
