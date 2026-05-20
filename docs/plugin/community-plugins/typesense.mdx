@@ -1,0 +1,86 @@
+---
+tag: new
+---
+
+# rspress-plugin-typesense <SourceCode href="https://github.com/typesense/rspress-plugin-typesense" />
+
+import { SourceCode } from '@rspress/core/theme';
+
+Этот плагин заменяет встроенный поиск Rspress на [Typesense](https://typesense.org/) — открытую поисковую систему, устойчивую к опечаткам.
+
+Плагин **автоматически индексирует вашу документацию во время сборки** (`rspress build`) и обеспечивает высокооптимизированный поиск с поддержкой мультиверсионности и интернационализации Rspress.
+
+:::note
+Это интеграция, поддерживаемая сообществом.
+:::
+
+## Установка
+
+import { PackageManagerTabs } from '@rspress/core/theme';
+
+<PackageManagerTabs command="add rspress-plugin-typesense -D" />
+
+## Использование
+
+### 1. Запуск сервера Typesense
+
+Вы можете установить Typesense-сервер самостоятельно (self-host) или воспользоваться их облачным сервисом. Следуйте их [официальному руководству по началу работы](https://typesense.org/docs/guide/install-typesense.html), чтобы настроить сервер и получить API-ключ и URL сервера.
+
+### 2. Настройка плагина
+
+Сначала добавьте плагин в файл `rspress.config.ts`. Вы должны указать данные вашего Typesense-сервера и API-ключ с правами **на запись**, чтобы плагин мог создавать коллекции и индексировать документы во время сборки.
+
+```ts
+// rspress.config.ts
+import { defineConfig } from '@rspress/core';
+import { pluginTypesense } from 'rspress-plugin-typesense';
+
+export default defineConfig({
+  plugins: [
+    pluginTypesense({
+      collectionName: 'my_docs',
+      serverConfig: {
+        nodes: [{ url: 'YOUR_TYPESENSE_SERVER_URL' }],
+        apiKey: 'YOUR_TYPESENSE_ADMIN_API_KEY', // Требуются права на запись
+      },
+    }),
+  ],
+});
+```
+
+### 3. Переопределение компонента поиска
+
+Далее переопределите стандартный компонент `Search` Rspress через [пользовательскую тему](/guide/basic/custom-theme).
+
+Здесь укажите **SEARCH_ONLY_API_KEY** (ключ только для поиска). По соображениям безопасности **никогда не раскрывайте API-ключ администратора на фронтенде**.
+
+```tsx
+// theme/index.tsx
+import { Search as PluginTypesenseSearch } from 'rspress-plugin-typesense/runtime';
+
+const Search = () => {
+  return (
+    <PluginTypesenseSearch
+      docSearchProps={{
+        typesenseServerConfig: {
+          nodes: [{ url: 'YOUR_TYPESENSE_SERVER_URL' }],
+          apiKey: 'YOUR_TYPESENSE_SEARCH_ONLY_API_KEY', // Безопасно для браузеров
+        },
+      }}
+    />
+  );
+};
+
+export { Search };
+export * from '@rspress/core/theme-original';
+```
+
+### 4. Сборка и индексация
+
+Выполните команду сборки, чтобы сгенерировать сайт и проиндексировать контент в Typesense.
+
+<PackageManagerTabs command="run build" />
+
+Готово! Вы успешно интегрировали поиск с поддержкой исправления опечаток в свою документацию. Плагин автоматически обрабатывает фильтрацию по текущему языку и версии пользователя.
+
+Для более продвинутой настройки и использования ознакомьтесь с [README плагина](https://github.com/typesense/rspress-plugin-typesense/).
