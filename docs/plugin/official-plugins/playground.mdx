@@ -137,11 +137,11 @@ export default App;
 import { useState } from 'react';
 
 function App() {
-  const [text, setText] = useState('Hello');
+  const [text, setText] = useState('Привет');
 
   return (
     <div>
-      <input value={text} onChange={(e) => setText(e.target.value)} />
+      <input value={text} onChange={e => setText(e.target.value)} />
       <p>Вы ввели: {text}</p>
     </div>
   );
