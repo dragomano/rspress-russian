@@ -1,19 +1,3 @@
-const _Original = Intl.DateTimeFormat;
-
-class PatchedDTF extends _Original {
-  constructor(
-    locales?: string | string[],
-    options?: Intl.DateTimeFormatOptions,
-  ) {
-    super(locales === 'en-US' ? 'ru-RU' : locales, options);
-  }
-}
-
-Object.setPrototypeOf(PatchedDTF, _Original);
-
-// @ts-ignore
-Intl.DateTimeFormat = PatchedDTF;
-
 import { useLang, usePages } from '@rspress/core/runtime';
 import { Link, renderInlineMarkdown } from '@rspress/core/theme';
 import type { BlogAvatarAuthor } from '@rstack-dev/doc-ui/blog-avatar';
