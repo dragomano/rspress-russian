@@ -70,12 +70,12 @@ tag: new, experimental
 
 Компонент имеет несколько встроенных тегов, которые отображаются с помощью `<Badge />`. Полный список:
 
-| Тег            | Соответствующий UI Badge       |
+| Тег            | Соответствующий UI-значок      |
 | -------------- | ------------------------------ |
-| `new`          | <Tag tag="new" />          |
-| `experimental` | <Tag tag="experimental" /> |
-| `deprecated`   | <Tag tag="deprecated" />         |
-| `updated`      | <Tag tag="updated" />        |
+| `new`          | <Tag tag="new" />              |
+| `experimental` | <Tag tag="experimental" />     |
+| `deprecated`   | <Tag tag="deprecated" />       |
+| `updated`      | <Tag tag="updated" />          |
 
 :::tip Расширение списка тегов
 
@@ -134,7 +134,7 @@ tag: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0
 
 ### URL-адрес изображения
 
-Вы можете использовать внешний URL или data URL в качестве тега:
+Вы можете использовать внешний URL, data URL или путь к папке `public` в качестве тега:
 
 ```mdx
 ---
@@ -145,6 +145,12 @@ tag: https://example.com/icon.png
 ```mdx
 ---
 tag: data:image/svg+xml;base64,...
+---
+```
+
+```mdx
+---
+tag: /icons/status.svg
 ---
 ```
 
@@ -173,7 +179,7 @@ interface TagProps {
    * - Встроенные теги: 'new', 'experimental', 'deprecated', 'updated'
    * - Несколько тегов вместе: 'new, experimental'
    * - SVG-строку: '<svg>...</svg>'
-   * - URL изображения: 'https://...' или 'data:...'
+   * - URL изображения: 'https://...','data:...', или '/icons/status.svg'
    * - Простой текст: любая другая строка
    */
   tag?: string;
