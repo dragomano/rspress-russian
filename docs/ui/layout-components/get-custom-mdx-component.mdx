@@ -1,0 +1,36 @@
+---
+description: getCustomMDXComponent — API темы для переопределения стандартных рендереров MDX-элементов в макетах документации Rspress.
+overviewHeaders: []
+---
+
+# getCustomMDXComponent
+
+`getCustomMDXComponent` возвращает компоненты по умолчанию, которые использует макет документации Rspress для рендеринга нативных элементов Markdown и MDX. Используйте его в кастомной теме, когда нужно переопределить способ отображения заголовков, ссылок, блоков кода, изображений, таблиц и других элементов документа.
+
+## Использование
+
+Импортируйте `getCustomMDXComponent` из `@rspress/core/theme-original` в вашей кастомной теме, затем экспортируйте новую функцию с тем же именем:
+
+```tsx title="theme/index.tsx"
+import { getCustomMDXComponent as getBasicCustomMDXComponent } from '@rspress/core/theme-original';
+
+function getCustomMDXComponent() {
+  const mdxComponents = getBasicCustomMDXComponent();
+  const { h1: H1, p: P } = mdxComponents;
+
+  return {
+    ...mdxComponents,
+    h1: props => (
+      <>
+        <H1 {...props} />
+        <P>ниже h1</P>
+      </>
+    ),
+  };
+}
+
+export { getCustomMDXComponent };
+export * from '@rspress/core/theme-original';
+```
+
+Экспортированный `getCustomMDXComponent` заменит стандартный для всего сайта. Rspress вызовет его при рендеринге контента документации и передаст возвращаемую карту компонентов в MDX. В примере выше каждый H1 сохраняет стандартный рендерер и получает дополнительный абзац под ним.
