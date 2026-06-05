@@ -182,12 +182,15 @@ export default App;
 
 - **Обработка тёмного режима**: Внедрите `MutationObserver` для отслеживания изменений класса `html.dark`, затем синхронизируйте с `body.dark` или выполните другую обработку тёмного режима.
 
-- **Использование Tailwind CSS**: Поскольку среда предпросмотра в iframe — это отдельный экземпляр Rsbuild, если ваши предпросматриваемые компоненты зависят от Tailwind CSS, вам необходимо внедрить `@import "tailwindcss";` через опцию `preEntry`.
+- **Использование Tailwind CSS**: Поскольку среда предпросмотра в iframe — это отдельный экземпляр Rsbuild, если ваши компоненты, отображаемые в предпросмотре, зависят от Tailwind CSS v4, настройте `@rsbuild/plugin-tailwindcss` в `iframeOptions.builderConfig.plugins` и внедрите вашу точку входа Tailwind CSS через `preEntry`.
 
 ```ts title="rspress.config.ts"
+import { pluginTailwindcss } from '@rsbuild/plugin-tailwindcss';
+
 pluginPreview({
   iframeOptions: {
     builderConfig: {
+      plugins: [pluginTailwindcss()],
       source: {
         preEntry: [
           '@vant/touch-emulator',
