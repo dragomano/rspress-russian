@@ -15,6 +15,7 @@ import { PackageManagerTabs } from '@theme';
 
 В репозитории [rstackjs/agent-skills](https://github.com/rstackjs/agent-skills) содержится множество навыков для экосистемы Rstack. Навыки, связанные с Rspress, включают:
 
+- [rspress-docs-generator](https://github.com/rstackjs/agent-skills#rspress-docs-generator): Рекомендуется для создания и сопровождения сайтов документации на Rspress, особенно если в монорепозитории документация вынесена в отдельный проект на Rspress.
 - [rspress-best-practices](https://github.com/rstackjs/agent-skills#rspress-best-practices): Лучшие практики Rspress по настройке, CLI-процессам, организации контента, метаданным, MDX, темам, i18n, поиску, статическим ресурсам, развёртыванию и отладке.
 - [rspress-v2-upgrade](https://github.com/rstackjs/agent-skills#rspress-v2-upgrade): миграция проектов Rspress с v1 на v2.
 - [rspress-custom-theme](https://github.com/rstackjs/agent-skills#rspress-custom-theme): кастомизация тем Rspress с помощью CSS-переменных, слотов Layout, обёртки компонентов или их встраивания.
@@ -23,14 +24,14 @@ import { PackageManagerTabs } from '@theme';
 В агентах для программирования, поддерживающих навыки, вы можете использовать пакет [skills](https://www.npmjs.com/package/skills) для установки конкретного навыка с помощью следующей команды:
 
 <PackageManagerTabs
-  command="skills add rstackjs/agent-skills --skill rspress-v2-upgrade"
+  command="skills add rstackjs/agent-skills --skill rspress-docs-generator"
   dlx
 />
 
 После установки просто используйте подсказки на естественном языке для активации навыка, например:
 
 ```
-Помоги обновить этот проект Rspress v1 до v2
+Help me update the Rspress documentation project in this monorepo for the current feature branch
 ```
 
 ## llms.txt
