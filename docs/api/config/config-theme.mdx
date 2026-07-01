@@ -219,6 +219,39 @@ export default defineConfig({
 });
 ```
 
+## lastUpdated
+
+- **Тип**: `boolean | { author?: boolean | ((info: { name: string; email: string; filePath: string }) => string) }`
+- **По умолчанию**: `false`
+
+Определяет, отображать ли время последнего обновления на каждой странице документации. Rspress получает это значение из последнего Git-коммита файла.
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  themeConfig: {
+    lastUpdated: true,
+  },
+});
+```
+
+При развёртывании в CI убедитесь, что история Git доступна. Например, в GitHub Actions используйте `fetch-depth: 0` для `actions/checkout`.
+
+Установите параметр `author`, чтобы также отображать автора последнего коммита. Чтобы настроить отображаемый текст с именем автора, можно передать функцию.
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  themeConfig: {
+    lastUpdated: {
+      author: ({ name, email }) => `${name} <${email}>`,
+    },
+  },
+});
+```
+
 ## socialLinks
 
 - **Тип**: `Array`
@@ -360,37 +393,36 @@ export interface LocaleConfig {
 
 ## darkMode
 
-- **Тип**: `boolean`
+- **Тип**: `boolean | 'dark' | 'light' | 'auto' | 'force-light' | 'force-dark' | 'force-auto'`
 - **По умолчанию**: `true`
 
-Показывать ли кнопку переключения между тёмной и светлой темой. Например:
+Когда включена тёмная тема, Rspress добавляет класс `dark` к элементу `<html>`. Для настройки стилей тёмной темы можно использовать селектор `html.dark`:
+
+```css
+html.dark .custom-content {
+  color: white;
+}
+```
+
+Настраиваем поведение светлой и тёмной тем:
+
+- `true`: то же, что и `'auto'`.
+- `false`: то же, что и `'force-light'`.
+- `'light'`: отображать кнопку переключения и использовать светлую тему по умолчанию, если пользователь ещё не сохранил свои предпочтения.
+- `'dark'`: отображать кнопку переключения и использовать тёмную тему по умолчанию, если пользователь ещё не сохранил свои предпочтения.
+- `'auto'`: отображать кнопку переключения и по умолчанию следовать системным настройкам пользователя, если пользователь ещё не сохранил свои предпочтения.
+- `'force-light'`: всегда использовать светлую тему и скрыть кнопку переключения.
+- `'force-dark'`: всегда использовать тёмную тему и скрыть кнопку переключения.
+- `'force-auto'`: всегда следовать системным настройкам пользователя и скрыть кнопку переключения.
+
+Например, чтобы всегда использовать тёмную тему и скрыть кнопку переключения:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
 
 export default defineConfig({
   themeConfig: {
-    darkMode: true,
-  },
-});
-```
-
-Можно также задать режим темы по умолчанию, внедрив глобальную переменную в HTML-шаблон, например:
-
-```ts title="rspress.config.ts"
-import { defineConfig } from '@rspress/core';
-
-export default defineConfig({
-  builderConfig: {
-    html: {
-      tags: [
-        {
-          tag: 'script',
-          // Указать режим темы по умолчанию: `dark` или `light`
-          children: "window.RSPRESS_THEME = 'dark';",
-        },
-      ],
-    },
+    darkMode: 'force-dark',
   },
 });
 ```
