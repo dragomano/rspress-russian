@@ -213,13 +213,13 @@ const shikiOptions = {
 ```ts
 export type RemarkLinkOptions = {
   checkDeadLinks?:
-    | boolean
-    | { excludes: string[] | ((url: string) => boolean) };
+    boolean | { excludes: string[] | ((url: string) => boolean) };
+  checkAnchors?: boolean | { excludes: string[] | ((url: string) => boolean) };
   autoPrefix?: boolean;
 };
 ```
 
-- **По умолчанию**: `{ checkDeadLinks: true, autoPrefix: true }`
+- **По умолчанию**: `{ checkDeadLinks: true, checkAnchors: false, autoPrefix: true }`
 
 Настройка параметров, связанных со ссылками.
 
@@ -246,6 +246,33 @@ export default defineConfig({
 });
 ```
 
+#### markdown.link.checkAnchors
+
+- **Тип:** `boolean | { excludes: string[] | ((url: string) => boolean) }`
+- **По умолчанию:** `false`
+
+:::info
+В настоящее время `checkAnchors` по умолчанию отключён. В одной из будущих версий он будет включён по умолчанию.
+:::
+
+После включения этой опции Rspress будет проверять, существуют ли якоря внутренних ссылок на целевой странице Markdown или MDX. Проверяются якоря на текущей странице, относительные и абсолютные ссылки, но якоря внешних URL пропускаются.
+
+Если проверка якорей ошибочно сообщает об ошибке, её можно проигнорировать с помощью параметра `excludes`:
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  markdown: {
+    link: {
+      checkAnchors: {
+        excludes: ['/guide/getting-started#custom-anchor'],
+      },
+    },
+  },
+});
+```
+
 #### markdown.link.autoPrefix
 
 - **Тип**: `boolean`
@@ -257,13 +284,12 @@ export default defineConfig({
 
 ### markdown.image
 
-- **Type**:
+- **Тип**:
 
 ```ts
 export type RemarkImageOptions = {
   checkDeadImages?:
-    | boolean
-    | { excludes: string[] | ((url: string) => boolean) };
+    boolean | { excludes: string[] | ((url: string) => boolean) };
 };
 ```
 
