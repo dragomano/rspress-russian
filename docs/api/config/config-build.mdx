@@ -4,7 +4,7 @@
 
 - **Тип**: `RsbuildConfig`
 
-Используется для настройки конфигураций Rsbuild. Подробные конфигурации смотрите в [Rsbuild - Config](https://rsbuild.rs/config/).
+Настраивает конфигурацию Rsbuild. Подробности см. в разделе [Rsbuild — Config](https://rsbuild.rs/config/).
 
 - Пример: Использование [resolve.alias](https://rsbuild.rs/config/resolve/alias) для настройки псевдонимов путей:
 
@@ -38,7 +38,7 @@ export default defineConfig({
 
 ::: warning Предупреждение
 
-Если вы хотите изменить директорию вывода, используйте параметр [outDir](/api/config/config-basic#outdir).
+Чтобы изменить выходную директорию, используйте [outDir](/api/config/config-basic#outdir).
 
 :::
 
@@ -50,7 +50,7 @@ export default defineConfig({
 
 Вы можете использовать обширную экосистему плагинов Rsbuild для улучшения и расширения возможностей сборки.
 
-- Пример: Поддержка Vue SFC через [@rsbuild/plugin-vue](https://rsbuild.rs/plugins/list/plugin-vue)
+- Пример: поддержка Vue SFC с помощью [@rsbuild/plugin-vue](https://rsbuild.rs/plugins/list/plugin-vue)
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -63,7 +63,7 @@ export default defineConfig({
 });
 ```
 
-- Пример: Добавление Google Analytics через [rsbuild-plugin-google-analytics](https://github.com/rstackjs/rsbuild-plugin-google-analytics).
+- Пример: добавление Google Analytics с помощью [rsbuild-plugin-google-analytics](https://github.com/rstackjs/rsbuild-plugin-google-analytics).
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -81,7 +81,7 @@ export default defineConfig({
 });
 ```
 
-- Пример: Добавление мета-тегов Open Graph через [rsbuild-plugin-open-graph](https://github.com/rstackjs/rsbuild-plugin-open-graph).
+- Пример: добавление мета-тегов Open Graph с помощью [rsbuild-plugin-open-graph](https://github.com/rstackjs/rsbuild-plugin-open-graph).
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -121,26 +121,26 @@ export default defineConfig({
 
 ### Конфигурация по умолчанию
 
-Если вам нужно просмотреть конфигурации Rspack или Rsbuild по умолчанию, вы можете добавить параметр `DEBUG=rsbuild` при запуске команды `rspress dev` или `rspress build`:
+Чтобы просмотреть конфигурацию Rspack или Rsbuild по умолчанию, установите `DEBUG=rsbuild` при запуске `rspress dev` или `rspress build`:
 
 ```bash
 DEBUG=rsbuild rspress dev
 ```
 
-После выполнения в директории `doc_build` создается файл `rsbuild.config.js`, который содержит полную конфигурацию `builderConfig`.
+После выполнения команды Rspress создаёт файл `rsbuild.config.js` в директории `doc_build`. Этот файл содержит полную конфигурацию `builderConfig`.
 
-> Подробнее о том, как отлаживать Rsbuild, смотрите в [Rsbuild - Debug Mode](https://rsbuild.rs/guide/debug/debug-mode).
+> См. [Rsbuild — Debug Mode](https://rsbuild.rs/guide/debug/debug-mode) для получения дополнительной информации об отладке Rsbuild.
 
 ## markdown
 
-Настройка возможностей компиляции, связанных с MDX.
+Настраивает компиляцию MDX.
 
 ### markdown.remarkPlugins
 
 - **Тип**: `Array`
 - **По умолчанию**: `[]`
 
-Настройка remark плагинов. Например:
+Настраивает плагины remark. Например:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -163,7 +163,7 @@ export default defineConfig({
 
 - **Тип**: `Array`
 
-Настройка rehype плагинов. Например:
+Настраивает плагины rehype. Например:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -228,9 +228,9 @@ export type RemarkLinkOptions = {
 - **Тип**: `boolean | { excludes: string[] | ((url: string) => boolean) }`
 - **По умолчанию**: `true`
 
-После включения этой опции Rspress будет проверять ссылки в документе на основе соглашения о маршрутах. Если обнаружена недоступная ссылка, сборка завершится с ошибкой.
+При включении Rspress проверяет ссылки в документации на соответствие стандартным маршрутам. Если ссылка недоступна, сборка завершается с ошибкой.
 
-Если происходит ошибочное определение ссылок, вы можете игнорировать ошибку с помощью параметра `excludes`:
+Если ссылка помечена как некорректная ошибочно, её можно исключить с помощью `excludes`:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -257,7 +257,7 @@ export default defineConfig({
 
 После включения этой опции Rspress будет проверять, существуют ли якоря внутренних ссылок на целевой странице Markdown или MDX. Проверяются якоря на текущей странице, относительные и абсолютные ссылки, но якоря внешних URL пропускаются.
 
-Если проверка якорей ошибочно сообщает об ошибке, её можно проигнорировать с помощью параметра `excludes`:
+Если якорь ошибочно помечен как некорректный, его можно исключить с помощью `excludes`:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -278,7 +278,7 @@ export default defineConfig({
 - **Тип**: `boolean`
 - **По умолчанию**: `true`
 
-После включения этой конфигурации Rspress будет автоматически добавлять префиксы к ссылкам в документах на основе соглашения о маршрутах для [Интернационализации](/guide/basic/i18n) и [Мультиверсионности](/guide/basic/multi-version).
+При включении Rspress автоматически добавляет префиксы к ссылкам на основе стандартных маршрутов для [i18n](/guide/basic/i18n) и [мультиверсионности](/guide/basic/multi-version).
 
 Если пользователь напишет ссылку `[](/guide/getting-started)` в `docs/ru/guide/index.md`, Rspress автоматически преобразует её в `[](/ru/guide/getting-started)`.
 
@@ -302,11 +302,11 @@ export type RemarkImageOptions = {
 - **Тип**: `boolean | { excludes: string[] | ((url: string) => boolean) }`
 - **По умолчанию**: `true`
 
-После включения этой настройки Rspress будет проверять локальные изображения в документе. Если изображение ссылается на несуществующий файл, сборка вызовет ошибку и завершится.
+При включении Rspress проверяет локальные изображения в документации. Если изображение ссылается на несуществующий файл, сборка завершается с ошибкой.
 
 Для относительных путей к изображениям (например, `./image.png`) файл разрешается относительно текущего документа. Для абсолютных путей к изображениям (например, `/image.png`) файл разрешается из каталога `public`.
 
-Если происходит ошибочное определение изображений, можно игнорировать ошибку с помощью настройки `excludes`:
+Если изображение ошибочно помечено как некорректное, его можно исключить с помощью `excludes`:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -326,7 +326,7 @@ export default defineConfig({
 
 - **Тип**: `boolean`
 
-Отображать ли номера строк в блоке кода. По умолчанию `false`.
+Управляет отображением номеров строк в блоках кода. По умолчанию — `false`.
 
 При глобальном включении вы можете использовать `lineNumbers=false` в метаданных блока кода, чтобы отключить нумерацию строк для конкретного блока. Напротив, при глобальном отключении вы можете использовать `lineNumbers` или `lineNumbers=true`, чтобы включить нумерацию строк для конкретного блока. Подробности см. в разделе [Нумерация строк](/guide/use-mdx/code-blocks#нумерация-строк).
 
@@ -334,7 +334,7 @@ export default defineConfig({
 
 - **Тип**: `boolean`
 
-Включает перенос длинных строк кода по умолчанию. По умолчанию `false`.
+Управляет тем, будут ли длинные строки кода переноситься по умолчанию. По умолчанию — `false`.
 
 При глобальном включении вы можете использовать `wrapCode=false` в метаданных блока кода, чтобы отключить перенос строк для конкретного блока. Напротив, при глобальном отключении вы можете использовать `wrapCode` или `wrapCode=true`, чтобы включить перенос строк для конкретного блока. Подробности см. в разделе [Перенос длинных строк](/guide/use-mdx/code-blocks#перенос-длинных-строк).
 
@@ -387,7 +387,7 @@ export default defineConfig({
 
 - **Тип**: `string[]`
 
-Зарегистрировать компонент в глобальной области видимости, что сделает его автоматически доступным в каждом MDX-файле без необходимости импорта. Например:
+Регистрирует компоненты глобально, чтобы они были доступны в каждом MDX-файле без необходимости импортировать их вручную. Например:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
