@@ -1,5 +1,5 @@
 ---
-description: Расширьте возможности сборки с помощью конфигурации Rsbuild, плагинов Rspack и пользовательских плагинов MDX remark/rehype.
+description: Расширяйте поведение сборки с помощью конфигурации Rsbuild, плагинов Rspack и пользовательских плагинов remark/rehype для MDX.
 ---
 
 # Расширение сборки
@@ -10,7 +10,7 @@ Rspress собирает документацию с помощью [Rsbuild](ht
 
 ### Настройка Rsbuild
 
-Rsbuild предоставляет богатый набор параметров сборки. Настроить их можно через опцию [builderConfig](/api/config/config-build.html#builderconfig). Например, поменять папку вывода на `doc_dist`:
+Rsbuild предоставляет широкий набор параметров сборки. Настроить их можно с помощью [builderConfig](/api/config/config-build.html#builderconfig). Например, чтобы изменить каталог вывода на `doc_dist`:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -26,9 +26,9 @@ export default defineConfig({
 });
 ```
 
-Rspress также предоставляет конфигурацию [builderConfig.plugins](/api/config/config-build#builderconfigplugins), с помощью которой можно подключать плагины Rsbuild. Вы можете использовать обширную экосистему плагинов Rsbuild, чтобы расширить и улучшить возможности сборки.
+Rspress также предоставляет [builderConfig.plugins](/api/config/config-build#builderconfigplugins) для регистрации плагинов Rsbuild. Используйте экосистему плагинов Rsbuild, чтобы расширить поведение сборки.
 
-Например, добавить Google Analytics через плагин [rsbuild-plugin-google-analytics](https://github.com/rstackjs/rsbuild-plugin-google-analytics):
+Например, можно добавить Google Analytics с помощью плагина [rsbuild-plugin-google-analytics](https://github.com/rstackjs/rsbuild-plugin-google-analytics):
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -46,8 +46,8 @@ export default defineConfig({
 });
 ```
 
-:::tip Совет
-Подробно о всех доступных опциях конфигурации можно узнать в официальной документации [Rsbuild - Config](https://rsbuild.rs/config/).
+:::tip
+Подробнее см. в документации [Rsbuild — Config](https://rsbuild.rs/config/).
 :::
 
 ### Настройка Rspack
@@ -70,7 +70,7 @@ export default defineConfig({
 
 ## Компиляция MDX
 
-Компиляция MDX в Rspress построена на базе [unified](https://github.com/unifiedjs/unified). Вы можете подключать соответствующие плагины обработки через конфигурацию `markdown`. Например:
+Rspress компилирует MDX с помощью [unified](https://github.com/unifiedjs/unified). Добавить связанные плагины компиляции можно через конфигурацию `markdown`. Например:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
