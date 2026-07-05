@@ -2,7 +2,7 @@
 
 import { SourceCode } from '@rspress/core/theme';
 
-Автоматическая генерация [карты сайта](https://developers.google.com/search/docs/crawling-indexing/sitemaps/overview) для SEO — помогает поисковым системам лучше индексировать ваш сайт.
+Автоматически генерирует [sitemap](https://developers.google.com/search/docs/crawling-indexing/sitemaps/overview) для SEO, чтобы поисковые системы могли легче индексировать ваш сайт.
 
 ## Установка
 
@@ -12,7 +12,7 @@ import { PackageManagerTabs } from '@rspress/core/theme';
 
 ## Использование
 
-Добавьте следующую конфигурацию в файл `rspress.config.ts`:
+Добавьте следующую конфигурацию:
 
 ```ts
 // rspress.config.ts
@@ -31,7 +31,7 @@ export default defineConfig({
 
 ## Конфигурация
 
-Плагин принимает объект-параметр следующего типа:
+Плагин принимает объект параметров следующего типа:
 
 ```ts
 type ChangeFreq =
@@ -77,7 +77,7 @@ export interface PluginSitemapOptions {
 
 URL сайта, на котором будет развёрнута документация, например `https://example.com`.
 
-Если в проекте задан параметр `base`, то `siteUrl` должен включать этот `base`-путь. Пример:
+Если настроен `base`, параметр `siteUrl` должен включать этот путь `base`. Например:
 
 ```ts
 // rspress.config.ts
@@ -114,7 +114,7 @@ interface CustomMaps {
 
 - **По умолчанию**: `{}`
 
-Позволяет задать индивидуальные значения sitemap для отдельных важных страниц.
+Задаёт пользовательские значения sitemap для отдельных важных страниц.
 
 ### defaultChangeFreq
 
