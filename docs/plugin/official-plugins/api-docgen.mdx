@@ -2,7 +2,7 @@
 
 import { SourceCode } from '@rspress/core/theme';
 
-Плагин используется для автоматической генерации описания API-документации. Работает на основе [react-docgen-typescript](https://github.com/styleguidist/react-docgen-typescript) и [documentation](https://github.com/documentationjs/documentation).
+Этот плагин автоматически генерирует контент документации API, используя пакеты [react-docgen-typescript](https://github.com/styleguidist/react-docgen-typescript) и [documentation](https://github.com/documentationjs/documentation).
 
 ## Установка
 
@@ -12,7 +12,7 @@ import { PackageManagerTabs } from '@rspress/core/theme';
 
 ## Использование
 
-Сначала добавьте следующую конфигурацию в файл `rspress.config.ts`:
+Сначала добавьте следующую конфигурацию:
 
 ```ts
 // rspress.config.ts
@@ -32,7 +32,7 @@ export default defineConfig({
 });
 ```
 
-Затем вы можете использовать компонент `API`, чтобы внедрить документацию API в ваш MDX-файл:
+Затем используйте компонент `API` для вставки документации API в файл MDX:
 
 ```mdx
 ## API
@@ -44,7 +44,7 @@ export default defineConfig({
 
 ## Конфигурация
 
-Плагин принимает объект со следующими параметрами:
+Плагин принимает объект следующего типа:
 
 ```ts
 interface Options {
@@ -57,20 +57,20 @@ interface Options {
 
 ### appDir
 
-`appDir` используется для указания базовой директории, из которой будет выполняться парсинг. По умолчанию — `process.cwd()`.
+`appDir` настраивает базовую директорию для парсинга. По умолчанию используется `process.cwd()`.
 
 ### entries
 
-`entries` используется для настройки базовой информации о парсируемых файлах.
+`entries` настраивает файлы для парсинга.
 
-- Ключ — это идентификатор, который будет использоваться как атрибут `moduleName` компонента `API`.
+- Ключ — это идентификатор, используемый как атрибут `moduleName` компонента `API`.
 - Значение — относительный путь к парсируемому файлу.
 
 ### apiParseTool
 
-`apiParseTool` позволяет выбрать инструмент для парсинга. По умолчанию — `react-docgen-typescript`:
+`apiParseTool` выбирает парсер. По умолчанию используется `react-docgen-typescript`:
 
-- `react-docgen-typescript` — предназначен для сценариев библиотек компонентов, парсит только пропсы и генерирует из них таблицы.
+- `react-docgen-typescript` используется для сценариев библиотек компонентов. Он парсит пропсы для генерации таблиц.
 
 ```tsx
 export type ButtonProps = {
@@ -87,10 +87,10 @@ export type ButtonProps = {
 export const Button = (props?: ButtonProps) => {};
 ```
 
-В приведённом выше примере тип `ButtonProps` будет извлечён в таблицу, а имя `Button` будет использовано как заголовок таблицы.
-Если вы используете экспорт по умолчанию (`export default`), то в качестве заголовка таблицы будет взято **имя файла**.
+В этой стандартной форме `ButtonProps` извлекается в таблицу, а `Button` используется как заголовок таблицы.
+Если вы используете экспорт по умолчанию, в качестве заголовка таблицы используется имя файла.
 
-Обратите внимание: экспорты, объявленные не в том же файле, **не поддерживаются**.
+Обратите внимание, что экспорты, объявленные в других местах, недоступны.
 
 ```tsx
 const A = () => {};
@@ -113,7 +113,7 @@ export default () => {}; // правильно
 ```
 
 :::warning Предупреждение
-Если в Props используются типы React (например, `React.ReactNode`, `React.FC` и т. д.), необходимо добавить эти типы в `tsconfig.json`, иначе они не будут найдены в пространстве имён React.
+Если пропсы используют типы React, добавьте эти типы в `tsconfig.json`; в противном случае типы в пространстве имён React не смогут быть разрешены.
 
 ```json
 {
@@ -123,7 +123,7 @@ export default () => {}; // правильно
 }
 ```
 
-Лучший способ — импортировать тип напрямую:
+Лучший подход — импортировать тип напрямую:
 
 ```tsx
 import { FC } from 'react';
@@ -131,8 +131,8 @@ import { FC } from 'react';
 
 :::
 
-- `documentation` — используется в сценариях библиотек-инструментов для парсинга JSDoc-аннотаций.
-  Ниже приведён пример функции `greet` с JSDoc-аннотациями.
+- `documentation` используется в сценариях утилитарных библиотек для парсинга аннотаций JSDoc.
+  Вот функция `greet` с аннотациями JSDoc.
 
 ```ts
 /**
@@ -167,7 +167,7 @@ Returns **[string][1]** Приветственное сообщение.
 
 ### parseToolOptions
 
-`parseToolOptions` используется для передачи опций соответствующему инструменту парсинга. Типы опций следующие:
+`parseToolOptions` передает параметры выбранному парсеру. Его тип:
 
 ```ts
 type ParseToolOptions = {
@@ -179,6 +179,6 @@ type ParseToolOptions = {
 };
 ```
 
-Обратитесь к [ParserOptions](https://github.com/styleguidist/react-docgen-typescript/blob/b7ea0a235efb7c78a1158ca12d864de2bc2ee30e/src/parser.ts#L84-L95) и [DocumentationArgs](https://github.com/documentationjs/documentation/blob/master/docs/NODE_API.md#parameters-1), чтобы узнать о доступных опциях.
+Смотрите [ParserOptions](https://github.com/styleguidist/react-docgen-typescript/blob/b7ea0a235efb7c78a1158ca12d864de2bc2ee30e/src/parser.ts#L84-L95) и [DocumentationArgs](https://github.com/documentationjs/documentation/blob/master/docs/NODE_API.md#parameters-1) для доступных параметров.
 
-Если парсер установлен как `react-docgen-typescript`, то по умолчанию используется метод `withDefaultConfig` для создания экземпляра парсера. Если настроены `tsconfigPath` или `compilerOptions`, то `tsconfigPath` и `compilerOptions` можно установить отдельно для каждого `entry`; в этом случае для создания экземпляра парсера используются методы `withCompilerOptions` и `withCustomConfig` соответственно. Подробности см. в разделе [Custom Parsers](https://github.com/styleguidist/react-docgen-typescript/blob/b7ea0a235efb7c78a1158ca12d864de2bc2ee30e/README.md#usage).
+Когда парсер — `react-docgen-typescript`, `withDefaultConfig` по умолчанию создает экземпляр парсера. Если настроены `tsconfigPath` или `compilerOptions`, их можно задать отдельно для каждой `entry`; `withCompilerOptions` и `withCustomConfig` используются для создания экземпляра парсера соответственно. Подробности смотрите в [Custom Parsers](https://github.com/styleguidist/react-docgen-typescript/blob/b7ea0a235efb7c78a1158ca12d864de2bc2ee30e/README.md#usage).
