@@ -1,12 +1,12 @@
 # API плагинов
 
-В предыдущем разделе мы познакомились с базовой структурой плагина. В этом разделе подробно разберём все доступные API плагинов, чтобы вы лучше понимали, какие возможности вам предоставляются.
+В предыдущем разделе была рассмотрена базовая структура плагина. На этой странице описываются API плагинов и возможности расширения, которые предоставляет каждый из них.
 
 ### globalStyles
 
 - **Тип**: `string | string[]`
 
-Позволяет подключить глобальные стили. Передаётся абсолютный путь к одному или нескольким файлам со стилями. Пример использования:
+Добавляет глобальный файл стилей. Передайте абсолютный путь к файлу стилей:
 
 ```tsx title="plugin.ts"
 import type { RspressPlugin } from '@rspress/core';
@@ -39,7 +39,7 @@ export function pluginForDoc(): RspressPlugin {
 
 - **Тип**: `(string | [string, object])[]`
 
-Служит для добавления глобальных компонентов. Передаётся массив, где каждый элемент — это либо абсолютный путь к компоненту, либо кортеж `[путь_к_компоненту, props]`, если компоненту нужно передать пропсы по умолчанию:
+Добавляет глобальные компоненты. Передайте массив, в котором каждый элемент — абсолютный путь к компоненту:
 
 ```tsx title="plugin.ts"
 import type { RspressPlugin } from '@rspress/core';
@@ -56,12 +56,7 @@ export function pluginForDoc(): RspressPlugin {
 }
 ```
 
-Элементы массива `globalUIComponents` могут быть двух видов:
-
-- строкой — абсолютный путь к файлу компонента,
-- массивом из двух элементов — первый элемент это путь к файлу компонента, второй — объект с пропсами, которые будут переданы этому компоненту.
-
-Пример:
+Каждый элемент `globalUIComponents` может быть либо строкой с путём к файлу компонента, либо кортежем. В случае кортежа первый элемент — путь к файлу компонента, а второй — пропсы компонента. Например:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -93,9 +88,9 @@ import GlobalUIComponents from '@fragments/global-ui-components.mdx';
 
 - **Тип**: `RsbuildConfig`
 
-Rspress использует [Rsbuild](https://github.com/web-infra-dev/rsbuild) в качестве инструмента сборки. Настройка Rsbuild осуществляется через `builderConfig`. Подробное описание опций конфигурации см. в [документации Rsbuild](https://rsbuild.rs/config/).
+Rspress использует [Rsbuild](https://github.com/web-infra-dev/rsbuild) в качестве инструмента сборки. Настройте Rsbuild с помощью `builderConfig`. Описание доступных параметров конфигурации см. в документации [Rsbuild](https://rsbuild.rs/config/).
 
-> Конечно, если вы хотите настроить Rspack напрямую, это также можно сделать через `builderConfig.tools.rspack`.
+> Чтобы настроить Rspack напрямую, используйте `builderConfig.tools.rspack`.
 
 ```tsx title="plugin.ts"
 import type { RspressPlugin } from '@rspress/core';
@@ -135,7 +130,7 @@ interface ConfigUtils {
 }
 ```
 
-С помощью этого хука можно изменять или расширять конфигурацию самого Rspress. Например, если вы хотите изменить заголовок сайта, это можно сделать через `config`:
+Изменяет или расширяет конфигурацию самого Rspress. Например, с помощью `config` можно изменить заголовок сайта:
 
 ```tsx title="plugin.ts"
 import type { RspressPlugin } from '@rspress/core';
@@ -155,7 +150,7 @@ export function pluginForDoc(): RspressPlugin {
 }
 ```
 
-Если требуется добавить или удалить плагин, это нужно делать через `addPlugin` и `removePlugin`:
+Для добавления или удаления плагинов используйте `addPlugin` и `removePlugin`:
 
 ```tsx title="plugin.ts"
 import type { RspressPlugin } from '@rspress/core';
@@ -183,7 +178,7 @@ export function pluginForDoc(): RspressPlugin {
 
 - **Тип**: `(config: DocConfig, isProd: boolean) => void | Promise<void>`
 
-Позволяет выполнять произвольные действия до или после завершения сборки сайта. Первый параметр — конфигурация документа, второй — флаг, показывающий, запущена ли сборка в продакшен-режиме (`true` для `npm run build`, `false` для `npm run dev`):
+Выполняет операции до или после сборки документации. Первый параметр — разрешённая конфигурация документации, второй указывает, запущена ли сборка в продакшен-режиме:
 
 ```tsx title="plugin.ts"
 import type { RspressPlugin } from '@rspress/core';
@@ -204,14 +199,14 @@ export function pluginForDoc(): RspressPlugin {
 ```
 
 :::tip Подсказка
-Когда выполняется хук `beforeBuild`, массив `config.plugins` уже прошёл обработку всеми плагинами, поэтому параметр `config` уже содержит **финальную** конфигурацию сайта.
+К моменту выполнения `beforeBuild` уже обработаны все хуки `config` всех плагинов, поэтому параметр `config` содержит итоговую конфигурацию документации.
 :::
 
 ### markdown
 
-- \*\*Тип: `{ remarkPlugins?: Plugin[]; rehypePlugins?: Plugin[] }`
+- **Тип**: `{ remarkPlugins?: Plugin[]; rehypePlugins?: Plugin[] }`
 
-Служит для расширения возможностей компиляции Markdown/MDX. Если вам нужно добавить свои remark-/rehype-плагины или глобальные MDX-компоненты, это делается через опцию `markdown`:
+Расширяет процесс компиляции Markdown/MDX. Используйте `markdown`, чтобы добавить собственные плагины remark/rehype или глобальные компоненты MDX (`globalComponents`):
 
 ```tsx title="plugin.ts"
 import type { RspressPlugin } from '@rspress/core';
@@ -220,8 +215,6 @@ export function pluginForDoc(): RspressPlugin {
   return {
     name: 'plugin-name',
     markdown: {
-      // Отключаем новый компилятор на Rust (mdx-rs), чтобы работали плагины
-      mdxRs: false,
       remarkPlugins: [
         // Добавляем свои remark-плагины
       ],
@@ -271,7 +264,7 @@ export function MyComponent() {
 
 - **Тип**: `(config: UserConfig) => AdditionalPage[] | Promise<AdditionalPage[]>`
 
-Параметр `config` — это конфигурация `doc` из файла `rspress.config.ts`, а тип `AdditionalPage` определён следующим образом:
+Параметр `config` — это конфигурация документации из `rspress.config.ts`, а тип `AdditionalPage` имеет следующий вид:
 
 ```tsx
 interface AdditionalPage {
@@ -281,7 +274,7 @@ interface AdditionalPage {
 }
 ```
 
-Служит для добавления дополнительных страниц. В функции `addPages` можно вернуть массив, где каждый элемент — конфигурация страницы. Маршрут страницы задаётся через `routePath`, а содержимое — либо через `filepath` (путь к файлу), либо через `content` (строка с содержимым MDX/Markdown):
+Добавляет дополнительные страницы. Верните массив из `addPages`, где каждый элемент — это конфигурация страницы. Используйте `routePath` для указания маршрута страницы, а `filepath` или `content` — для задания содержимого страницы. Например:
 
 ```tsx
 import path from 'path';
@@ -292,12 +285,12 @@ export function docPluginDemo(): RspressPlugin {
     name: 'add-pages',
     addPages(config, isProd) {
       return [
-        // Поддерживается абсолютный путь к реальному файлу (filepath) — содержимое md(x) будет прочитано с диска
+        // Поддерживает абсолютный путь к реальному файлу (`filepath`) и считывает md(x)-содержимое с диска
         {
           routePath: '/filepath-route',
           filepath: path.join(__dirname, 'blog', 'index.md'),
         },
-        // Также можно передать содержимое md(x) напрямую через параметр content
+        // Поддерживает прямую передачу md(x)-содержимого через параметр `content`
         {
           routePath: '/content-route',
           content: '# Demo2',
@@ -308,16 +301,13 @@ export function docPluginDemo(): RspressPlugin {
 }
 ```
 
-Функция `addPages` принимает два параметра:
-
-- `config` — текущая конфигурация сайта (из `rspress.config.ts`),
-- `isProd` — булево значение, показывающее, запущена ли сборка в продакшн-режиме.
+`addPages` принимает два параметра: `config` — это текущая конфигурация сайта документации, а `isProd` указывает, запущена ли сборка в продакшен-режиме.
 
 ### routeGenerated
 
 - **Тип**：`(routeMeta: RouteMeta[]) => void | Promise<void>`
 
-В этом хуке вы получаете доступ ко всей метаинформации маршрутов. Структура каждого элемента выглядит так:
+Этот хук получает все метаданные маршрутов. Каждый элемент метаданных маршрута имеет следующую структуру:
 
 ```ts
 export interface RouteMeta {
@@ -353,7 +343,7 @@ export function pluginForDoc(): RspressPlugin {
 
 - **Тип**: `(config: UserConfig, isProd: boolean) => Record<string, string> | Promise<Record<string, string>>;`
 
-Служит для добавления дополнительных модулей, которые будут доступны на клиенте во время выполнения (runtime). Например, если вы хотите передать в браузер какую-то информацию, известную только на этапе сборки, это можно сделать через `addRuntimeModules`:
+Добавляет дополнительные runtime-модули. Например, используйте `addRuntimeModules`, чтобы передавать информацию, известную только на этапе сборки, в документацию:
 
 ```tsx title="plugin.ts"
 import type { RspressPlugin } from '@rspress/core';
@@ -377,7 +367,7 @@ export function pluginForDoc(): RspressPlugin {
 }
 ```
 
-Таким образом, в клиентских (runtime) компонентах вы сможете использовать модуль `virtual-foo`:
+Затем вы можете использовать модуль `virtual-foo` в runtime-компоненте:
 
 ```jsx
 import myData from 'virtual-foo';
@@ -387,7 +377,7 @@ export function MyComponent() {
 }
 ```
 
-:::tip Совет
+:::tip
 
 Этот хук выполняется **после** хука `routeGenerated`.
 
@@ -397,7 +387,7 @@ export function MyComponent() {
 
 - **Тип**: `(source: Record<string, Record<string, string>>) => Record<string, Record<string, string>> | Promise<Record<string, Record<string, string>>>`
 
-Служит для добавления или изменения текстов локализации (i18n). С помощью этого хука вы можете расширять или переопределять тексты интерфейса темы.
+Добавляет или изменяет данные интернационализации (i18n). Используйте этот хук для расширения или переопределения текстов i18n в теме.
 
 Параметр `source` — это объект следующей структуры:
 
@@ -409,7 +399,7 @@ export function MyComponent() {
 }
 ```
 
-Где `textKey` первого уровня — это имя ключа текста, `locale` второго уровня — код языка (например, `ru`, `en`), а значение — переведённый текст на соответствующем языке.
+Ключ первого уровня `textKey` — это ключ текста, второй уровень `locale` — код языка (например, `ru` или `en`), а значение — это перевод для соответствующего языка.
 
 Пример использования:
 
@@ -441,7 +431,7 @@ export function pluginForDoc(): RspressPlugin {
 }
 ```
 
-Если ваш плагин одновременно предоставляет runtime-компоненты, то в этих компонентах вы сможете использовать переведённые тексты через хук `useI18n`:
+Если ваш плагин также предоставляет runtime-компоненты, используйте хук `useI18n` для чтения этих текстов:
 
 ```tsx
 import { useI18n } from '@rspress/core/runtime';
