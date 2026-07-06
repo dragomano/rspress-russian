@@ -1,18 +1,20 @@
 ---
-description: Компонент LastUpdated для отображения времени последнего обновления страницы.
+description: Компонент LastUpdated для отображения автора и времени последнего обновления страницы.
 overviewHeaders: []
 ---
 
 # LastUpdated
 
-`LastUpdated` отображает время последнего обновления текущей страницы.
+`LastUpdated` отображает время последнего обновления страницы и, при необходимости, автора последнего изменения. Обычно используется вместе с параметром `lastUpdated` в конфигурации темы.
 
 ## Использование
 
-```tsx title="index.mdx"
-import { LastUpdated } from '@rspress/core/theme';
+```tsx preview
+import { LastUpdated as BasicLastUpdated } from '@rspress/core/theme-original';
 
-<LastUpdated />;
+export default function LastUpdated() {
+  return <BasicLastUpdated />;
+}
 ```
 
 Этот компонент не принимает никаких пропсов. Он автоматически читает время последнего обновления из метаданных страницы.
@@ -33,8 +35,24 @@ export default defineConfig({
 
 Когда `lastUpdated` включён, компонент автоматически читает и форматирует метаданные страницы для отображения.
 
-Чтобы кастомизировать метку или форматирование, выполните `rspress eject LastUpdated` и отредактируйте файл `theme/components/LastUpdated/index.tsx`.
+### Отображение автора
 
-:::tip Совет
-Если в дефолтной теме не настроено `lastUpdated: true`, установите и зарегистрируйте плагин `@rspress/plugin-last-updated`.
-:::
+Настройте `lastUpdated.author`, чтобы отображать автора последнего коммита:
+
+```ts title="rspress.config.ts"
+export default defineConfig({
+  themeConfig: {
+    lastUpdated: {
+      // Показывать имя автора коммита:
+      // author: true,
+
+      // Или использовать собственный формат отображения:
+      author: ({ name, email }) => `${name} <${email}>`,
+    },
+  },
+});
+```
+
+Функция обратного вызова получает объект `{ name, email, filePath }` (информацию об авторе коммита из `git log` и путь к исходному файлу) и должна вернуть строку, которая будет отображаться.
+
+Чтобы кастомизировать метку или форматирование, выполните `rspress eject LastUpdated` и отредактируйте файл `theme/components/LastUpdated/index.tsx`.
