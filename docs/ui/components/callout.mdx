@@ -65,7 +65,15 @@ interface CalloutProps {
   /**
    * Тип callout, который определяет его цвет и иконку.
    */
-  type: 'tip' | 'note' | 'warning' | 'caution' | 'danger' | 'info' | 'details';
+  type:
+    | 'tip'
+    | 'note'
+    | 'important'
+    | 'warning'
+    | 'caution'
+    | 'danger'
+    | 'info'
+    | 'details';
   /**
    * Пользовательский заголовок для callout. Если не указан, будет использован заглавный тип.
    */
