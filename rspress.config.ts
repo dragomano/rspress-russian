@@ -48,6 +48,12 @@ export default defineConfig({
         transformerRemoveNotationEscape(),
       ],
     },
+    link: {
+      checkDeadLinks: {
+        excludes: ['/og-image.png', '/llms-full.txt'],
+      },
+      checkAnchors: true,
+    },
   },
   plugins: [
     pluginPreview(),
@@ -99,4 +105,5 @@ export default defineConfig({
         '<p><a href="https://github.com/dragomano/rspress-russian">Поставьте лайк репозиторию перевода</a></p>',
     },
   },
+  llms: true,
 });
