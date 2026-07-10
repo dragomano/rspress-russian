@@ -39,6 +39,28 @@ export default defineConfig({
 });
 ```
 
+## siteOrigin
+
+- **Тип**: `string`
+- **По умолчанию**: `""`
+
+Необязательный базовый URL, по которому развёрнут сайт, например `https://foo.github.io`.
+
+Rspress использует это значение вместе с параметром [`base`](#base), когда при генерации файлов требуются абсолютные URL, например для ссылок в `llms.txt` или данных, создаваемых плагинами. Полный URL формируется в следующем порядке: `siteOrigin + base + routePath`.
+
+Если `siteOrigin` не задан, Rspress использует в качестве альтернативы `base + routePath`.
+
+Если ваш сайт развёрнут по адресу `https://foo.github.io/bar/`, установите `siteOrigin` в `"https://foo.github.io"`, а `base` — в `"/bar/"`:
+
+```ts title="rspress.config.ts" twoslash
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  siteOrigin: 'https://foo.github.io',
+  base: '/bar/',
+});
+```
+
 ## title
 
 - **Тип**: `string`
@@ -666,6 +688,50 @@ import { defineConfig } from '@rspress/core';
 export default defineConfig({
   route: {
     cleanUrls: true,
+  },
+});
+```
+
+### route.useTransitions
+
+- **Тип**: `Boolean`
+- **По умолчанию**: `true`
+
+Включает параллельную оптимизированную маршрутизацию для внутренних ссылок, отображаемых стандартным компонентом `Link` в Rspress. Это относится к ссылкам в содержимом Markdown и MDX, а также к навигационным ссылкам темы по умолчанию, например элементам боковой панели.
+
+По умолчанию этот параметр включён. Переходы между внутренними страницами оборачиваются в `React.startTransition`, если только вы явно не установите `useTransitions` в `false`. Это позволяет избежать блокировки пользовательского ввода во время ресурсоёмкого рендеринга содержимого новой страницы, сохраняя отзывчивость и интерактивность интерфейса при навигации.
+
+```js title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  route: {
+    useTransitions: false,
+  },
+});
+```
+
+### route.prefetchLink
+
+- **Тип**: `Boolean`
+- **По умолчанию**: `true`
+
+По умолчанию компонент `Link` в Rspress выполняет предварительную загрузку ресурсов, соответствующих целевому маршруту, когда пользователь наводит курсор на внутреннюю ссылку, а также использует аналогичное поведение на устройствах с сенсорным экраном. Это сделано для повышения производительности. Установите этот параметр в `false`, чтобы отключить предварительную загрузку.
+
+:::tip
+
+В режиме разработки предварительная загрузка ссылок спроектирована для совместной работы с [`dev.lazyCompilation`](https://rsbuild.rs/config/dev/lazy-compilation), который по умолчанию включён в Rspress. Ленивая компиляция ускоряет запуск, компилируя страницы только при первом переходе к ним, а предварительная загрузка ссылок начинает компиляцию целевого маршрута уже при наведении курсора, сокращая время ожидания при первом открытии этой страницы.
+
+:::
+
+Пример:
+
+```js title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  route: {
+    prefetchLink: false,
   },
 });
 ```
