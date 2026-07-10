@@ -144,7 +144,7 @@ RSS-файл состоит из двух основных частей:
 
 ```ts
 export interface PluginRssOptions {
-  siteUrl: string;
+  siteUrl?: string;
   feed?: Partial<FeedChannel> | FeedChannel[];
   output?: Omit<FeedOutputOptions, 'filename'>;
 }
@@ -153,11 +153,13 @@ export interface PluginRssOptions {
 #### `siteUrl`
 
 - **Тип**: `string`
-- **Обязательный параметр**
+- **По умолчанию**: [`siteOrigin`](/api/config/config-basic#siteorigin) + [`base`](/api/config/config-basic#base), либо `base`, если `siteOrigin` не задан
 
 URL сайта, на котором размещена текущая документация. Используется при формировании RSS-файла.
 
-Если настроен `base`, параметр `siteUrl` должен включать этот путь `base`. Например:
+RSS-ссылки используются вне контекста страниц документации, поэтому укажите абсолютный URL с протоколом и доменом, например `https://example.com/base/`. Если задан параметр `base`, значение `siteUrl` на уровне плагина должно включать путь `base`.
+
+Если в Rspress настроены параметры [`siteOrigin`](/api/config/config-basic#siteorigin) и [`base`](/api/config/config-basic#base), параметр `siteUrl` на уровне плагина можно не указывать. Полный URL формируется в следующем порядке: `siteOrigin + base + routePath`. Если не заданы ни `siteUrl` на уровне плагина, ни `siteOrigin`, плагин использует в качестве резервного варианта значение `base`. Это сохраняет существующее поведение с относительными путями, но не позволяет генерировать абсолютные RSS-ссылки.
 
 ```ts
 // rspress.config.ts
@@ -166,11 +168,11 @@ import { defineConfig } from '@rspress/core';
 import { pluginRss } from '@rspress/plugin-rss';
 
 export default defineConfig({
+  siteOrigin: 'https://example.com',
   base: '/base/',
   plugins: [
-    pluginRss({
-      siteUrl: 'https://example.com/base/',
-    }),
+    // По умолчанию `siteUrl` имеет значение `https://example.com/base/`
+    pluginRss(),
   ],
 });
 ```
