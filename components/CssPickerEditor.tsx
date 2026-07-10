@@ -199,7 +199,7 @@ export function CssPickerEditor() {
   }, [value]);
 
   const isCustomized = activeTab === 0 && value !== INITIAL_CONTENT;
-  const firstTabLabel = isCustomized ? 'Custom' : 'Default';
+  const firstTabLabel = isCustomized ? 'Пользовательский' : 'По умолчанию';
 
   const handleTabChange = (tabIndex: number) => {
     setActiveTab(tabIndex);
@@ -267,7 +267,7 @@ export function CssPickerEditor() {
           {firstTabLabel}
         </button>
 
-<div
+        <div
           style={{
             width: 1,
             height: 20,
@@ -307,10 +307,9 @@ export function CssPickerEditor() {
             backgroundColor: 'var(--rp-c-divider-light)',
           }}
         />
-      </div>
 
-      <div
-          title="Custom Color"
+        <div
+          title="Пользовательский цвет"
           style={{
             position: 'relative',
             width: 22,
@@ -343,6 +342,7 @@ export function CssPickerEditor() {
             }}
           />
         </div>
+      </div>
 
       <LiveCodeEditor lang="css" value={value} onChange={handleCodeChange} />
     </div>
