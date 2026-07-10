@@ -19,7 +19,15 @@
     /* type checking */
     "strict": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+
+    /* path aliases */
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@fragments/*": ["fragments/*"],
+      "@theme/*": ["theme/*"]
+    }
   },
   "include": ["docs", "theme", "rspress.config.ts"],
   "mdx": {
