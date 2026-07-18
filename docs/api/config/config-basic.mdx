@@ -412,10 +412,20 @@ export default defineConfig({
 
 ## llms
 
-- **Тип**: `boolean | { remarkSplitMdxOptions?: RemarkSplitMdxOptions }`
+- **Тип**:
+
+```ts
+boolean | {
+  llmsTxt?: (context: LlmsTxtContext) => string | Promise<string>;
+  remarkSplitMdxOptions?: RemarkSplitMdxOptions;
+}
+```
+
 - **По умолчанию**: `false`
 
 Включает генерацию [SSG-MD](/guide/basic/ssg-md) для создания файлов `llms.txt`, `llms-full.txt` и Markdown-файлов для каждой страницы, что облегчает понимание вашей документации большими языковыми моделями.
+
+Используйте `llmsTxt` для формирования полного содержимого `llms.txt` на основе метаданных сайта и разделов страниц. Подробности см. в разделе [Настройка llms.txt](/guide/basic/ssg-md#customize-llmstxt).
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
