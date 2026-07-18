@@ -245,6 +245,7 @@ export default defineConfig({
     llmsUI: false,
     // Или настроить параметры:
     // llmsUI: {
+    //   injectLlmsHint: false, // Отключить скрытую подсказку для LLM
     //   viewOptions: ['markdownLink', 'chatgpt', 'claude'],
     //   placement: 'outline', // Отображать в панели оглавления вместо размещения под заголовком H1
     // },
@@ -253,6 +254,44 @@ export default defineConfig({
 ```
 
 Подробности см. в [themeConfig.llmsUI](/api/config/config-theme#llmsui).
+
+### Настройка llms.txt \{#customize-llmstxt}
+
+Используйте `llms.llmsTxt` для формирования полного содержимого каждого создаваемого файла `llms.txt`:
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  llms: {
+    llmsTxt: ({ title, description, sections }) => {
+      const sectionContent = sections
+        .map(section => {
+          const pages = section.pages
+            .map(page => `- [${page.title}](${page.link})`)
+            .join('\n');
+          return `## ${section.title}\n\n${pages}`;
+        })
+        .join('\n\n');
+
+      return `# ${title}
+
+> ${description}
+
+${sectionContent}`;
+    },
+  },
+});
+```
+
+Функция обратного вызова может возвращать строку или `Promise`. Она выполняется один раз для каждой создаваемой комбинации языка и версии и получает следующие параметры:
+
+- `title` и `description`: метаданные сайта из `rspress.config.ts`.
+- `lang` и `version`: язык и версия текущего файла `llms.txt`.
+- `base` и `siteOrigin`: параметры URL, используемые для формирования ссылок в Markdown.
+- `sections`: страницы, сгруппированные по навигации и упорядоченные в соответствии с боковой панелью. Каждая страница содержит поля `title`, `description`, `frontmatter`, `routePath`, `link`, `lang` и `version`. Поле `link` содержит конечный URL созданного Markdown-файла.
+
+Страницы, не соответствующие ни одному элементу навигации, помещаются в раздел `Others`. Главная страница локали не включается, поскольку она уже представлена названием и описанием сайта.
 
 ## Настройка разбиения MDX
 
