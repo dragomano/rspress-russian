@@ -54,6 +54,7 @@ export default defineConfig({
     llmsUI: true,
     // Или с пользовательскими настройками:
     // llmsUI: {
+    //   injectLlmsHint: false, // Отключить скрытую подсказку для LLM
     //   viewOptions: ['markdownLink', 'chatgpt', 'claude'],
     //   placement: 'outline', // Отображать в панели оглавления вместо размещения под заголовком H1
     // },
@@ -108,8 +109,7 @@ export * from '@rspress/core/theme-original';
 
 <LlmsContainer>
   <LlmsCopyButton />
-  {/* Добавьте LlmsViewOptions, если нужно */}
-  <LlmsViewOptions />
+  <LlmsViewOptions /> {/* Добавьте LlmsViewOptions, если нужно */}
 </LlmsContainer>
 
 Пример документа
@@ -368,7 +368,7 @@ interface LlmsCopyButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
 - **Тип**: `LlmsViewOptionsProps`
 
 ```ts
-type Option =
+type LlmsViewOptionsItem =
   | {
       title: string;
       icon?: React.ReactNode;
@@ -384,16 +384,16 @@ type Option =
   | 'claude';
 
 interface LlmsViewOptionsProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  options?: Option[];
+  options?: LlmsViewOptionsItem[];
 }
 ```
 
 #### options
 
-- **Тип**: `Option[]`
+- **Тип**: `LlmsViewOptionsItem[]`
 
 ```ts
-type Option =
+type LlmsViewOptionsItem =
   | {
       title: string;
       icon?: React.ReactNode;
