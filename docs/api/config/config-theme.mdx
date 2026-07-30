@@ -29,12 +29,16 @@ interface NavItem {
   download?: boolean;
   // Правило активации (подсветки) пункта навигации
   activeMatch: '^/$|^/';
-  // SVG-строка или URL изображения (необязательно)
+  // Значок, отображаемый перед текстом в панели навигации
+  icon?: string;
+  // Метка, отображаемая после текста в панели навигации
   tag?: string;
 }
 ```
 
 Значение `activeMatch` сопоставляется с текущим маршрутом. Когда маршрут соответствует правилу `activeMatch`, пункт навигации подсвечивается. По умолчанию `activeMatch` использует `link` элемента навигации.
+
+Для локальных значков поместите изображение в каталог `public` и укажите его через абсолютный путь, например `/icon.png`. Также поддерживаются встроенные строки SVG, эмодзи, внешние URL-адреса и data URL.
 
 Например:
 
@@ -47,6 +51,7 @@ export default defineConfig({
       {
         text: 'Главная',
         link: '/',
+        icon: '/icon.png',
       },
       {
         text: 'Руководство',
@@ -64,7 +69,9 @@ interface NavGroup {
   text: string;
   // подменю
   items: NavItem[];
-  // SVG-строка или URL изображения (необязательно)
+  // Значок, отображаемый перед текстом в панели навигации
+  icon?: string;
+  // Метка, отображаемая после текста в панели навигации
   tag?: string;
 }
 ```
@@ -132,7 +139,9 @@ interface SidebarGroup {
   collapsible?: boolean;
   // Свёрнута ли группа по умолчанию
   collapsed?: boolean;
-  // SVG-строка или URL изображения (необязательно)
+  // Значок, отображаемый перед текстом в панели навигации
+  icon?: string;
+  // Метка, отображаемая после текста в панели навигации
   tag?: string;
 }
 
@@ -141,7 +150,9 @@ type SidebarItem = {
   text: string;
   // Ссылка пункта боковой панели
   link: string;
-  // SVG-строка или URL изображения (необязательно)
+  // Значок, отображаемый перед текстом в панели навигации
+  icon?: string;
+  // Метка, отображаемая после текста в панели навигации
   tag?: string;
 };
 ```
@@ -157,10 +168,13 @@ export default defineConfig({
       '/guide/': [
         {
           text: 'Первые шаги',
+          icon: '/icon.png',
           items: [
             {
               text: 'Введение',
               link: '/guide/getting-started/introduction',
+              icon: '<svg>...</svg>',
+              tag: 'new',
             },
             {
               text: 'Установка',
@@ -530,18 +544,24 @@ export default defineConfig({
 });
 ```
 
-## localeRedirect
+## ~~localeRedirect~~
 
 - **Тип**: `'auto' | 'never' | 'only-default-lang'`
 - **По умолчанию**: `'auto'`
 
-Управляет тем, выполняется ли перенаправление пользователя на локаль, наиболее близкую к `window.navigator.language`. По умолчанию используется `auto`, при котором перенаправление происходит при первом посещении. Можно установить `never`, чтобы отключить перенаправления, или `only-default-lang`, чтобы перенаправлять только при переходе на локаль по умолчанию. Например:
+Управляет перенаправлением новых посетителей на ближайшую настроенную локаль на основе `window.navigator.language`.
+
+:::warning Конфигурация перенесена
+
+Этот параметр был перенесён в [`route.localeRedirect`](./config-basic#routelocaleredirect). `themeConfig.localeRedirect` по-прежнему поддерживается для обратной совместимости, но считается устаревшим. Перенесите параметр в `route`; если заданы оба параметра, приоритет имеет `route.localeRedirect`.
+
+:::
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
 
 export default defineConfig({
-  themeConfig: {
+  route: {
     localeRedirect: 'never',
   },
 });
@@ -618,16 +638,27 @@ export default defineConfig({
 - **Тип**: `boolean`
 - **По умолчанию**: `true`
 
-Этот параметр определяет, следует ли внедрять скрытую подсказку в создаваемые HTML-страницы. Предположим, что значение [`siteOrigin`](/api/config/config-basic#siteorigin) равно `https://example.com`. В этом случае на страницу `/guide/` будет добавлено следующее содержимое:
+Этот параметр определяет, будет ли подсказка с директивой для LLM внедряться в сгенерированные страницы. Один и тот же компонент `LlmsHint` имеет две формы вывода:
+
+- В HTML-выводе SSG он отображается как визуально скрытый текстовый DOM-элемент в верхней части страницы. При этом не используются `display: none`, атрибут `hidden`, `aria-hidden` или вложенные ссылки, чтобы преобразование HTML в Markdown на стороне агента могло сохранить директиву в виде текста.
+- В Markdown-выводе SSG-MD он отображается в виде строки с цитатой в верхней части Markdown-страницы.
+
+Если предположить, что [`siteOrigin`](/api/config/config-basic#siteorigin) имеет значение `https://example.com`, следующая HTML-директива будет внедрена в страницу `/guide/`:
 
 {/* prettier-ignore */}
 ```html
-<div style="display:none" hidden="" aria-hidden="true">Are you an LLM? View https://example.com/llms.txt for optimized Markdown documentation, or https://example.com/llms-full.txt for full documentation bundle. This page is also available as Markdown at https://example.com/guide/index.md</div>
+<div class="rp-llms-hint" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap;border:0">For AI agents: the complete documentation index is available at https://example.com/llms.txt, the full documentation bundle is available at https://example.com/llms-full.txt, and this page is available as Markdown at https://example.com/guide/index.md.</div>
 ```
 
-URL автоматически включают настроенные значения `siteOrigin` и [`base`](/api/config/config-basic#base). URL Markdown-файла для конкретной страницы формируется на основе текущего маршрута. Если `siteOrigin` не задан, в URL будут использоваться пути с учетом значения `base`.
+Markdown-вывод SSG-MD для той же страницы начинается с:
 
-Установите `injectLlmsHint` в значение `false`, чтобы убрать скрытую подсказку, не отключая при этом видимые компоненты интерфейса LLMS:
+```md
+> For AI agents: the complete documentation index is available at https://example.com/llms.txt, the full documentation bundle is available at https://example.com/llms-full.txt, and this page is available as Markdown at https://example.com/guide/index.md.
+```
+
+URL-адреса автоматически включают настроенные префиксы `siteOrigin`, [`base`](/api/config/config-basic#base), локали и версии. URL-адрес страницы в формате Markdown формируется на основе текущего маршрута. Без `siteOrigin` URL-адреса остаются путями с учётом `base`.
+
+Установите `injectLlmsHint` в `false`, чтобы отключить это поведение:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
