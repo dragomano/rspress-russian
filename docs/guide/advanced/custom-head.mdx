@@ -16,7 +16,7 @@
 
 ## Как определяется описание
 
-По умолчанию Rspress извлекает первый содержательный абзац под заголовком `h1` в качестве описания страницы (см. [`markdown.extractDescription`](/api/config/config-build#markdownextractdescription)). Если результат извлечения вас не устраивает, вы можете указать поле `description` в [frontmatter](/api/config/config-frontmatter#description), чтобы переопределить его:
+По умолчанию Rspress извлекает первый содержательный абзац под заголовком `h1` в качестве описания страницы (см. [`markdown.extractDescription`](/api/config/config-build#markdownextractdescription)). Если результат извлечения вас не устраивает, вы можете указать поле `description` в [метаданных](/api/config/config-frontmatter#description), чтобы переопределить его:
 
 ```md title="example.mdx"
 ---
@@ -58,6 +58,17 @@ head:
   - - meta
     - property: og:description
       content: Это описание
+---
+```
+
+Вы можете использовать то же поле `head` в метаданных, чтобы добавить тег `<meta name="keywords">`:
+
+```md title="example.mdx"
+---
+head:
+  - - meta
+    - name: keywords
+      content: Rspress, React, static site generator
 ---
 ```
 
