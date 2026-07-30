@@ -145,6 +145,7 @@ export type FileSideMeta = {
   type: 'file';
   name: string;
   label?: string;
+  icon?: string;
   tag?: string;
   overviewHeaders?: number[];
   context?: string;
@@ -156,6 +157,7 @@ export type DirSideMeta = {
   label?: string;
   collapsible?: boolean;
   collapsed?: boolean;
+  icon?: string;
   tag?: string;
   overviewHeaders?: number[];
   context?: string;
@@ -172,6 +174,7 @@ export type DividerSideMeta = {
 export type SectionHeaderMeta = {
   type: 'section-header';
   label: string;
+  icon?: string;
   tag?: string;
 };
 
@@ -180,6 +183,7 @@ export type CustomLinkMeta =
       // ссылка на файл
       type: 'custom-link';
       label: string;
+      icon?: string;
       tag?: string;
       overviewHeaders?: number[];
       context?: string;
@@ -189,6 +193,7 @@ export type CustomLinkMeta =
       // ссылка на директорию
       type: 'custom-link';
       label: string;
+      icon?: string;
       tag?: string;
       overviewHeaders?: number[];
       context?: string;
@@ -227,6 +232,7 @@ export type FileSideMeta = {
   type: 'file';
   name: string;
   label?: string;
+  icon?: string;
   tag?: string;
   overviewHeaders?: number[];
   context?: string;
@@ -259,6 +265,7 @@ export type DirSideMeta = {
   label?: string;
   collapsible?: boolean;
   collapsed?: boolean;
+  icon?: string;
   tag?: string;
   overviewHeaders?: number[];
   context?: string;
@@ -354,6 +361,7 @@ export type DividerSideMeta = {
 export type SectionHeaderMeta = {
   type: 'section-header';
   label: string;
+  icon?: string;
   tag?: string;
 };
 ```
@@ -397,6 +405,7 @@ export type CustomLinkMeta =
       // ссылка на файл
       type: 'custom-link';
       label: string;
+      icon?: string;
       tag?: string;
       overviewHeaders?: number[];
       context?: string;
@@ -406,6 +415,7 @@ export type CustomLinkMeta =
       // ссылка на директорию
       type: 'custom-link';
       label: string;
+      icon?: string;
       tag?: string;
       overviewHeaders?: number[];
       context?: string;
@@ -522,17 +532,64 @@ basic
   └── 3-plugin-development.md
 ```
 
-## Иконки-теги для боковой панели и навигационной панели
+## Настройка элементов файлов с помощью метаданных
 
-Вы можете добавлять иконки после заголовков в боковой панели или навигационной панели через свойство `tag`. Оно поддерживает строки SVG-тегов или URL-адреса изображений.
+Большинство параметров отображения автоматически сгенерированных элементов файлов можно задать в блоке метаданных страницы: `title`, `icon`, `tag`, `overviewHeaders` и `context`.
 
-```json title="_meta.json"
-{
-  "type": "file",
-  "name": "introduction",
-  "label": "Introduction",
-  "tag": "<svg width=\"1em\" height=\"1em\" viewBox=\"0 0 32 32\"><path fill=\"currentColor\" d=\"M4 6h24v2H4zm0 18h24v2H4zm0-12h24v2H4zm0 6h24v2H4z\"/></svg>"
-}
+Структурные параметры следует хранить в `_meta.json`, включая порядок элементов, `type`, `name`, группы каталогов, заголовки секций, пользовательские ссылки, `collapsible` и `collapsed`. Для метаданных, относящихся к конкретной странице, рекомендуется использовать метаданные, чтобы содержимое и его представление в боковой панели находились в одном месте.
+
+Например, `_meta.json` может определять, какие файлы отображаются и в каком порядке:
+
+```json title="docs/guide/_meta.json"
+["introduction"]
 ```
 
-Подробнее см. в разделе [компонент Tag](/ui/layout-components/tag).
+Затем настройте параметры отображения элемента файла в метаданных страницы:
+
+```md title="docs/guide/introduction.mdx"
+---
+title: Введение
+icon: /icon.png
+tag: new
+overviewHeaders: [2, 3]
+context: guide-introduction
+---
+
+# Введение
+```
+
+Если для одного и того же элемента файла одно и то же поле задано в обоих местах, для полей `icon`, `tag`, `overviewHeaders` и `context` приоритет имеет frontmatter, а для заголовка страницы приоритет имеет `label` из `_meta.json`. Для группы каталогов приоритет имеет `_meta.json` по сравнению с метаданными из её индексной страницы.
+
+## Значки и метки боковой панели \{#sidebar-icons-and-tags}
+
+Используйте `icon`, чтобы добавить значок перед заголовком в боковой панели. Рекомендуемый и наиболее распространённый способ — поместить изображение в каталог `public` и указать его через абсолютный путь.
+
+Например, поместите локальное изображение в `docs/public/icon.png`, а затем укажите его в `_meta.json`:
+
+```json title="docs/_meta.json"
+[
+  {
+    "type": "file",
+    "name": "introduction",
+    "label": "Introduction",
+    "icon": "/icon.png",
+    "tag": "new"
+  }
+]
+```
+
+Вы также можете указать встроенную строку SVG, если хотите встроить значок непосредственно в конфигурацию:
+
+```json title="docs/_meta.json"
+[
+  {
+    "type": "file",
+    "name": "introduction",
+    "icon": "<svg width=\"1em\" height=\"1em\" viewBox=\"0 0 32 32\"><path fill=\"currentColor\" d=\"M4 6h24v2H4zm0 18h24v2H4zm0-12h24v2H4zm0 6h24v2H4z\"/></svg>"
+  }
+]
+```
+
+Также поддерживаются эмодзи, внешние URL-адреса и data URL. Существующая настройка `tag` по-прежнему отображается после заголовка.
+
+Подробную информацию о `tag` см. в разделе [Компонент Tag](/ui/layout-components/tag).
