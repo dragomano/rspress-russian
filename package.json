@@ -9,16 +9,16 @@
   },
   "devDependencies": {
     "@rsbuild/plugin-sass": "^2.0.1",
-    "@rspress/core": "^2.0.18",
-    "@rspress/plugin-llms": "^2.0.18",
-    "@rspress/plugin-playground": "^2.0.18",
-    "@rspress/plugin-preview": "^2.0.18",
-    "@rstack-dev/doc-ui": "^1.14.5",
+    "@rspress/core": "^2.0.19",
+    "@rspress/plugin-llms": "^2.0.19",
+    "@rspress/plugin-playground": "^2.0.19",
+    "@rspress/plugin-preview": "^2.0.19",
+    "@rstack-dev/doc-ui": "^1.14.7",
     "@shikijs/transformers": "^4.3.1",
-    "@types/node": "^26.1.1",
-    "@types/react": "^19.2.17",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
+    "@types/node": "^26.1.2",
+    "@types/react": "^19.2.18",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "rspress-plugin-file-tree": "^1.0.5"
   }
 }

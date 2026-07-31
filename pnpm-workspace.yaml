@@ -1,6 +1,8 @@
 minimumReleaseAgeExclude:
-  - '@rspress/core@2.0.16 || 2.0.18'
-  - '@rspress/plugin-playground@2.0.16 || 2.0.18'
-  - '@rspress/plugin-preview@2.0.16 || 2.0.18'
-  - '@rspress/shared@2.0.16 || 2.0.18'
-  - '@rspress/plugin-llms@2.0.18'
+  - '@rspress/core@2.0.16 || 2.0.18 || 2.0.19'
+  - '@rspress/plugin-playground@2.0.16 || 2.0.18 || 2.0.19'
+  - '@rspress/plugin-preview@2.0.16 || 2.0.18 || 2.0.19'
+  - '@rspress/shared@2.0.16 || 2.0.18 || 2.0.19'
+  - '@rspress/plugin-llms@2.0.18 || 2.0.19'
+  - '@types/node@26.1.2'
+  - '@types/react@19.2.18'
