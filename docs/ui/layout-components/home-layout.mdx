@@ -5,11 +5,11 @@ overviewHeaders: []
 
 # HomeLayout
 
-`HomeLayout` is the layout component for the [homepage](/guide/basic/home-page), responsible for integrating and rendering the Hero, Features, and Footer sections.
+`HomeLayout` — это компонент макета для [главной страницы](/guide/basic/home-page), отвечающий за интеграцию и отображение секций Hero, Features и Footer.
 
-## Usage
+## Использование
 
-Modify or override through [custom theme](/guide/basic/custom-theme):
+Измените или переопределите его через [пользовательскую тему](/guide/basic/custom-theme):
 
 ```tsx title="theme/index.tsx"
 import { HomeLayout as BasicHomeLayout } from '@rspress/core/theme-original';
@@ -19,11 +19,11 @@ export default function HomeLayout() {
 }
 ```
 
-The `HomeLayout` component reads the `hero` and `features` configuration from frontmatter through [`useFrontmatter`](/ui/hooks/use-frontmatter). For detailed configuration options, refer to [Frontmatter Configuration](/api/config/config-frontmatter#hero).
+Компонент `HomeLayout` получает конфигурацию `hero` и `features` из метаданных через [`useFrontmatter`](/ui/hooks/use-frontmatter). Подробные параметры конфигурации приведены в разделе [Конфигурация метаданных](/api/config/config-frontmatter#hero).
 
-### Custom slots
+### Пользовательские слоты
 
-Use slot props to insert custom content before and after each section:
+Используйте свойства слотов, чтобы вставить собственный контент перед каждой секцией и после неё:
 
 ```tsx title="theme/index.tsx"
 import { HomeLayout as BasicHomeLayout } from '@rspress/core/theme-original';
@@ -31,60 +31,60 @@ import { HomeLayout as BasicHomeLayout } from '@rspress/core/theme-original';
 export default function HomeLayout() {
   return (
     <BasicHomeLayout
-      beforeHero={<div>Content before Hero</div>}
-      afterHero={<div>Content after Hero</div>}
-      beforeFeatures={<div>Content before Features</div>}
-      afterFeatures={<div>Content after Features</div>}
-      beforeHeroActions={<div>Content before Hero buttons</div>}
-      afterHeroActions={<div>Content after Hero buttons</div>}
+      beforeHero={<div>Контент перед Hero</div>}
+      afterHero={<div>Контент после Hero</div>}
+      beforeFeatures={<div>Контент перед Features</div>}
+      afterFeatures={<div>Контент после Features</div>}
+      beforeHeroActions={<div>Контент перед кнопками Hero</div>}
+      afterHeroActions={<div>Контент после кнопок Hero</div>}
     />
   );
 }
 ```
 
-## Props
+## Пропсы
 
 ### beforeHero
 
 - **Тип:** `React.ReactNode`
 
-Custom content to insert before the Hero section.
+Пользовательский контент, вставляемый перед секцией Hero.
 
 ### afterHero
 
 - **Тип:** `React.ReactNode`
 
-Custom content to insert after the Hero section.
+Пользовательский контент, вставляемый после секции Hero.
 
 ### beforeHeroActions
 
 - **Тип:** `React.ReactNode`
 
-Custom content to insert before the Hero buttons, passed to the [HomeHero](/ui/layout-components/home-hero) component.
+Пользовательский контент, вставляемый перед кнопками Hero и передаваемый компоненту [HomeHero](/ui/layout-components/home-hero).
 
 ### afterHeroActions
 
 - **Тип:** `React.ReactNode`
 
-Custom content to insert after the Hero buttons, passed to the [HomeHero](/ui/layout-components/home-hero) component.
+Пользовательский контент, вставляемый после кнопок Hero и передаваемый компоненту [HomeHero](/ui/layout-components/home-hero).
 
 ### beforeFeatures
 
 - **Тип:** `React.ReactNode`
 
-Custom content to insert before the Features section.
+Пользовательский контент, вставляемый перед секцией Features.
 
 ### afterFeatures
 
 - **Тип:** `React.ReactNode`
 
-Custom content to insert after the Features section.
+Пользовательский контент, вставляемый после секции Features.
 
-## Sub-components
+## Вложенные компоненты
 
-`HomeLayout` uses the following components internally:
+`HomeLayout` внутри использует следующие компоненты:
 
-- [HomeBackground](/ui/layout-components/home-background) - Homepage background
-- [HomeHero](/ui/layout-components/home-hero) - Hero section
-- [HomeFeature](/ui/layout-components/home-feature) - Features section
-- [HomeFooter](/ui/layout-components/home-footer) - Footer section
+- [HomeBackground](/ui/layout-components/home-background) — фон главной страницы
+- [HomeHero](/ui/layout-components/home-hero) — секция Hero
+- [HomeFeature](/ui/layout-components/home-feature) — секция Features
+- [HomeFooter](/ui/layout-components/home-footer) — секция Footer
