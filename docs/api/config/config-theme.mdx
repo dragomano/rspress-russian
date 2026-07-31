@@ -656,7 +656,7 @@ Markdown-вывод SSG-MD для той же страницы начинает�
 > For AI agents: the complete documentation index is available at https://example.com/llms.txt, the full documentation bundle is available at https://example.com/llms-full.txt, and this page is available as Markdown at https://example.com/guide/index.md.
 ```
 
-URL-адреса автоматически включают настроенные префиксы `siteOrigin`, [`base`](/api/config/config-basic#base), локали и версии. URL-адрес страницы в формате Markdown формируется на основе текущего маршрута. Без `siteOrigin` URL-адреса остаются путями с учётом `base`.
+URL-адреса автоматически включают настроенные префиксы `siteOrigin`, [`base`](/api/config/config-basic#base), локали и версии. Если `siteOrigin` не задан, URL-адреса остаются путями с учётом `base`.
 
 Установите `injectLlmsHint` в `false`, чтобы отключить это поведение:
 
