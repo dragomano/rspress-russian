@@ -1,3 +1,5 @@
+import { VersionBadge } from '@components/VersionBadge';
+
 # Базовая конфигурация
 
 ## root
@@ -40,6 +42,8 @@ export default defineConfig({
 ```
 
 ## siteOrigin
+
+<VersionBadge version="2.0.17" />
 
 - **Тип**: `string`
 - **По умолчанию**: `""`
@@ -702,7 +706,74 @@ export default defineConfig({
 });
 ```
 
+### route.cleanUrlsRedirect
+
+- **Тип**: `Boolean`
+- **По умолчанию**: `true`
+
+При включении этой опции Rspress нормализует неканонические URL-адреса в браузере во время запуска клиентского приложения, используя фактически сопоставленный маршрут как единственный источник истины. Итоговый формат URL определяется параметром [`route.cleanUrls`](#routecleanurls).
+
+Параметр `route.cleanUrls` задаёт предпочтительный формат URL, используемый в генерируемых ссылках, тогда как `route.cleanUrlsRedirect` отвечает только за нормализацию адресной строки браузера.
+
+:::warning Клиентская нормализация
+
+Эта опция выполняется после загрузки HTML запрошенной страницы и клиентского приложения. Она использует `history.replaceState` и не возвращает HTTP-перенаправление с кодом 301/308, поэтому не может полностью заменить каноническое перенаправление на стороне сервера или CDN, особенно с точки зрения SEO. Хостинг-платформа всё равно должна отдавать корректную страницу Rspress для запрошенного варианта URL. Если есть возможность, предпочтительно использовать перенаправление на стороне сервера.
+
+:::
+
+#### При `cleanUrls: true`
+
+URL обычных страниц не содержат завершающего слеша, а URL индексных страниц каталогов сохраняют его.
+
+| Входящий URL         | Сопоставленный маршрут | Изменение URL в браузере            |
+| -------------------- | ---------------------- | ----------------------------------- |
+| `/file`              | `/file`                | Без изменений                       |
+| `/file.html`         | `/file`                | `replaceState` → `/file`            |
+| `/file/`             | `/file`                | `replaceState` → `/file`            |
+| `/file/index`        | `/file`                | `replaceState` → `/file`            |
+| `/file/index.html`   | `/file`                | `replaceState` → `/file`            |
+| `/folder`            | `/folder/`             | `replaceState` → `/folder/`         |
+| `/folder.html`       | `/folder/`             | `replaceState` → `/folder/`         |
+| `/folder/`           | `/folder/`             | Без изменений                       |
+| `/folder/index`      | `/folder/`             | `replaceState` → `/folder/`         |
+| `/folder/index.html` | `/folder/`             | `replaceState` → `/folder/`         |
+
+#### При `cleanUrls: false`
+
+Для обычных страниц используется суффикс `.html`, а для индексных страниц каталогов — `/index.html`.
+
+| Входящий URL         | Сопоставленный маршрут | Изменение URL в браузере                     |
+| -------------------- | ---------------------- | -------------------------------------------- |
+| `/file`              | `/file`                | `replaceState` → `/file.html`                |
+| `/file.html`         | `/file`                | Без изменений                                |
+| `/file/`             | `/file`                | `replaceState` → `/file.html`                |
+| `/file/index`        | `/file`                | `replaceState` → `/file.html`                |
+| `/file/index.html`   | `/file`                | `replaceState` → `/file.html`                |
+| `/folder`            | `/folder/`             | `replaceState` → `/folder/index.html`        |
+| `/folder.html`       | `/folder/`             | `replaceState` → `/folder/index.html`        |
+| `/folder/`           | `/folder/`             | `replaceState` → `/folder/index.html`        |
+| `/folder/index`      | `/folder/`             | `replaceState` → `/folder/index.html`        |
+| `/folder/index.html` | `/folder/`             | Без изменений                                |
+
+Например, URL-адреса `/ru/guide/start/introduction.html` и `/ru/guide/start/introduction/index.html` соответствуют маршруту `/ru/guide/start/introduction`; итоговый URL будет приведён к формату, заданному параметром `cleanUrls`, без потери префикса локали.
+
+Форматы канонических URL соответствуют механизму [HTML handling](https://developers.cloudflare.com/workers/static-assets/routing/advanced/html-handling/) в Cloudflare. Однако Cloudflare выполняет HTTP-перенаправления на стороне сервера, тогда как эта опция лишь обновляет URL в адресной строке браузера.
+
+Установите `cleanUrlsRedirect` в `false`, чтобы отключить нормализацию URL в браузере.
+
+```js
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  route: {
+    cleanUrlsRedirect: false,
+  },
+});
+```
+
 ### route.localeRedirect
+
+<VersionBadge version="2.0.19" />
 
 - **Тип**: `'auto' | 'never' | 'only-default-lang'`
 - **По умолчанию**: `'auto'`
@@ -731,6 +802,8 @@ export default defineConfig({
 
 ### route.useTransitions
 
+<VersionBadge version="2.0.17" />
+
 - **Тип**: `Boolean`
 - **По умолчанию**: `true`
 
@@ -749,6 +822,8 @@ export default defineConfig({
 ```
 
 ### route.prefetchLink
+
+<VersionBadge version="2.0.17" />
 
 - **Тип**: `Boolean`
 - **По умолчанию**: `true`
