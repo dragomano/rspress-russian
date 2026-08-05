@@ -3,6 +3,11 @@ declare module '*.css' {
   export default content;
 }
 
+declare module '*.scss' {
+  const content: Record<string, string>;
+  export default content;
+}
+
 // Rsbuild/Vite "?raw" imports — returns file content as a string
 declare module '*?raw' {
   const content: string;
