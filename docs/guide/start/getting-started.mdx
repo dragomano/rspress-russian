@@ -46,6 +46,8 @@ Rspress требует Node.js версии 20.19+ или 22.12+.
 
 Утилита запросит название проекта или путь к нему, нужно ли настроить i18n, создавать ли папку `theme` для кастомизации, а также какие дополнительные инструменты или возможности добавить.
 
+По умолчанию утилита инициализирует Git-репозиторий в созданном проекте. Передайте `--no-git`, чтобы пропустить инициализацию.
+
 После создания проекта следуйте инструкциям, которые появятся в терминале:
 
 ```bash
@@ -146,6 +148,7 @@ Options:
   -h, --help                display help for command
   -d, --dir <dir>           create project in specified directory
   -t, --template <tpl>      specify the template to use
+  --no-git                  skip Git repository initialization
   --tools <tool>            add additional tools, comma separated
   --skill <skill>           add optional skills, comma separated
   --override                override files in target directory
