@@ -6,3 +6,7 @@ minimumReleaseAgeExclude:
   - '@rspress/plugin-llms@2.0.18 || 2.0.19'
   - '@types/node@26.1.2'
   - '@types/react@19.2.18'
+  - '@shikijs/core@4.4.2'
+  - '@shikijs/primitive@4.4.2'
+  - '@shikijs/transformers@4.4.2'
+  - '@shikijs/types@4.4.2'
