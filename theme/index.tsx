@@ -11,11 +11,19 @@ import { CssModificationIndicator } from '../components/CssModificationIndicator
 import { CssStyleSync } from '../components/CssStyleSync';
 import { Callout, Prompt, Tag } from './components';
 import { BlogBackButton } from './components/BlogBackButton';
+import { HomeSections } from './components/HomeSections';
+import { ToolStack } from './components/ToolStack';
 import './index.css';
 
 function HomeLayout() {
   return (
     <BasicHomeLayout
+      afterFeatures={
+        <>
+          <HomeSections />
+          <ToolStack />
+        </>
+      }
       afterHeroActions={
         <div
           className="rp-doc"
