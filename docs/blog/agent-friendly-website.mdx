@@ -1,0 +1,305 @@
+---
+date: 2026-08-20
+authors: ['sooniter']
+description: 'Rspress использует llms.txt, SSG-MD, Accept: text/markdown и injectLlmsHint, чтобы помочь агентам обнаруживать документацию и читать её.'
+sidebar: false
+pageType: doc
+---
+
+import { TweetEmbed } from 'rspress-plugin-third-parties';
+
+_20 августа 2026 года_
+
+# Как создать сайт, удобный для агентов
+
+Такие агенты, как Claude Code, Cursor и Codex, уже ищут документацию, вызывают API и непосредственно пишут код. Люди больше не являются единственными читателями документации инструментов для разработчиков.
+
+Однако сайт, обеспечивающий отличное взаимодействие для людей, всё ещё может быть неудобен для агентов:
+
+- Люди могут перемещаться по навигации, тогда как агенты могут не знать, с чего начать;
+- Люди видят полностью отрендеренную страницу, тогда как агенты могут получить лишь пустую оболочку, ожидающую выполнения JavaScript;
+- Люди могут не обращать внимания на навигацию, кнопки и рекламу, тогда как агентам необходимо извлекать основное содержимое из большого объёма HTML;
+- Даже если сайт предоставляет Markdown, агенты могут не знать о его существовании.
+
+Rspress создан не только для людей. Его цель — сделать каждый документ более удобным для обнаружения, чтения и понимания агентами. В этой статье рассматриваются лучшие практики создания сайтов, удобных для агентов, в Rspress:
+
+<TweetEmbed
+  id="2090359544769913185"
+  caption={
+    <a href="https://x.com/Soon_Iter/status/2090359544769913185?s=20">
+      Rspress набирает 100/100 баллов в AFDocs
+    </a>
+  }
+/>
+
+## llms.txt: Карта сайта для эпохи агентов
+
+Спецификация [llms.txt](https://llmstxt.org/) определяет Markdown-индекс, размещаемый в корне сайта или в его подкаталоге. Он содержит введение в сайт и ссылки на подробный контент.
+
+Текущая спецификация требует только H1 с названием проекта. Всё остальное является необязательным:
+
+- Краткое описание проекта в блоке цитаты;
+- Дополнительный контекст без заголовка;
+- Списки ссылок, сгруппированные под заголовками H2, при необходимости с описаниями;
+- Раздел с названием `Optional` для содержимого, которым можно пренебречь при ограниченном контекстном окне.
+
+Например:
+
+```md
+# Rspress
+
+> Rspress — генератор статических сайтов на основе Rspack.
+
+## Документация
+
+- [Введение](https://rspress.rs/guide/start/introduction.md): Введение в Rspress
+- [Быстрый старт](https://rspress.rs/guide/start/quick-start.md): Быстрый старт
+```
+
+`sitemap.xml` помогает поисковым системам индексировать страницы, а `llms.txt` помогает агентам обнаруживать содержимое с помощью поэтапного раскрытия информации: сначала он предоставляет краткий индекс документации, а затем позволяет агентам по запросу читать релевантные страницы.
+
+Текущий результат `doc_build` в Rspress делится на три категории: HTML для людей, Markdown для каждой страницы для агентов и индексные файлы для обнаружения содержимого.
+
+```text
+doc_build/
+├── index.html                              # HTML-страница для людей
+├── index.md                                # Markdown-страница для агентов
+├── guide/
+│   └── start/
+│       ├── introduction.html               # HTML-страница для людей
+│       └── introduction.md                 # Markdown-страница для агентов
+├── llms.txt                                # Краткий индекс документации
+└── llms-full.txt                           # Markdown-содержимое всего сайта
+```
+
+## SSG-MD: Версия SSG в формате Markdown
+
+Rspress предоставляет генерацию статических сайтов в Markdown (SSG-MD). Подобно [генерации статических сайтов (SSG)](/guide/basic/ssg), SSG-MD преобразует страницы в файлы Markdown вместо HTML-файлов, а также создаёт `llms.txt` и `llms-full.txt`, благодаря чему техническую документацию становится проще понимать и использовать большим языковым моделям.
+
+Rspress — это не только фреймворк для SSG: благодаря SSG-MD он также рассматривает генерацию Markdown как полноценную возможность: HTML для людей, Markdown для ИИ.
+
+В следующей таблице сравниваются SSG и SSG-MD:
+
+| Сравнение                    | SSG                                        | SSG-MD                                    |
+| ---------------------------- | ------------------------------------------ | ----------------------------------------- |
+| **Полное название**          | Static Site Generation                     | Static Site Generation to Markdown        |
+| **Цель оптимизации**         | SEO (поисковая оптимизация)                | GEO (оптимизация для генеративных систем) |
+| **Целевой потребитель**      | Поисковый робот                            | LLM / система векторного поиска           |
+| **Индексный файл**           | [`sitemap.xml`](https://www.sitemaps.org/) | [`llms.txt`](https://llmstxt.org/)        |
+| **Файл с полным содержимым** | -                                          | `llms-full.txt`                           |
+| **Ключевая реализация**      | `renderToString`                           | `renderToMarkdownString`                  |
+| **Способ доступа**           | `/guide/start/introduction.html`           | `/guide/start/introduction.md`            |
+
+### Почему SSG-MD?
+
+Во фронтенд-фреймворках на основе React извлечение статической информации из динамически отрендеренного содержимого зачастую затруднено. MDX сталкивается с той же проблемой: файлы `.mdx` содержат Markdown, но также могут включать React-компоненты, делая документацию более интерактивной. Rspress позволяет пользователям расширять документацию с помощью фрагментов MDX, React-компонентов, хуков и маршрутов TSX, однако этот динамический контент создаёт проблемы при преобразовании в Markdown:
+
+- Передача исходного MDX в ИИ добавляет шум в виде синтаксиса кода и приводит к потере содержимого отрендеренных React-компонентов.
+
+- Преобразование HTML в Markdown часто даёт неудовлетворительные результаты, из-за чего сложно гарантировать качество информации.
+
+[Генерация статических сайтов (SSG)](/guide/basic/ssg) создаёт статический HTML для поисковых роботов и улучшает [SEO](https://ru.wikipedia.org/wiki/%D0%9F%D0%BE%D0%B8%D1%81%D0%BA%D0%BE%D0%B2%D0%B0%D1%8F_%D0%BE%D0%BF%D1%82%D0%B8%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F). SSG-MD решает аналогичную проблему для инструментов ИИ: он улучшает [GEO](https://ru.wikipedia.org/wiki/Generative_engine_optimization) и качество статической информации для больших языковых моделей. В отличие от преобразования HTML в Markdown, рендеринг из виртуального DOM React предоставляет SSG-MD более богатый источник информации.
+
+<div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+  <img
+    src="https://assets.rspack.rs/rspress/assets/ssg-md-flow.jpg"
+    width="600"
+    alt="SSG-MD rendering flow"
+  />
+</div>
+
+### Как работает SSG-MD?
+
+1. Внутри Rspress реализован метод `renderToMarkdownString`, аналогичный `renderToString` из `react-dom`, который преобразует React-компоненты в строки Markdown:
+
+```tsx
+import { renderToMarkdownString } from 'react-render-to-markdown';
+
+// HTML-элементы преобразуются в соответствующий синтаксис Markdown
+renderToMarkdownString(
+  <div>
+    <strong>foo</strong>
+    <span>bar</span>
+  </div>,
+);
+// Результат: '**foo**bar'
+
+// Поддерживаются React-компоненты и хуки
+const Article = () => {
+  return (
+    <>
+      <h1>Привет, мир</h1>
+      <p>Это параграф.</p>
+    </>
+  );
+};
+renderToMarkdownString(<Article />);
+// Результат: '# Привет, мир\n\nЭто параграф.\n'
+```
+
+В принципе, этот API работает с любым сайтом, созданным с использованием React; если вам это интересно, см. [react-render-to-markdown](https://www.npmjs.com/package/react-render-to-markdown).
+
+2. Rspress использует собственный плагин remark `remarkSplitMdx` для предварительной обработки MDX-файлов перед рендерингом. Этот плагин разделяет AST MDX, отделяя обычное содержимое Markdown от JSX-компонентов: текст Markdown сериализуется в строковые литералы, а JSX-компоненты и MDX-выражения (например, `{variable}`) сохраняются как React-элементы. Это позволяет передавать содержимое Markdown как есть, не обрабатывая его через React-рендеринг, в то время как динамические компоненты рендерятся с помощью `renderToMarkdownString`.
+
+Например, следующий MDX:
+
+```mdx
+# Привет
+
+Немного **жирного** текста.
+
+<PackageManagerTabs command="install rspress" />
+
+{window.title}
+```
+
+преобразуется в компонент следующего вида:
+
+```tsx
+function _createMdxContent() {
+  return (
+    <>
+      {'# Привет\n\nНемного **жирного** текста.\n'}
+      <PackageManagerTabs command="install rspress" />
+      {window.title}
+    </>
+  );
+}
+```
+
+3. Rspress предоставляет переменную окружения `import.meta.env.SSG_MD`, благодаря которой React-компоненты могут отличать рендеринг SSG-MD от рендеринга в браузере и соответствующим образом настраивать свой вывод:
+
+```tsx
+export function Tab({ label }: { label: string }) {
+  if (import.meta.env.SSG_MD) {
+    return <>{`**Вот вкладка под названием ${label}**`}</>;
+  }
+  return <div>{label}</div>;
+}
+```
+
+4. Внутренняя библиотека компонентов Rspress адаптирована для SSG-MD, поэтому на этапе SSG-MD компоненты генерируют содержательный Markdown. Например:
+
+```tsx
+<PackageManagerTabs command="create rspress@latest" />
+```
+
+Он преобразуется в:
+
+````md
+```sh [npm]
+npm create rspress@latest
+```
+
+```sh [yarn]
+yarn create rspress
+```
+
+```sh [pnpm]
+pnpm create rspress@latest
+```
+
+```sh [bun]
+bun create rspress@latest
+```
+
+```sh [deno]
+deno init --npm rspress@latest
+```
+````
+
+## Accept: text/markdown: Возвращение Markdown на основе заголовка запроса
+
+В ноябре 2025 года [Boris Cherny](https://x.com/bcherny/status/1988860326306087102), руководитель Claude Code, написал в X:
+
+> В следующей версии Claude Code инструмент WebFetch будет автоматически добавлять к запросам `Accept: "text/markdown, *"`, что поможет сайтам с документацией предоставлять документацию, требующую меньше токенов.
+
+[Cloudflare также отмечает](https://blog.cloudflare.com/markdown-for-agents/), что такие агенты для работы с кодом, как Claude Code и OpenCode, отправляют заголовок запроса `Accept`, содержащий `text/markdown`.
+
+Клиенты для агентов, такие как Claude Code, и сайты с документацией, такие как Bun, одними из первых начали использовать соглашение `Accept: text/markdown`. По сравнению с HTML Markdown не содержит элементы оформления страницы, такие как навигация, стили и скрипты, требует меньше контекста и избавляет от необходимости извлекать основное содержимое из HTML. Поэтому агенты могут быстрее получать пригодный для использования контент. Если сайт уже генерирует Markdown, поддержка этого заголовка делает эти преимущества надёжными, вместо того чтобы полагаться на самостоятельный разбор HTML каждым клиентом.
+
+Rspress — полностью статический фреймворк и не имеет сервера развёртывания, который выбирал бы HTML или Markdown в зависимости от заголовка запроса. Тем не менее поддержать этот заголовок достаточно просто: нужно настроить соответствующее правило у провайдера хостинга. На сайте Rspress используется перенаправление Cloudflare. Запросы, содержащие `Accept: text/markdown`, внутренне перенаправляются на соответствующий `.md`-файл по тому же пути, тогда как обычные браузеры по тому же URL по-прежнему получают HTML.
+
+```bash
+curl https://rspress.rs/guide/start/introduction \
+  -H 'Accept: text/markdown'
+```
+
+Ответ представлен в формате Markdown:
+
+```md
+> For AI agents: the complete documentation index is available at
+> https://rspress.rs/llms.txt ...
+
+# Введение
+
+Rspress — генератор статических сайтов на основе React, созданный на базе Rsbuild.
+```
+
+## AFDocs: Проверки и оценка
+
+[AFDocs](https://afdocs.dev/) — сопутствующий инструмент с открытым исходным кодом для [спецификации документации, удобной для ИИ-агентов](https://agentdocsspec.com/). В [справочнике проверок](https://afdocs.dev/checks/) перечислены 23 проверки в 7 категориях, а также критерии прохождения, предупреждения и ошибки для каждой проверки.
+
+Несколько описанных в этой статье оптимизаций Rspress для агентов можно проверить с помощью AFDocs:
+
+| Возможность Rspress       | Проверки AFDocs                                                                                                                                                                                              | Что проверяется                                            |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
+| `llms.txt`                 | [`llms-txt-exists`](https://afdocs.dev/checks/content-discoverability#llms-txt-exists), [`llms-txt-valid`](https://afdocs.dev/checks/content-discoverability#llms-txt-valid)                               | Могут ли агенты найти и разобрать индекс документации      |
+| SSG-MD                    | [`markdown-url-support`](https://afdocs.dev/checks/markdown-availability#markdown-url-support)                                                                                                             | Предоставляется ли для каждой страницы версия в Markdown   |
+| `Accept: text/markdown`   | [`content-negotiation`](https://afdocs.dev/checks/markdown-availability#content-negotiation)                                                                                                               | Возвращается ли Markdown в ответ на соответствующий заголовок запроса |
+| `LlmsHint`                | [`llms-txt-directive-html`](https://afdocs.dev/checks/content-discoverability#llms-txt-directive-html), [`llms-txt-directive-md`](https://afdocs.dev/checks/content-discoverability#llms-txt-directive-md) | Могут ли агенты обнаружить индекс с одной страницы          |
+| Двойной вывод             | [`markdown-content-parity`](https://afdocs.dev/checks/observability#markdown-content-parity)                                                                                                               | Выражают ли HTML и Markdown одно и то же содержимое         |
+
+Rspress также использует другие проверки AFDocs для дальнейшего улучшения, включая такие метрики, как размер HTML.
+
+Выполните следующую команду, чтобы проверить общедоступный сайт с документацией:
+
+```bash
+npx afdocs check https://docs.example.com --format scorecard
+```
+
+Отчёт содержит результат каждой проверки, рекомендуемые изменения и итоговую оценку, что делает его полезным для сравнения сайта до и после обновления с учётом требований агентов.
+
+[Agent Score от Mintlify](https://www.mintlify.com/blog/agent-score) также основан на этой спецификации. Помимо 23 базовых проверок, он добавляет проверки обнаруживаемости полного содержимого, Agent Skills и MCP-серверов.
+
+Важно отметить, что AFDocs не оценивает качество написания документации или правильность ответов агентов. Он лишь проверяет набор верифицируемых правил.
+
+## injectLlmsHint: Предоставление URL llms.txt
+
+[Проверки обнаруживаемости содержимого AFDocs](https://afdocs.dev/checks/content-discoverability) включают два релевантных правила:
+
+- `llms-txt-directive-html`: Если агент напрямую открывает HTML-страницу, может ли он узнать, что на сайте есть `llms.txt` и Markdown-версия текущей страницы?
+- `llms-txt-directive-md`: Если агент получает Markdown-страницу, может ли он узнать, где находится вся документация сайта?
+
+Даже если сайт предоставляет Markdown, агент, попавший на глубоко вложенную страницу, может не знать, что для текущей страницы существует Markdown-версия или что существует `/llms.txt`. Поэтому каждая страница должна явно предоставлять эти точки входа.
+
+Rspress предоставляет настройку [`injectLlmsHint`](/api/config/config-theme#injectllmshint). После включения SSG-MD Rspress добавляет визуально скрытый обычный текст в начало основного содержимого сгенерированного HTML:
+
+{/* prettier-ignore */}
+```html
+<div class="rp-llms-hint" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap;border:0">For AI agents: the complete documentation index is available at https://example.com/llms.txt, the full documentation bundle is available at https://example.com/llms-full.txt, and this page is available as Markdown at https://example.com/guide/index.md.</div>
+```
+
+Здесь не используются `display: none`, `hidden` или `aria-hidden`. URL также отображаются непосредственно в виде обычного текста, а не заключены в элементы ссылок. Подсказка остаётся невидимой для читателей, но сохраняется в DOM, благодаря чему агенты, которые разбирают HTML или преобразуют HTML в Markdown, могут сохранить и прочитать эту директиву.
+
+[Правило `llms-txt-directive-html` в AFDocs](https://afdocs.dev/checks/content-discoverability#llms-txt-directive-html) предъявляет то же требование: директиву можно визуально скрыть с помощью таких методов, как `clip-rect` или `sr-only`, но она должна оставаться в DOM и сохраняться при преобразовании HTML в Markdown.
+
+В выводе Markdown используется блок цитаты:
+
+```md
+> For AI agents: the complete documentation index is available at
+> https://example.com/llms.txt, the full documentation bundle is available at
+> https://example.com/llms-full.txt.
+```
+
+Поскольку агент уже получает текущую страницу в формате Markdown, подсказка содержит только `llms.txt` и `llms-full.txt`. Эти два варианта соответствуют проверкам `llms-txt-directive-html` и `llms-txt-directive-md`.
+
+## Ссылки
+
+- [Файл /llms.txt](https://llmstxt.org/)
+- [Rspress: llms.txt (SSG-MD)](/guide/basic/ssg-md)
+- [Boris Cherny: заголовок Accept в запросах Claude Code WebFetch](https://x.com/bcherny/status/1988860326306087102)
+- [Cloudflare: представляем Markdown для агентов](https://blog.cloudflare.com/markdown-for-agents/)
+- [Спецификация документации, удобной для агентов](https://agentdocsspec.com/)
+- [AFDocs: справочник проверок](https://afdocs.dev/checks/)
+- [Mintlify: готова ли ваша документация к работе с агентами?](https://www.mintlify.com/blog/agent-score)
