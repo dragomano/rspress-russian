@@ -1,0 +1,55 @@
+---
+description: NavList отображает пользовательские элементы навигации в настольной панели навигации и мобильном меню.
+overviewHeaders: []
+---
+
+import { VersionBadge } from '@components/VersionBadge';
+
+# NavList
+
+<VersionBadge version="2.0.22" />
+
+`NavList` отображает список пользовательских элементов навигации в соответствии с текущим представлением навигации в макете. Один и тот же компонент работает как в настольной панели навигации, так и в раскрытом мобильном меню.
+
+## Использование
+
+Используйте `NavList` с одним из слотов для элементов навигации в [кастомной теме](/guide/basic/custom-theme):
+
+```tsx title="theme/index.tsx"
+import { Layout as BasicLayout, NavList } from '@rspress/core/theme-original';
+
+const customItems = [
+  { text: 'Сообщество', link: '/community' },
+  {
+    text: 'Ресурсы',
+    items: [{ text: 'Примеры', link: '/examples' }],
+  },
+];
+
+export function Layout() {
+  return <BasicLayout afterRightNavItems={<NavList items={customItems} />} />;
+}
+
+export * from '@rspress/core/theme-original';
+```
+
+На настольных устройствах элементы отображаются в панели навигации. На небольших экранах те же элементы отображаются в раскрытом мобильном меню, поэтому теме не нужны отдельные реализации для настольных и мобильных устройств.
+
+## Свойства
+
+### items
+
+- **Тип:** `NavItem[]`
+
+Элементы навигации для отображения. Структура элемента такая же, как у [`themeConfig.nav`](/api/config/config-theme#nav), включая `text`, `link` и вложенные `items`.
+
+## Расположение
+
+Передайте `NavList` в один из четырёх слотов для элементов навигации компонента `Layout`:
+
+- `beforeLeftNavItems`
+- `afterLeftNavItems`
+- `beforeRightNavItems`
+- `afterRightNavItems`
+
+Слот определяет, будет ли список отображаться перед или после соответствующих элементов левой или правой навигации.

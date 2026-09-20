@@ -1,28 +1,31 @@
 import {
   DocLayout as BasicDocLayout,
   HomeLayout as BasicHomeLayout,
-  Layout as BasicLayout,
   PackageManagerTabs,
+  type HomeLayoutProps,
   type DocLayoutProps,
 } from '@rspress/core/theme-original';
 import { NavIcon } from '@rstack-dev/doc-ui/nav-icon';
 import { CssModificationProvider } from '../components/CssModificationContext';
 import { CssModificationIndicator } from '../components/CssModificationIndicator';
 import { CssStyleSync } from '../components/CssStyleSync';
+import { SlotPreview, SlotPreviewLayout } from '../components/SlotPreview';
 import { Callout, Prompt, Tag } from './components';
 import { BlogBackButton } from './components/BlogBackButton';
 import { HomeSections } from './components/HomeSections';
 import { ToolStack } from './components/ToolStack';
 import './index.css';
 
-function HomeLayout() {
+function HomeLayout(props: HomeLayoutProps) {
   return (
     <BasicHomeLayout
+      {...props}
       afterFeatures={
-        <>
+        <SlotPreview name="afterFeatures">
+          {props.afterFeatures}
           <HomeSections />
           <ToolStack />
-        </>
+        </SlotPreview>
       }
       afterHeroActions={
         <div
@@ -40,8 +43,7 @@ const Layout = () => {
   return (
     <CssModificationProvider>
       <CssStyleSync />
-      <CssModificationIndicator />
-      <BasicLayout beforeNavTitle={<NavIcon />} />
+      <SlotPreviewLayout beforeNavTitle={<NavIcon />} />
     </CssModificationProvider>
   );
 };
@@ -51,10 +53,10 @@ const DocLayout = (props: DocLayoutProps) => {
     <BasicDocLayout
       {...props}
       beforeDocContent={
-        <>
+        <SlotPreview name="beforeDocContent">
           <BlogBackButton />
           {props.beforeDocContent}
-        </>
+        </SlotPreview>
       }
     />
   );

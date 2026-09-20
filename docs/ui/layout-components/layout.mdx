@@ -3,7 +3,10 @@ description: Компонент макета, служит контейнеро�
 overviewHeaders: []
 ---
 
-# Макет
+import { SlotPreviewToggle } from '@components/SlotPreview';
+import { VersionBadge } from '@components/VersionBadge';
+
+# Layout
 
 `Layout` — это основной компонент макета Rspress, служащий контейнером макета для всей страницы. Он предоставляет богатые слот-пропсы для расширения макета темы по умолчанию без eject.
 
@@ -23,6 +26,10 @@ export * from '@rspress/core/theme-original';
 ## Слот-пропсы
 
 Компонент `Layout` предоставляет серию слот-пропсов для расширения стандартной темы макета:
+
+Нажмите ниже, чтобы просмотреть расположение слотов на странице.
+
+<SlotPreviewToggle />
 
 <details>
 
@@ -68,6 +75,12 @@ const Layout = () => (
     beforeNavMenu={<div>beforeNavMenu</div>}
     /* После меню панели навигации */
     afterNavMenu={<div>afterNavMenu</div>}
+    /* Перед/после элементов левой навигации (для настольных и мобильных устройств) */
+    beforeLeftNavItems={<li>beforeLeftNavItems</li>}
+    afterLeftNavItems={<li>afterLeftNavItems</li>}
+    /* Перед/после элементов правой навигации (для настольных и мобильных устройств) */
+    beforeRightNavItems={<li>beforeRightNavItems</li>}
+    afterRightNavItems={<li>afterRightNavItems</li>}
     /* Над левой боковой панелью */
     beforeSidebar={<div>beforeSidebar</div>}
     /* Под левой боковой панелью */
@@ -102,3 +115,23 @@ export * from '@rspress/core/theme-original';
 ```
 
 </details>
+
+### Пользовательские списки навигации
+
+<VersionBadge version="2.0.22" />
+
+Используйте `beforeLeftNavItems` / `afterLeftNavItems` и `beforeRightNavItems` / `afterRightNavItems`, чтобы добавлять элементы перед или после левого и правого списков навигации. `NavList` автоматически адаптируется к настольным и мобильным устройствам.
+
+```tsx title="theme/index.tsx"
+import { Layout as BasicLayout, NavList } from '@rspress/core/theme-original';
+
+const customItems = [{ text: 'Community', link: '/community' }];
+
+export function Layout() {
+  return <BasicLayout afterRightNavItems={<NavList items={customItems} />} />;
+}
+
+export * from '@rspress/core/theme-original';
+```
+
+`items` использует ту же структуру, что и [`themeConfig.nav`](/api/config/config-theme#nav); расположение определяется слотом.

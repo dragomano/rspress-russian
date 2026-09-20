@@ -20,3 +20,11 @@ declare module '*.mdx' {
   const component: ComponentType;
   export default component;
 }
+
+interface ImportMetaEnv {
+  readonly SSG_MD: boolean;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
