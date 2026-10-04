@@ -117,7 +117,7 @@ export default defineConfig({
 - **Тип**: `string`
 - **По умолчанию**: `"en"`
 
-Язык сайта по умолчанию. Подробности см. в разделе [Интернационализация](/guide/basic/i18n).
+Язык сайта по умолчанию. Подробности см. в разделе [i18n](/guide/basic/i18n).
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -136,6 +136,57 @@ export default defineConfig({
   ],
 });
 ```
+
+## locales
+
+- **Тип**: `Locale[]`
+- **По умолчанию**: `undefined`
+
+Настраивает поддерживаемые языки и информацию о сайте для каждого языка.
+
+```ts
+export interface Locale {
+  lang: string;
+  label: string;
+  title?: string;
+  description?: string;
+}
+```
+
+| Поле          | Описание                                                                             |
+| ------------- | ------------------------------------------------------------------------------------ |
+| `lang`        | Код языка. Должен совпадать с именем соответствующей директории в корне документации. |
+| `label`       | Отображаемый текст в переключателе языков панели навигации.                            |
+| `title`       | Заголовок сайта для этого языка.                                                       |
+| `description` | Описание сайта для этого языка.                                                        |
+
+Установите верхнеуровневый параметр [`lang`](#lang) в один из этих кодов языков, чтобы выбрать язык по умолчанию. Rspress опускает языковой префикс в маршрутах языка по умолчанию.
+
+Например:
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  lang: 'ru',
+  locales: [
+    {
+      lang: 'en',
+      label: 'English',
+      title: 'My Site',
+      description: 'My site description',
+    },
+    {
+      lang: 'ru',
+      label: 'Русский',
+      title: 'Мой сайт',
+      description: 'Описание моего сайта',
+    },
+  ],
+});
+```
+
+Полный пример настройки см. в разделе [i18n](/guide/basic/i18n). О языковых параметрах темы, таких как `nav` и `sidebar`, см. в разделе [`themeConfig.locales`](/api/config/config-theme#locales).
 
 ## i18nSourcePath
 
@@ -325,42 +376,6 @@ export default defineConfig({
 Эта опция поддерживает как относительные, так и абсолютные пути. Относительные пути разрешаются относительно текущей рабочей директории.
 
 Подробнее о пользовательских темах см. [Кастомная тема](/guide/basic/custom-theme).
-
-## locales
-
-- **Тип**: `Locale[]`
-
-```ts
-export interface Locale {
-  lang: string;
-  label: string;
-  title?: string;
-  description?: string;
-}
-```
-
-Настройка интернационализации (i18n) сайта. Например:
-
-```ts title="rspress.config.ts"
-import { defineConfig } from '@rspress/core';
-
-export default defineConfig({
-  locales: [
-    {
-      lang: 'en-US',
-      label: 'English',
-      title: 'My Site',
-      description: 'My site description',
-    },
-    {
-      lang: 'ru-RU',
-      label: 'Русский',
-      title: 'Заголовок сайта',
-      description: 'Описание сайта',
-    },
-  ],
-});
-```
 
 ## head
 
