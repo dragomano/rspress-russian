@@ -15,6 +15,14 @@ import { SourceCode } from '@rspress/core/theme';
 <SourceCode href="https://github.com/web-infra-dev/rspress/blob/main/packages/core/src/theme/src/components/SourceCode/index.tsx" />
 ```
 
+Также можно разместить `SourceCode` на одной строке с заголовком. Ссылка на исходный код отобразится в заголовке документа и будет исключена из оглавления, при этом якорь заголовка останется прежним.
+
+```mdx
+import { SourceCode } from '@rspress/core/theme';
+
+## Google Analytics <SourceCode href="https://github.com/rstackjs/rspress-plugins" />
+```
+
 ## Пропсы
 
 ```ts
