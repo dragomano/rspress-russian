@@ -1,0 +1,133 @@
+---
+title: rspress-plugin-third-parties
+description: Встраивайте видео YouTube, твиты и Google Карты, добавляйте Google Analytics или Tag Manager и управляйте загрузкой скриптов в Rspress.
+---
+
+# rspress-plugin-third-parties <SourceCode href="https://github.com/rstackjs/rspress-plugins/tree/main/packages/rspress-plugin-third-parties" />
+
+import { SourceCode, PackageManagerTabs } from '@rspress/core/theme';
+
+Этот плагин предоставляет компоненты для YouTube, Twitter/X и Google Карт, интеграции с Google Analytics и Google Tag Manager, а также компонент `Script` для управления моментом загрузки скриптов.
+
+:::note
+Это интеграция, поддерживаемая сообществом.
+
+- [Документация и демо](https://sanjaiyan-dev.github.io/rspress-plugin-third-parties/) — поддерживается автором плагина.
+- [README плагина](https://github.com/rstackjs/rspress-plugins/tree/main/packages/rspress-plugin-third-parties#readme) со всеми параметрами компонентов.
+
+:::
+
+## Установка
+
+<PackageManagerTabs command="add rspress-plugin-third-parties -D" />
+
+## Глобальная аналитика
+
+Чтобы добавить Google Analytics на все страницы, зарегистрируйте плагин в `rspress.config.ts` и замените `G-XXXXXXXXXX` на ваш идентификатор отслеживания GA4:
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+import { pluginThirdParties } from 'rspress-plugin-third-parties/plugin';
+
+export default defineConfig({
+  plugins: [
+    pluginThirdParties({
+      googleAnalytics: { gaId: 'G-XXXXXXXXXX' },
+    }),
+  ],
+});
+```
+
+Чтобы отслеживать клиентские переходы между страницами, настройте [измерение одностраничных приложений в GA4](https://developers.google.com/analytics/devguides/collection/ga4/single-page-applications).
+
+## Компоненты
+
+Импортируйте компоненты в MDX-страницу или собственную тему. В примерах YouTube и Tweet ниже живой предпросмотр показан рядом с исходным кодом.
+
+### `<YouTubeEmbed />`
+
+<SourceCode href="https://github.com/rstackjs/rspress-plugins/blob/main/packages/rspress-plugin-third-parties/src/components/YouTubeEmbed.tsx" />
+
+Показывает миниатюру видео и загружает YouTube-плеер при нажатии кнопки воспроизведения.
+
+```mdx preview
+import { YouTubeEmbed } from 'rspress-plugin-third-parties';
+
+<YouTubeEmbed
+  videoid="sSbDtQTtwBY"
+  playlabel="Digital Tamizh - A Lineage of Logic, A Future of Code (Unreal Engine Showcase)"
+/>
+```
+
+### `<TweetEmbed />`
+
+<SourceCode href="https://github.com/rstackjs/rspress-plugins/blob/main/packages/rspress-plugin-third-parties/src/components/TweetEmbed.tsx" />
+
+Встраивает публикацию Twitter/X и подстраивается под светлую или тёмную тему сайта.
+
+```mdx preview
+import { TweetEmbed } from 'rspress-plugin-third-parties';
+
+<TweetEmbed id="2017178323550605790" />
+```
+
+### `<GoogleMapsEmbed />`
+
+<SourceCode href="https://github.com/rstackjs/rspress-plugins/blob/main/packages/rspress-plugin-third-parties/src/components/GoogleMapsEmbed.tsx" />
+
+Встраивает Google Карты. Чтобы использовать этот пример, замените плейсхолдер вашим ключом Google Maps Embed API.
+
+```mdx
+import { GoogleMapsEmbed } from 'rspress-plugin-third-parties';
+
+<GoogleMapsEmbed
+  apiKey="YOUR_GOOGLE_MAPS_API_KEY"
+  mode="place"
+  q="Point Pedro, Sri Lanka"
+  height={400}
+/>
+```
+
+### `<Script />`
+
+<SourceCode href="https://github.com/rstackjs/rspress-plugins/blob/main/packages/rspress-plugin-third-parties/src/components/Script.tsx" />
+
+Загружает внешние или встроенные скрипты и устраняет повторную загрузку внешних скриптов при переходах между страницами. Стратегия по умолчанию — `afterInteractive`; с `lazyOnload` загрузка откладывается, пока страница не загрузится, а браузер не перейдёт в состояние простоя.
+
+```mdx
+import { Script } from 'rspress-plugin-third-parties';
+
+<Script src="https://example.com/widget.js" strategy="lazyOnload" />
+```
+
+### `<GoogleTagManager />`
+
+<SourceCode href="https://github.com/rstackjs/rspress-plugins/blob/main/packages/rspress-plugin-third-parties/src/components/GoogleTagManager.tsx" />
+
+Добавьте Google Tag Manager в макет вашей собственной темы.
+
+```mdx
+import { GoogleTagManager } from 'rspress-plugin-third-parties';
+
+<GoogleTagManager gtmId="GTM-XXXXXXX" />
+```
+
+### `<GoogleAnalytics />`
+
+<SourceCode href="https://github.com/rstackjs/rspress-plugins/blob/main/packages/rspress-plugin-third-parties/src/components/GoogleAnalytics/index.tsx" />
+
+Добавьте GA4 в макет вашей собственной темы. Пропустите этот компонент, если вы уже зарегистрировали тот же идентификатор отслеживания через глобальный плагин.
+
+```mdx
+import { GoogleAnalytics } from 'rspress-plugin-third-parties';
+
+<GoogleAnalytics gaId="G-XXXXXXXXXX" />
+```
+
+После настройки Google Analytics используйте `sendGAEvent` в обработчике событий, чтобы отправлять пользовательские события:
+
+```ts
+import { sendGAEvent } from 'rspress-plugin-third-parties';
+
+sendGAEvent('event', 'documentation_feedback', { sentiment: 'yes' });
+```
