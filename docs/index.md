@@ -42,4 +42,5 @@ features:
     details: Расширяйте интерфейс темы и процесс сборки через расширенные API Rspress.
     icon: /custom.svg
     link: ./guide/basic/custom-theme
+description: 'Создавайте сайты документации с Rspress — генератором статических сайтов на базе Rsbuild с поддержкой MDX, поиска, интернационализации и вывода, удобного для ИИ.'
 ---
