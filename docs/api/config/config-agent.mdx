@@ -1,0 +1,61 @@
+# Конфигурация ИИ
+
+Эти опции настраивают генерацию Markdown и инструменты для браузерных агентов. `llms` и `webMcp` — опции верхнего уровня в `rspress.config.ts`.
+
+## llms
+
+- **Тип**:
+
+```ts
+boolean | {
+  llmsTxt?: (context: LlmsTxtContext) => string | Promise<string>;
+  remarkSplitMdxOptions?: RemarkSplitMdxOptions;
+}
+```
+
+- **По умолчанию**: `true` (`false` до v2.1.0)
+
+Включает генерацию [SSG-MD](/guide/basic/ssg-md) для создания файлов `llms.txt`, `llms-full.txt` и Markdown-файлов для каждой страницы, что облегчает понимание вашей документации большими языковыми моделями.
+
+Включение `llms` также по умолчанию включает копирование Markdown и интерфейс ИИ-инструментов. Используйте [`themeConfig.llmsUI`](/api/config/config-theme#llmsui), чтобы настроить или отключить эти элементы управления.
+
+Используйте `llmsTxt` для формирования полного содержимого `llms.txt` на основе метаданных сайта и разделов страниц. Подробности см. в разделе [Настройка llms.txt](/guide/basic/ssg-md#customize-llmstxt).
+
+Установите `llms: false`, чтобы отключить функцию.
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  llms: false,
+});
+```
+
+:::warning
+
+Если ваш код несовместим с SSR, установите `llms: false` и используйте [@rspress/plugin-llms](/plugin/official-plugins/llms) в качестве запасного варианта.
+
+:::
+
+Подробное использование, параметры конфигурации и принципы реализации см. в разделе [llms.txt (SSG-MD)](/guide/basic/ssg-md).
+
+## webMcp
+
+- **Тип**: `boolean | { exposedTo?: string[] }`
+- **По умолчанию**: `true`
+
+Предоставляет встроенные инструменты документации через нативный WebMCP API браузера. Установите `webMcp: false`, чтобы отключить только встроенные инструменты. Вы по-прежнему можете использовать хук [`useWebMcp`](/ui/hooks/use-web-mcp) для регистрации собственных инструментов. Браузеры без поддержки WebMCP продолжают отображать сайт как обычно.
+
+Используйте `exposedTo`, чтобы разрешить определённым безопасным источникам обнаруживать инструменты:
+
+```ts title="rspress.config.ts"
+import { defineConfig } from '@rspress/core';
+
+export default defineConfig({
+  webMcp: {
+    exposedTo: ['https://agent.example'],
+  },
+});
+```
+
+Доступные инструменты, требования к браузерам и кросс-доменный доступ описаны в разделе [WebMCP](/guide/basic/webmcp).
