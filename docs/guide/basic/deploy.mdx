@@ -113,15 +113,15 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Build job
+  # Задание сборки
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Not needed if lastUpdated is not enabled
-      - uses: pnpm/action-setup@v3 # pnpm is optional but recommended, you can also use npm / yarn
+          fetch-depth: 0 # Не требуется, если не включён lastUpdated
+      - uses: pnpm/action-setup@v3 # pnpm необязателен, но рекомендуется; можно также использовать npm или yarn
         with:
           version: 8
       - name: Setup Node
@@ -141,7 +141,7 @@ jobs:
         with:
           path: doc_build
 
-  # Deployment job
+  # Задание развёртывания
   deploy:
     environment:
       name: github-pages
