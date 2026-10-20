@@ -368,23 +368,6 @@ export default defineConfig({
 });
 ```
 
-## nextPageText
-
-- **Тип**: `string`
-- **По умолчанию**: `Next Page`
-
-Текст ссылки «Следующая страница». Например:
-
-```ts title="rspress.config.ts"
-import { defineConfig } from '@rspress/core';
-
-export default defineConfig({
-  themeConfig: {
-    nextPageText: 'Следующая страница',
-  },
-});
-```
-
 ## locales
 
 - **Тип**: `Array<LocaleConfig>`
@@ -612,9 +595,9 @@ type LlmsUI =
     };
 ```
 
-- **По умолчанию**: `false` (автоматически устанавливается в `true`, когда настроено `llms: true`)
+- **По умолчанию**: `true` (автоматически устанавливается в `false`, когда настроено `llms: false`)
 
-Конфигурация UI-компонентов llms. При включении `LlmsCopyButton` и `LlmsViewOptions` автоматически добавляются под всеми заголовками H1 по умолчанию или как строки в панели оглавления.
+Настраивает UI-компоненты llms через `themeConfig.llmsUI`. Когда функция включена, `LlmsCopyButton` и `LlmsViewOptions` автоматически добавляются под всеми заголовками H1 по умолчанию или как строки в панели оглавления.
 
 Это полезно при использовании функции [llms](/guide/basic/ssg-md) для генерации файлов llms.txt, поскольку пользователи могут копировать или открывать Markdown-контент в ИИ-инструментах.
 
