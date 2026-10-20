@@ -37,7 +37,7 @@ const group = {
 Этот компонент обычно используется автоматически Rspress на страницах с `overview: true` в метаданных и не требует ручного вызова.
 :::
 
-## Прорсы
+## Пропсы
 
 ### group
 
@@ -46,20 +46,20 @@ const group = {
 
 ```ts
 interface GroupItem {
-  /** Item title */
+  /** Заголовок элемента */
   text: string;
-  /** Item link */
+  /** Ссылка на элемент */
   link: string;
-  /** List of heading anchors within the page */
+  /** Список якорей заголовков на странице */
   headers?: Header[];
-  /** Custom sub-items list */
+  /** Список пользовательских подэлементов */
   items?: { text: string; link: string }[];
 }
 
 interface Group {
-  /** Group name */
+  /** Имя группы */
   name: string;
-  /** List of items in the group */
+  /** Список элементов в группе */
   items: GroupItem[];
 }
 
@@ -70,7 +70,7 @@ interface Header {
 }
 ```
 
-- `name` - The group title, rendered as an h2 heading
-- `items` - List of pages in the group
-- `headers` - Heading anchors within each page, clicking navigates to the corresponding position
-- `items` (within GroupItem) - Custom sub-items, used to replace automatically extracted headers
+- `name` — заголовок группы, отображаемый как заголовок h2
+- `items` — список страниц в группе
+- `headers` — якоря заголовков на каждой странице; при клике выполняется переход к соответствующему месту
+- `items` (внутри GroupItem) — пользовательские подэлементы для замены автоматически извлечённых заголовков
