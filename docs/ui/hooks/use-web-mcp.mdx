@@ -1,0 +1,82 @@
+---
+icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/><path d="M20 2v4m-2-2h4"/></svg>'
+description: Регистрируйте собственные WebMCP-инструменты компонентов для браузерных агентов с помощью useWebMcp.
+---
+
+import { VersionBadge } from '@components/VersionBadge';
+
+# useWebMcp
+
+<VersionBadge version="2.1.0" />
+
+`useWebMcp` регистрирует инструмент через экспериментальный WebMCP API браузера и удаляет его при размонтировании компонента. Импортируйте его из `@rspress/core/runtime`:
+
+```tsx
+import { usePage, useWebMcp } from '@rspress/core/runtime';
+
+export function PageTitleTool() {
+  const { page } = usePage();
+
+  useWebMcp({
+    name: 'my_site_page_title',
+    description: 'Get the current page title',
+    annotations: { readOnlyHint: true },
+    execute: () => ({ title: page.title }),
+  });
+
+  return null;
+}
+```
+
+Размещайте компонент там, где эта возможность уместна. Инструменты уровня сайта держите в постоянном компоненте; инструменты для конкретной страницы монтируйте вместе с этой страницей. Имена инструментов должны быть уникальными в пределах документа, включая [встроенные инструменты](/guide/basic/webmcp).
+
+Собственные инструменты работают независимо от опции конфигурации `webMcp`. Требования к браузерам описаны в [руководстве по WebMCP](/guide/basic/webmcp).
+
+## Опции
+
+| Опция                     | Описание                                                                                                                                   |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `name`                    | Обязательное уникальное имя инструмента.                                                                                                   |
+| `description`             | Обязательное описание для агентов.                                                                                                         |
+| `title`                   | Необязательный отображаемый заголовок.                                                                                                     |
+| `inputSchema`             | JSON Schema, описывающая входные данные.                                                                                                   |
+| `execute(input, options)` | Обязательная функция, возвращающая сериализуемое в JSON значение или промис. `options.signal`, если передан, несёт отмену от вызывающей стороны. |
+| `enabled`                 | Регистрировать ли инструмент. По умолчанию `true`; значение `false` отменяет регистрацию инструмента.                                      |
+| `annotations`             | Необязательные логические подсказки: `readOnlyHint`, `untrustedContentHint`, `consequentialHint` и `debugging`.                            |
+| `exposedTo`               | Необязательный массив дополнительных безопасных источников, которым разрешено обнаруживать инструмент.                                     |
+
+Используйте `WebMcpOptions<TInput, TResult>` или аннотации параметров для типов, а также проверяйте входные данные и обрабатывайте отмену в `execute`.
+
+```tsx
+useWebMcp({
+  name: 'my_site_lookup',
+  description: 'Look up a documentation entry',
+  inputSchema: {
+    type: 'object',
+    properties: { query: { type: 'string' } },
+    required: ['query'],
+    additionalProperties: false,
+  },
+  async execute(input: { query: string }, { signal }) {
+    if (typeof input?.query !== 'string' || !input.query.trim()) {
+      throw new TypeError('query must be a non-empty string');
+    }
+    const response = await fetch(
+      `/api/lookup?q=${encodeURIComponent(input.query)}`,
+      { signal },
+    );
+    if (!response.ok) throw new Error(`Lookup failed: ${response.status}`);
+    return response.json();
+  },
+});
+```
+
+## Возвращаемое значение и жизненный цикл
+
+Возвращает `WebMcpState`:
+
+- `supported`: поддерживает ли браузер WebMCP.
+- `registered`: успешно ли прошла регистрация.
+- `error`: ошибка регистрации или `null` при успехе.
+
+Вызовы инструмента используют последние зафиксированные props и состояние. Обновление обработчика не перерегистрирует инструмент. Отключение или размонтирование компонента отменяет его регистрацию.
