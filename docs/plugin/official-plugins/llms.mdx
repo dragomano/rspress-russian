@@ -26,7 +26,7 @@ import { PackageManagerTabs } from '@rspress/core/theme';
 
 ### 1. Подключение плагина
 
-Добавьте следующую конфигурацию:
+Установите `llms: false`, чтобы отключить встроенную генерацию SSG-MD при использовании этого плагина:
 
 ```ts
 // rspress.config.ts
@@ -34,6 +34,7 @@ import { defineConfig } from '@rspress/core';
 import { pluginLlms } from '@rspress/plugin-llms';
 
 export default defineConfig({
+  llms: false,
   plugins: [pluginLlms()],
 });
 ```
@@ -53,6 +54,7 @@ import { defineConfig } from '@rspress/core';
 import { pluginLlms } from '@rspress/plugin-llms';
 
 export default defineConfig({
+  llms: false,
   plugins: [pluginLlms()],
   themeConfig: {
     llmsUI: true,
@@ -427,6 +429,7 @@ type LlmsViewOptionsItem =
 // rspress.config.ts
 import { defineConfig } from '@rspress/core';
 defineConfig({
+  llms: false,
   lang: 'en',
   plugins: [
     pluginLlms([
