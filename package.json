@@ -15,10 +15,10 @@
     "@rspress/plugin-preview": "^2.0.23",
     "@rstack-dev/doc-ui": "^1.14.8",
     "@shikijs/transformers": "^4.5.0",
-    "@types/node": "^26.6.3",
+    "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "rspress-plugin-file-tree": "^1.0.7",
     "rspress-plugin-third-parties": "^2.1.2"
   }
