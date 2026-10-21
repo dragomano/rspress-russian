@@ -277,13 +277,14 @@ docs/
 
 Теперь SSG включён в строгом режиме по умолчанию. При любой ошибке сборка немедленно прерывается вместо отката на CSR (рендеринг на стороне клиента). Опция `ssg.strict` удалена.
 
-Чтобы полностью отключить SSG, укажите `ssg: false`:
+Если ваш код несовместим с SSR, установите и `ssg: false`, и `llms: false`, чтобы пропустить SSG и SSG-MD. Начиная с v2.1.0, `llms` включён по умолчанию:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
 
 export default defineConfig({
   ssg: false,
+  llms: false,
 });
 ```
 
