@@ -232,7 +232,7 @@ export default defineConfig({
 В V2 синтаксис мета-подсветки строк `{1,3-4}` больше не включён по умолчанию. Выберите один из следующих вариантов в зависимости от ваших нужд:
 
 - **[Подсветка отдельных строк](/guide/use-mdx/code-blocks#notation-line-highlight)**: Использует синтаксис комментариев `// [!code highlight]`, требует настройки `transformerNotationHighlight`
-- **[Подсветка строк через meta-информацию](/guide/use-mdx/code-blocks#подсветка-строк-через-meta-информацию)**: Совместим с устаревшим синтаксисом `{1,3-4}`, требует настройки `transformerCompatibleMetaHighlight`
+- **[Подсветка строк через meta-информацию](/guide/use-mdx/code-blocks#meta-line-highlight)**: Совместим с устаревшим синтаксисом `{1,3-4}`, требует настройки `transformerCompatibleMetaHighlight`
 
 Чтобы сохранить совместимость с синтаксисом мета-подсветки строк из V1, добавьте следующую конфигурацию:
 
@@ -568,7 +568,7 @@ export default defineConfig({
 });
 ```
 
-Подробнее о миграции см. [руководство по миграции plugin-preview](/plugin/official-plugins/preview#миграция-с-v1).
+Подробнее о миграции см. [руководство по миграции plugin-preview](/plugin/official-plugins/preview#migrating-from-v1).
 
 ## Ресурсы
 
