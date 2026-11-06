@@ -272,25 +272,18 @@ export default defineConfig({
 
 <details>
 
-```ts
-const DEFAULT_I18N_TEXT = {
-  // Основные строки интерфейса
-  searchPlaceholder: 'Поиск',
-  theme: 'Тема',
-  darkMode: 'Тёмная тема',
-  lightMode: 'Светлая тема',
-  // И другие строки...
-};
+```ts file="<root>/node_modules/@rspress/core/dist/node/runtimeModule/i18n/DEFAULT_I18N_TEXT.js"
+
 ```
 
 </details>
 
 ## logo \{#logo-1}
 
-- **Тип**: `string | { dark: string; light: string }`
+- **Тип**: `string | { dark: string; light: string; width?: number; height?: number }`
 - **По умолчанию**: `""`
 
-Логотип сайта. Rspress использует его в качестве логотипа в левом верхнем углу панели навигации. Например:
+Логотип сайта. Rspress использует его в качестве логотипа в левом верхнем углу панели навигации. В объектной форме необязательные `width` и `height` задают внутренние размеры (в пикселях) для обоих изображений; используйте размеры исходных изображений, чтобы сохранить их соотношение сторон и уменьшить сдвиги макета. Например:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -311,6 +304,8 @@ export default defineConfig({
   logo: {
     dark: '/logo-dark.png',
     light: '/logo-light.png',
+    width: 120,
+    height: 32,
   },
 });
 ```
