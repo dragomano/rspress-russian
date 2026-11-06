@@ -195,7 +195,7 @@ Rspress поддерживает якорную навигацию в ссылк
 ```mdx
 [Перейти к разделу «Формат пути к файлу»](#file-path-format)
 
-[Перейти к разделу «Создание проекта Rspress» в главе «Быстрый старт»](../start/getting-started.mdx#создание-проекта-rspress)
+[Перейти к разделу «Создание проекта Rspress» в главе «Быстрый старт»](../start/getting-started.mdx#create-a-rspress-project)
 ```
 
 </Tab>
@@ -203,7 +203,7 @@ Rspress поддерживает якорную навигацию в ссылк
 
 [Перейти к разделу «Формат пути к файлу»](#file-path-format)
 
-[Перейти к разделу «Создание проекта Rspress» в главе «Быстрый старт»](../start/getting-started.mdx#создание-проекта-rspress)
+[Перейти к разделу «Создание проекта Rspress» в главе «Быстрый старт»](../start/getting-started.mdx#create-a-rspress-project)
 
 </Tab>
 </Tabs>
@@ -240,11 +240,7 @@ export default defineConfig({
 
 Rspress также может проверять, существуют ли якоря внутренних ссылок на целевой странице. Проверяются якоря на текущей странице, относительные и абсолютные ссылки, но якоря внешних URL пропускаются.
 
-:::info
-В настоящее время проверка якорей по умолчанию отключена. В одной из будущих версий она будет включена по умолчанию.
-:::
-
-Для автоматической проверки недействительных якорей используйте параметр [markdown.link.checkAnchors](/api/config/config-build#markdownlinkcheckanchors).
+Проверка якорей включена по умолчанию. Установите [markdown.link.checkAnchors](/api/config/config-build#markdownlinkcheckanchors) в `false`, чтобы отключить её:
 
 ```ts title="rspress.config.ts"
 import { defineConfig } from '@rspress/core';
@@ -252,7 +248,7 @@ import { defineConfig } from '@rspress/core';
 export default defineConfig({
   markdown: {
     link: {
-      checkAnchors: true,
+      checkAnchors: false,
     },
   },
 });
