@@ -39,7 +39,7 @@ import { PackageManagerTabs } from '@rspress/core/theme';
 
 ## Добавление дополнительных вкладок
 
-Используйте `additionalTabs`, чтобы добавить больше менеджеров пакетов:
+Используйте `additionalTabs`, чтобы добавить больше менеджеров пакетов. Укажите `command` для каждой дополнительной вкладки, чтобы задать её полную команду:
 
 ```mdx preview title="index.mdx"
 import { PackageManagerTabs } from '@rspress/core/theme';
@@ -49,6 +49,7 @@ import { PackageManagerTabs } from '@rspress/core/theme';
   additionalTabs={[
     {
       tool: 'custom',
+      command: 'custom add --dev @rspress/core',
     },
   ]}
 />
@@ -90,6 +91,8 @@ type PackageManagerTabProps = (
     additionalTabs?: {
       // Название дополнительного менеджера пакетов
       tool: string;
+      // Полная команда для этой вкладки, отображается как есть
+      command?: string;
       // Иконка для дополнительного менеджера пакетов
       icon?: React.ReactNode;
     }[];
