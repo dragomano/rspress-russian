@@ -7,14 +7,14 @@
 | Тег                                                            | Описание                                                                                                    |
 | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `<meta name="generator" content="Rspress v${version}">`        | Указывает генератор сайта и его версию                                                                      |
-| `<meta name="description" content="${description}">`           | Описание страницы, см. [Как определяется описание](#как-определяется-описание) ниже                         |
+| `<meta name="description" content="${description}">`           | Описание страницы, см. [Как определяется описание](#how-description-is-determined) ниже                     |
 | `<meta property="og:type" content="website">`                  | Тип Open Graph, фиксированное значение `website`                                                            |
 | `<meta property="og:title" content="${title}">`                | Заголовок Open Graph, используется заголовок текущей страницы (если доступен)                               |
 | `<meta property="og:description" content="${description}">`    | Описание Open Graph, то же, что и выше                                                                      |
 | `<link rel="alternate" hreflang="${lang}" href="${url}">`      | Альтернативные языковые версии текущей страницы на многоязычных сайтах                                      |
 | `<link rel="preload" href="${currentRouteChunk}" as="script">` | Оптимизация производительности, предварительно загружающая асинхронный модуль маршрута для текущей страницы |
 
-## Как определяется описание
+## Как определяется описание \{#how-description-is-determined}
 
 По умолчанию Rspress извлекает первый содержательный абзац под заголовком `h1` в качестве описания страницы (см. [`markdown.extractDescription`](/api/config/config-build#markdownextractdescription)). Если результат извлечения вас не устраивает, вы можете указать поле `description` в [метаданных](/api/config/config-frontmatter#description), чтобы переопределить его:
 
